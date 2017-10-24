@@ -10,7 +10,7 @@ try:
     #GPIO.output(23,1)
     
     print("Transmitter")
-    pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+    pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 
     radio = NRF24(GPIO, spidev.SpiDev())
     radio.begin(0, 22)
@@ -22,7 +22,7 @@ try:
     radio.setAutoAck(False)
     radio.enableDynamicPayloads()
 
-    radio.openReadingPipe(0, pipes[1])
+    radio.openReadingPipe(1, pipes)
     radio.printDetails()
     print("///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
 
@@ -32,11 +32,16 @@ try:
 
     while True:
         radio.startListening()
-        if radio.available(0):
-            radio.read(frame, radio.getDynamicPayloadSize())
-            pritn("Received Message: ")
-            print(frame)
-        
+        while not radio.available(0):
+            time.sleep(1/100)
+            
+        radio.read(frame, radio.getDynamicPayloadSize())
+        str_frame = ""
+        for c in range(0, len(frame)):
+            str_frame += chr(frame[c])
+        print("Received Message: ")
+        print(str_frame)
+            
 except KeyboardInterrupt:
     GPIO.output(23,0)
     GPIO.output(24,0)
