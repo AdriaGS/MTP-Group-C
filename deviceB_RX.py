@@ -20,7 +20,7 @@ try:
     radio_Tx = NRF24(GPIO, spidev.SpiDev())
     radio_Rx = NRF24(GPIO, spidev.SpiDev())
     radio_Tx.begin(0, 22)
-    radio_Rx.begin(1, 24)
+    radio_Rx.begin(0, 24)
 
     #We set the Payload Size to the limit which is 32 bytes
     radio_Tx.setPayloadSize(payloadSize)
@@ -46,7 +46,7 @@ try:
 
     #Open the writing and reading pipe
     radio_Tx.openWritingPipe(pipes[0])
-    radio_Rx.openReadingPipe(0, pipes[1])
+    radio_Rx.openReadingPipe(1, pipes[1])
 
     #We print the configuration details of both transceivers
     radio_Tx.printDetails()
@@ -62,7 +62,7 @@ try:
     receivedPacket = 0
     while(1):
         timeout = time.time() + time_ack
-        radio_Rx.openReadingPipe(0, pipes[1])
+        radio_Rx.openReadingPipe(1, pipes[1])
         while(!receivedPacket):
             if radio_Rx.available(0):
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())

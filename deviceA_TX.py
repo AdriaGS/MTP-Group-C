@@ -20,7 +20,7 @@ try:
     radio_Tx = NRF24(GPIO, spidev.SpiDev())
     radio_Rx = NRF24(GPIO, spidev.SpiDev())
     radio_Tx.begin(0, 22)
-    radio_Rx.begin(1, 24)
+    radio_Rx.begin(0, 24)
 
     #We set the Payload Size to the limit which is 32 bytes
     radio_Tx.setPayloadSize(payloadSize)
@@ -80,7 +80,7 @@ try:
     	print("Message sent, waiting ACK: {}".format(message))
     	timeout = time.time() + time_ack
     	while(!ack_received):
-    		radio_Rx.openReadingPipe(0, pipes[0])
+    		radio_Rx.openReadingPipe(1, pipes[0])
     		radio_Rx.startListening()
     		if radio_Rx.available(0):
     			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
