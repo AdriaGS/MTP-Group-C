@@ -32,7 +32,7 @@ try:
 
     #We set the Transmission Rate
     radio_Tx.setDataRate(NRF24.BR_250KBPS)
-	radio_Rx.setDataRate(NRF24.BR_250KBPS)
+    radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 	#Configuration of the power level to be used by the transceiver
     radio_Tx.setPALevel(NRF24.PA_MAX)
@@ -67,19 +67,20 @@ try:
     dataSize = payloadSize - overhead
     #Now we conform all the packets in a list
     for i in range (0, len(data2Tx), dataSize):
-    	if((i+dataSize) < len(data)):
-    		packets.append(data[i:i+dataSize])
+    	if((i+dataSize) < len(data2Tx)):
+    		packets.append(data2Tx[i:i+dataSize])
     	else:
-    		packets.append(data[i:])
+    		packets.append(data2Tx[i:])
 
     #Start time
     start = time.time()
     #We iterate over every packet to be sent
     for message in packets:
+        retransmisions = 0
     	radio_Tx.write(str(flag) + message)
     	print("Message sent, waiting ACK: {}".format(message))
     	timeout = time.time() + time_ack
-    	while(!ack_received):
+    	while not (ack_received):
     		radio_Rx.openReadingPipe(1, pipes[0])
     		radio_Rx.startListening()
     		if radio_Rx.available(0):
@@ -99,7 +100,7 @@ try:
     			retransmisions += 1
     			print("Number of retransmision for message " + str(flag) + " = " + str(retransmisions))
     			radio_Tx.openWritingPipe(pipes[1])
-    			radio.write(str(flag) + message)
+    			radio_Tx.write(str(flag) + message)
     			timeout = time.time() + time_ack
     	flag += 1 % 10
 
