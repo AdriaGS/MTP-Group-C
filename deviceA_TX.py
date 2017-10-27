@@ -57,7 +57,7 @@ try:
     print("*------------------------------------------------------------------------------------------------------------*")
 
     flag = 0
-    overhead = 1
+    overhead = 0
     time_ack = 1
     ack = []
     str_ack = ""
@@ -80,7 +80,7 @@ try:
     #We iterate over every packet to be sent
     for message in packets:
         retransmisions = 0
-    	radio_Tx.write(str(flag) + message)
+    	radio_Tx.write(message)
 	time.sleep(1)
     	print("Message sent, waiting ACK: {}".format(message))
     	timeout = time.time() + time_ack
