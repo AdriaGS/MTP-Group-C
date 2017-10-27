@@ -54,8 +54,8 @@ try:
     radio_Rx.printDetails()
     print("*------------------------------------------------------------------------------------------------------------*")
 
-    recv_frame = []
-    str_recvFrame = ""
+    frame = []
+    str_frame = ""
     flag = 0
     time_ack = 0.5
     outputFile = open("ReceivedFile.txt", "wb")
@@ -63,12 +63,12 @@ try:
     while(1):
         timeout = time.time() + time_ack
         radio_Rx.openReadingPipe(1, pipes[1])
-        while(!receivedPacket):
+        while not (receivedPacket):
             if radio_Rx.available(0):
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
                 print(frame)
                 print(str(flag))
-                if(char(frame[0]) == flag):
+                if(chr(frame[0]) == flag):
                     for c in range(1, len(frame)):
                         str_frame = str_frame + chr(frame[c])
                     outputFile.write(str_frame)
