@@ -17,43 +17,43 @@ try:
     pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
     payloadSize = 32
     channel_RX = 0x60
-    #channel_TX = 0x65
+    channel_TX = 0x60
 
     #Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
-    #radio_Tx = NRF24(GPIO, spidev.SpiDev())
+    radio_Tx = NRF24(GPIO, spidev.SpiDev())
     radio_Rx = NRF24(GPIO, spidev.SpiDev())
-    #radio_Tx.begin(0, 22)
+    radio_Tx.begin(0, 22)
     radio_Rx.begin(0, 24)
 
     #We set the Payload Size to the limit which is 32 bytes
-    #radio_Tx.setPayloadSize(payloadSize)
+    radio_Tx.setPayloadSize(payloadSize)
     radio_Rx.setPayloadSize(payloadSize)
 
     #We choose the channels to be used for one and the other transceiver
-    #radio_Tx.setChannel(channel_TX)
+    radio_Tx.setChannel(channel_TX)
     radio_Rx.setChannel(channel_RX)
 
     #We set the Transmission Rate
-    #radio_Tx.setDataRate(NRF24.BR_250KBPS)
+    radio_Tx.setDataRate(NRF24.BR_250KBPS)
     radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
     #Configuration of the power level to be used by the transceiver
-    #radio_Tx.setPALevel(NRF24.PA_MIN)
+    radio_Tx.setPALevel(NRF24.PA_MIN)
     radio_Rx.setPALevel(NRF24.PA_MIN)
 
     #We disable the Auto Acknowledgement
-    #radio_Tx.setAutoAck(False)
+    radio_Tx.setAutoAck(False)
     radio_Rx.setAutoAck(False)
-    #radio_Tx.enableDynamicPayloads()
+    radio_Tx.enableDynamicPayloads()
     radio_Rx.enableDynamicPayloads()
 
     #Open the writing and reading pipe
-    #radio_Tx.openWritingPipe(pipes[1])
+    radio_Tx.openWritingPipe(pipes[1])
     radio_Rx.openReadingPipe(1, pipes[0])
 
     #We print the configuration details of both transceivers
-   # radio_Tx.printDetails()
-    #print("*------------------------------------------------------------------------------------------------------------*")
+    radio_Tx.printDetails()
+    print("*------------------------------------------------------------------------------------------------------------*")
     radio_Rx.printDetails()
     print("*------------------------------------------------------------------------------------------------------------*")
 
