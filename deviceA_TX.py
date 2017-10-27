@@ -55,7 +55,7 @@ try:
 
     flag = 0
     overhead = 1
-    time_ack = 0.5
+    time_ack = 1
     ack = []
     str_ack = ""
     ack_received = 0
