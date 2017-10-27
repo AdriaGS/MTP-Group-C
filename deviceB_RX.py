@@ -62,9 +62,10 @@ try:
     receivedPacket = 0
     while(1):
         timeout = time.time() + time_ack
-        radio_Rx.openReadingPipe(1, pipes[1])
+        # radio_Rx.openReadingPipe(1, pipes[1])
         while not (receivedPacket):
             if radio_Rx.available(0):
+		print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
                 print(frame)
                 print(str(flag))
