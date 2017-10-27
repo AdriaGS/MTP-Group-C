@@ -1,3 +1,4 @@
+
 try:
 
     import RPi.GPIO as GPIO
@@ -7,9 +8,11 @@ try:
     import spidev
 
     GPIO.setmode(GPIO.BCM)
-    #GPIO.setup(23, GPIO.OUT)
-    #GPIO.output(23,1)
-    
+    GPIO.setup(23, GPIO.OUT)
+    GPIO.output(23,1)
+    GPIO.setup(22, GPIO.OUT)
+    GPIO.output(22,1)
+
     print("Receiver")
     pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
     payloadSize = 32

@@ -7,15 +7,17 @@ try:
     import spidev
 
     GPIO.setmode(GPIO.BCM)
-    #GPIO.setup(23, GPIO.OUT)
-    #GPIO.output(23,1)
-    
+    GPIO.setup(23, GPIO.OUT)
+    GPIO.output(23,1)
+    GPIO.setup(22, GPIO.OUT)
+    GPIO.output(22, 1)
+
     print("Transmitter")
     pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
     pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
     payloadSize = 32
     channel_TX = 0x60
-    channel_RX = 0x65
+    channel_RX = 0x60
 
     #Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
     radio_Tx = NRF24(GPIO, spidev.SpiDev())
@@ -79,7 +81,7 @@ try:
     for message in packets:
         retransmisions = 0
     	radio_Tx.write(str(flag) + message)
-	time.sleep(1/100)
+	time.sleep(1)
     	print("Message sent, waiting ACK: {}".format(message))
     	timeout = time.time() + time_ack
 #    	while not (ack_received):
