@@ -62,6 +62,7 @@ try:
     receivedPacket = 0
     while(1):
         timeout = time.time() + time_ack
+	radio_Rx.startListening()
         # radio_Rx.openReadingPipe(1, pipes[1])
         while not (receivedPacket):
             if radio_Rx.available(0):
@@ -82,14 +83,14 @@ try:
                         radio_Tx.write(list("ACK") + list(str(flag-1)))
                     timeout = time.time() + time_ack
             if((time.time() + 0.3) > timeout):
-                radio_Rx.openReadingPipe(0, pipes[1])
+                radio_Rx.openReadingPipe(0, pipes[0])
                 radio_Rx.startListening()
                 radio_Tx.write(list("ACK") + list(str(flag-1)))
                 timeout = time.time() + time_ack
         flag += 1 % 10
    
 except KeyboardInterrupt:
-    GPIO.output(23,0)
+    GPIO.output(22,0)
     GPIO.output(24,0)
     GPIO.cleanup()
     
