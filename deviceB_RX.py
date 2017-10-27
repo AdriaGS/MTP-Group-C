@@ -63,20 +63,22 @@ try:
     time_ack = 1
     outputFile = open("ReceivedFile.txt", "wb")
     receivedPacket = 0
+    radio_Rx.startListening()
     while(1):
         timeout = time.time() + time_ack
-	radio_Rx.startListening()
         # radio_Rx.openReadingPipe(1, pipes[1])
         while not (receivedPacket):
+	    str_frame = ""
             if radio_Rx.available(0):
 		print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-                print(frame)
-                print(str(flag))
+                #print(frame)
+                #print(str(flag))
                 #if(chr(frame[0]) == flag):
-                for c in range(1, len(frame)):
+                for c in range(0, len(frame)):
                     str_frame = str_frame + chr(frame[c])
-                 outputFile.write(str_frame)
+                print(str_frame)
+		outputFile.write(str_frame)
                     #radio_Tx.write(list("ACK") + list(str(flag)))
                 receivedPacket = 1
                 #else:
@@ -84,13 +86,14 @@ try:
                         #radio_Tx.write(list("ACK") + list("9"))
                     #else:
                         #radio_Tx.write(list("ACK") + list(str(flag-1)))
-                 timeout = time.time() + time_ack
+                timeout = time.time() + time_ack
             #if((time.time() + 0.3) > timeout):
             #    radio_Rx.openReadingPipe(0, pipes[0])
             #    radio_Rx.startListening()
             #    radio_Tx.write(list("ACK") + list(str(flag-1)))
             #    timeout = time.time() + time_ack
         flag += 1 % 10
+	receivedPacket = 0
    
 except KeyboardInterrupt:
     GPIO.output(22,0)
