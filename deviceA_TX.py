@@ -11,7 +11,8 @@ try:
     #GPIO.output(23,1)
     
     print("Transmitter")
-    pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+    pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
+    pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
     payloadSize = 32
     channel_TX = 0x60
     channel_RX = 0x65
@@ -45,7 +46,7 @@ try:
     radio_Rx.enableDynamicPayloads()
 
     #Open the writing and reading pipe
-    radio_Tx.openWritingPipe(pipes[0])
+    radio_Tx.openWritingPipe(pipe_Tx)
 
    	#We print the configuration details of both transceivers
     radio_Tx.printDetails()
@@ -78,30 +79,31 @@ try:
     for message in packets:
         retransmisions = 0
     	radio_Tx.write(str(flag) + message)
+	time.sleep(1/100)
     	print("Message sent, waiting ACK: {}".format(message))
     	timeout = time.time() + time_ack
-    	while not (ack_received):
-    		radio_Rx.openReadingPipe(1, pipes[1])
-    		radio_Rx.startListening()
-    		if radio_Rx.available(0):
-    			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
-    			for c in range(0, len(ack)):
-    				str_ack = str_ack + chr(ack[c])
-    			print("ACK received: " + str_ack)
-    			if(list(str_ack) != (list("ACK") + list(str(flag)))):
-    				print(list("ACK") + list(str(flag)))
-    				radio_Tx.write(str(flag) + message)
-    				timeout = time.time() + time_ack
-    				print("Message Lost")
-    			else:
-    				ack_received = 1
-    		if((time.time() + 0.2) > timeout):
-    			print("No ACK received resending message")
-    			retransmisions += 1
-    			print("Number of retransmision for message " + str(flag) + " = " + str(retransmisions))
-    			radio_Tx.openWritingPipe(pipes[1])
-    			radio_Tx.write(str(flag) + message)
-    			timeout = time.time() + time_ack
+#    	while not (ack_received):
+#    		radio_Rx.openReadingPipe(1, pipe_Rx)
+#    		radio_Rx.startListening()
+#    		if radio_Rx.available(0):
+#    			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
+#    			for c in range(0, len(ack)):
+#    				str_ack = str_ack + chr(ack[c])
+#    			print("ACK received: " + str_ack)
+#    			if(list(str_ack) != (list("ACK") + list(str(flag)))):
+#    				print(list("ACK") + list(str(flag)))
+#    				radio_Tx.write(str(flag) + message)
+#    				timeout = time.time() + time_ack
+#    				print("Message Lost")
+#    			else:
+#    				ack_received = 1
+#    		if((time.time() + 0.01) > timeout):
+#			print("No ACK received resending message")
+#    			retransmisions += 1
+#    			print("Number of retransmision for message " + str(flag) + " = " + str(retransmisions))
+#    			radio_Tx.openWritingPipe(pipe_Tx)
+#    			radio_Tx.write(str(flag) + message)
+#    			timeout = time.time() + time_ack
     	flag += 1 % 10
 
     final = time.time()
@@ -113,3 +115,4 @@ except KeyboardInterrupt:
     GPIO.output(24,0)
     GPIO.cleanup()
 	
+
