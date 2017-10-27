@@ -34,11 +34,10 @@ try:
         radio.startListening()
         while not radio.available(0):
             time.sleep(1/100)
-            
-        radio.read(frame, radio.getDynamicPayloadSize())
+       	radio.read(frame, radio.getDynamicPayloadSize())
         str_frame = ""
         for c in range(0, len(frame)):
-            str_frame += chr(frame[c])
+        	str_frame += chr(frame[c])
         print("Received Message: ")
         print(str_frame)
             

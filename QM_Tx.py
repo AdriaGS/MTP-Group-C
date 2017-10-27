@@ -18,7 +18,7 @@ try:
     radio.setChannel(0x60)
 
     radio.setDataRate(NRF24.BR_250KBPS)#2MBPS)
-    radio.setPALevel(NRF24.PA_MAX)#MIN)
+    radio.setPALevel(NRF24.PA_MIN)
     radio.setAutoAck(False)
     radio.enableDynamicPayloads()
 
@@ -30,7 +30,7 @@ try:
         print("Transmitting Ping")
         message = list("PINGDEPRUEBAMTPPROJECTTEAMC")
         radio.write(message)
-        time.sleep(5)
+        time.sleep(1)
         
 except KeyboardInterrupt:
     GPIO.output(23,0)
