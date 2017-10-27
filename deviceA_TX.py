@@ -35,8 +35,8 @@ try:
     radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 	#Configuration of the power level to be used by the transceiver
-    radio_Tx.setPALevel(NRF24.PA_MAX)
-    radio_Rx.setPALevel(NRF24.PA_MAX)
+    radio_Tx.setPALevel(NRF24.PA_MIN)
+    radio_Rx.setPALevel(NRF24.PA_MIN)
 
     #We disable the Auto Acknowledgement
     radio_Tx.setAutoAck(False)
@@ -45,7 +45,7 @@ try:
     radio_Rx.enableDynamicPayloads()
 
     #Open the writing and reading pipe
-    radio_Tx.openWritingPipe(pipes[1])
+    radio_Tx.openWritingPipe(pipes[0])
 
    	#We print the configuration details of both transceivers
     radio_Tx.printDetails()
@@ -59,7 +59,7 @@ try:
     ack = []
     str_ack = ""
     ack_received = 0
-    inFile = open("prova1.txt", "rb")
+    inFile = open("QuickModeFile.txt", "rb")
     data2Tx = inFile.read()
     inFile.close()
     packets = []
@@ -81,7 +81,7 @@ try:
     	print("Message sent, waiting ACK: {}".format(message))
     	timeout = time.time() + time_ack
     	while not (ack_received):
-    		radio_Rx.openReadingPipe(1, pipes[0])
+    		radio_Rx.openReadingPipe(1, pipes[1])
     		radio_Rx.startListening()
     		if radio_Rx.available(0):
     			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())

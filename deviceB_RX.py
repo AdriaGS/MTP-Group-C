@@ -35,8 +35,8 @@ try:
     radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
     #Configuration of the power level to be used by the transceiver
-    radio_Tx.setPALevel(NRF24.PA_MAX)
-    radio_Rx.setPALevel(NRF24.PA_MAX)
+    radio_Tx.setPALevel(NRF24.PA_MIN)
+    radio_Rx.setPALevel(NRF24.PA_MIN)
 
     #We disable the Auto Acknowledgement
     radio_Tx.setAutoAck(False)
@@ -45,8 +45,8 @@ try:
     radio_Rx.enableDynamicPayloads()
 
     #Open the writing and reading pipe
-    radio_Tx.openWritingPipe(pipes[0])
-    radio_Rx.openReadingPipe(1, pipes[1])
+    radio_Tx.openWritingPipe(pipes[1])
+    radio_Rx.openReadingPipe(1, pipes[0])
 
     #We print the configuration details of both transceivers
     radio_Tx.printDetails()
