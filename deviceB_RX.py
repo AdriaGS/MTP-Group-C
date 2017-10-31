@@ -9,8 +9,8 @@ try:
     import spidev
 
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(23, GPIO.OUT)
-    GPIO.output(23,1)
+    GPIO.setup(24, GPIO.OUT)
+    GPIO.output(24,1)
     GPIO.setup(22, GPIO.OUT)
     GPIO.output(22,1)
 
@@ -18,13 +18,13 @@ try:
     pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
     payloadSize = 32
     channel_RX = 0x60
-    channel_TX = 0x60
+    channel_TX = 0x65
 
     #Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
     radio_Tx = NRF24(GPIO, spidev.SpiDev())
     radio_Rx = NRF24(GPIO, spidev.SpiDev())
     radio_Tx.begin(0, 22)
-    radio_Rx.begin(0, 24)
+    radio_Rx.begin(1, 24)
 
     #We set the Payload Size to the limit which is 32 bytes
     radio_Tx.setPayloadSize(payloadSize)
@@ -39,8 +39,8 @@ try:
     radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
     #Configuration of the power level to be used by the transceiver
-    radio_Tx.setPALevel(NRF24.PA_MIN)
-    radio_Rx.setPALevel(NRF24.PA_MIN)
+    radio_Tx.setPALevel(NRF24.PA_LOW)
+    radio_Rx.setPALevel(NRF24.PA_LOW)
 
     #We disable the Auto Acknowledgement
     radio_Tx.setAutoAck(False)
@@ -64,7 +64,7 @@ try:
     frame = []
     str_frame = ""
     time_ack = 1
-    outputFile = open("ReceivedFile.txt", "wb")
+    outputFile = open("ReceivedFile2.txt", "wb")
     receivedPacket = 0
     radio_Rx.startListening()
     while(1):
@@ -78,14 +78,15 @@ try:
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
                 #print(frame)
                 #print(str(flag))
-                #if(chr(frame[0]) == flag):
-                for c in range(0, len(frame)):
-                    str_frame = str_frame + chr(frame[c])
-                print(str_frame)
-                outputFile.write(str_frame)
-                    #radio_Tx.write(list("ACK") + list(flag))
-                receivedPacket = 1
-                #else:
+                if(chr(frame[0]) == flag):
+                    for c in range(1, len(frame)):
+                	str_frame = str_frame + chr(frame[c])
+                    print(str_frame)
+                    outputFile.write(str_frame)
+                    radio_Tx.write(list("ACK") + list(flag))
+                    receivedPacket = 1
+		else:
+		    print("Wrong flag")
                     #if flag_n == 0:
                         #radio_Tx.write(list("ACK") + list('I'))
                     #else:
