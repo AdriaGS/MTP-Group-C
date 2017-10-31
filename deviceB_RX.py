@@ -57,20 +57,23 @@ try:
     radio_Rx.printDetails()
     print("*------------------------------------------------------------------------------------------------------------*")
 
+    original_flag = 'A'
+    flag = ''
+    flag_n = 0
     frame = []
     str_frame = ""
-    flag = 0
     time_ack = 1
     outputFile = open("ReceivedFile.txt", "wb")
     receivedPacket = 0
     radio_Rx.startListening()
     while(1):
         timeout = time.time() + time_ack
+        flag = chr(ord(original_flag) + flag_n)
         # radio_Rx.openReadingPipe(1, pipes[1])
         while not (receivedPacket):
 	    str_frame = ""
             if radio_Rx.available(0):
-		print("RECEIVED PKT")
+                print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
                 #print(frame)
                 #print(str(flag))
@@ -78,21 +81,21 @@ try:
                 for c in range(0, len(frame)):
                     str_frame = str_frame + chr(frame[c])
                 print(str_frame)
-		outputFile.write(str_frame)
-                    #radio_Tx.write(list("ACK") + list(str(flag)))
+                outputFile.write(str_frame)
+                    #radio_Tx.write(list("ACK") + list(flag))
                 receivedPacket = 1
                 #else:
-                    #if flag == 0:
-                        #radio_Tx.write(list("ACK") + list("9"))
+                    #if flag_n == 0:
+                        #radio_Tx.write(list("ACK") + list('I'))
                     #else:
-                        #radio_Tx.write(list("ACK") + list(str(flag-1)))
+                        #radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
                 timeout = time.time() + time_ack
             #if((time.time() + 0.3) > timeout):
             #    radio_Rx.openReadingPipe(0, pipes[0])
             #    radio_Rx.startListening()
-            #    radio_Tx.write(list("ACK") + list(str(flag-1)))
+            #    radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
             #    timeout = time.time() + time_ack
-        flag += 1 % 10
+        flag_n = (flag_n + 1) % 10
 	receivedPacket = 0
    
 except KeyboardInterrupt:
