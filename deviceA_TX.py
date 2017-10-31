@@ -34,8 +34,8 @@ try:
     radio_Rx.setChannel(channel_RX)
 
     #We set the Transmission Rate
-    radio_Tx.setDataRate(NRF24.BR_250KBPS)
-    radio_Rx.setDataRate(NRF24.BR_250KBPS)
+    radio_Tx.setDataRate(NRF24.BR_1MBPS)
+    radio_Rx.setDataRate(NRF24.BR_1MBPS)
 
     #Configuration of the power level to be used by the transceiver
     radio_Tx.setPALevel(NRF24.PA_LOW)
@@ -58,13 +58,13 @@ try:
     print("*------------------------------------------------------------------------------------------------------------*")
 
     original_flag = 'A'
-    flag = ''
+    flag = ""
     flag_n = 0
     overhead = 1
-    time_ack = 1
+    time_ack = 0.5
     ack = []
     ack_received = 0
-    inFile = open("QuickModeFile.txt", "rb")
+    inFile = open("1MBFile.txt", "rb")
     data2Tx = inFile.read()
     inFile.close()
     packets = []
@@ -86,11 +86,11 @@ try:
 	message2Send = str(flag) + message
     	radio_Tx.write(message2Send)
 	#radio_Tx.write(message)
-	time.sleep(1)
-    	print("Message sent: {}".format(message))
-    	timeout = time.time() + time_ack + 1
+	#time.sleep(1)
+    	#print("Message sent: {}".format(message))
+    	timeout = time.time() + time_ack
 	radio_Rx.startListening()
-	print("Waiting ACK...")
+	#print("Waiting ACK...")
 	str_ack = ""
     	while not (ack_received):
     		#radio_Rx.openReadingPipe(1, pipe_Rx)
@@ -98,9 +98,9 @@ try:
 			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
     			for c in range(0, len(ack)):
     				str_ack = str_ack + chr(ack[c])
-    			print("ACK received: " + str_ack)
+    			#print("ACK received: " + str_ack)
     			if(list(str_ack) != (list("ACK") + list(flag))):
-    				print(list("ACK") + list(flag))
+    				#print(list("ACK") + list(flag))
     				radio_Tx.write(list(flag) + list(message))
     				timeout = time.time() + time_ack
     				print("Message Lost")
@@ -113,7 +113,7 @@ try:
     			#print("Number of retransmision for message " + flag + " = " + str(retransmisions))
     			#radio_Tx.openWritingPipe(pipe_Tx)
     			radio_Tx.write(message2Send)
-    			timeout = time.time() + time_ack + 1
+    			timeout = time.time() + time_ack
 	ack_received = 0
     	flag_n = (flag_n + 1) % 10
 
