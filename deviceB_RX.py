@@ -35,8 +35,8 @@ try:
     radio_Rx.setChannel(channel_RX)
 
     #We set the Transmission Rate
-    radio_Tx.setDataRate(NRF24.BR_250KBPS)
-    radio_Rx.setDataRate(NRF24.BR_250KBPS)
+    radio_Tx.setDataRate(NRF24.BR_1MBPS)
+    radio_Rx.setDataRate(NRF24.BR_1MBPS)
 
     #Configuration of the power level to be used by the transceiver
     radio_Tx.setPALevel(NRF24.PA_LOW)
@@ -59,12 +59,12 @@ try:
     print("*------------------------------------------------------------------------------------------------------------*")
 
     original_flag = 'A'
-    flag = ''
+    flag = ""
     flag_n = 0
     frame = []
     str_frame = ""
     time_ack = 1
-    outputFile = open("ReceivedFile2.txt", "wb")
+    outputFile = open("ReceivedFile1MB.txt", "wb")
     receivedPacket = 0
     radio_Rx.startListening()
     while(1):
@@ -74,23 +74,23 @@ try:
         while not (receivedPacket):
 	    str_frame = ""
             if radio_Rx.available(0):
-                print("RECEIVED PKT")
+                #print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-                #print(frame)
+                #print(chr(frame[0]))
                 #print(str(flag))
                 if(chr(frame[0]) == flag):
                     for c in range(1, len(frame)):
                 	str_frame = str_frame + chr(frame[c])
-                    print(str_frame)
+                    #print(str_frame)
                     outputFile.write(str_frame)
                     radio_Tx.write(list("ACK") + list(flag))
                     receivedPacket = 1
 		else:
 		    print("Wrong flag")
-                    #if flag_n == 0:
-                        #radio_Tx.write(list("ACK") + list('I'))
-                    #else:
-                        #radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
+                    if flag_n == 0:
+                        radio_Tx.write(list("ACK") + list('J'))
+                    else:
+                        radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
                 timeout = time.time() + time_ack
             #if((time.time() + 0.3) > timeout):
             #    radio_Rx.openReadingPipe(0, pipes[0])
