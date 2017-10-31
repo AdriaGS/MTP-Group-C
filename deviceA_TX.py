@@ -83,8 +83,8 @@ try:
     for message in packets:
         retransmisions = 0
         flag = chr(ord(original_flag) + flag_n)
-    	radio_Tx.write(list(flag) + message)
-		time.sleep(1)
+    	radio_Tx.write(list(flag) + list(message))
+	time.sleep(1)
     	print("Message sent, waiting ACK: {}".format(message))
     	timeout = time.time() + time_ack
 #    	while not (ack_received):
@@ -97,7 +97,7 @@ try:
 #    			print("ACK received: " + str_ack)
 #    			if(list(str_ack) != (list("ACK") + list(flag))):
 #    				print(list("ACK") + list(flag))
-#    				radio_Tx.write(list(flag) + message)
+#    				radio_Tx.write(list(flag) + list(message))
 #    				timeout = time.time() + time_ack
 #    				print("Message Lost")
 #    			else:
@@ -107,7 +107,7 @@ try:
 #    			retransmisions += 1
 #    			print("Number of retransmision for message " + flag + " = " + str(retransmisions))
 #    			radio_Tx.openWritingPipe(pipe_Tx)
-#    			radio_Tx.write(list(flag) + message)
+#    			radio_Tx.write(list(flag) + list(message))
 #    			timeout = time.time() + time_ack
     	flag_n = (flag_n + 1) % 10
 
