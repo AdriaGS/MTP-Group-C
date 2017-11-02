@@ -93,7 +93,6 @@ try:
 	print("Waiting ACK...")
 	str_ack = ""
     	while not (ack_received):
-    		#radio_Rx.openReadingPipe(1, pipe_Rx)
     		if radio_Rx.available(0):
 			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
     			for c in range(0, len(ack)):
@@ -111,7 +110,6 @@ try:
 			print("No ACK received resending message")
     			retransmisions += 1
     			print("Number of retransmision for message " + flag + " = " + str(retransmisions))
-    			#radio_Tx.openWritingPipe(pipe_Tx)
     			radio_Tx.write(message2Send)
     			timeout = time.time() + time_ack
 	ack_received = 0
