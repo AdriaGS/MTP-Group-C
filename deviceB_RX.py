@@ -76,9 +76,10 @@ try:
             if radio_Rx.available(0):
                 print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-                print(str(frame))
-                print(str(flag))
-                if(chr(frame[0]) == flag):
+                #print(str(frame))
+                print("Expected flag: "+str(flag))
+                print("Received flag: "+str(frame[0]))
+	        if(chr(frame[0]) == flag):
                     for c in range(1, len(frame)):
                 	str_frame = str_frame + chr(frame[c])
                     print(str_frame)
@@ -88,8 +89,10 @@ try:
                 else:
                     print("Wrong flag")
                     if flag_n == 0:
+                        print("Sending ACK of J")
                         radio_Tx.write(list("ACK") + list('J'))
                     else:
+			print("Sending ACK of "+chr(ord(original_flag)+flag_n-1))
                         radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
                 timeout = time.time() + time_ack
             #if((time.time() + 0.3) > timeout):
@@ -104,3 +107,4 @@ except KeyboardInterrupt:
     GPIO.output(22,0)
     GPIO.output(24,0)
     GPIO.cleanup()
+
