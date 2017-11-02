@@ -74,14 +74,14 @@ try:
         while not (receivedPacket):
 	    str_frame = ""
             if radio_Rx.available(0):
-                #print("RECEIVED PKT")
+                print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
                 #print(chr(frame[0]))
                 #print(str(flag))
                 if(chr(frame[0]) == flag):
                     for c in range(1, len(frame)):
                 	str_frame = str_frame + chr(frame[c])
-                    #print(str_frame)
+                    print(str_frame)
                     outputFile.write(str_frame)
                     radio_Tx.write(list("ACK") + list(flag))
                     receivedPacket = 1
