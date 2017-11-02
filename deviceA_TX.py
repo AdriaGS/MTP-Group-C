@@ -90,7 +90,7 @@ try:
     	#print("Message sent: {}".format(message))
     	timeout = time.time() + time_ack
 	radio_Rx.startListening()
-	#print("Waiting ACK...")
+	print("Waiting ACK...")
 	str_ack = ""
     	while not (ack_received):
     		#radio_Rx.openReadingPipe(1, pipe_Rx)
@@ -98,9 +98,9 @@ try:
 			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
     			for c in range(0, len(ack)):
     				str_ack = str_ack + chr(ack[c])
-    			#print("ACK received: " + str_ack)
+    			print("ACK received: " + str_ack)
     			if(list(str_ack) != (list("ACK") + list(flag))):
-    				#print(list("ACK") + list(flag))
+    				print(list("ACK") + list(flag))
     				radio_Tx.write(list(flag) + list(message))
     				timeout = time.time() + time_ack
     				print("Message Lost")
@@ -126,4 +126,3 @@ except KeyboardInterrupt:
     GPIO.output(24,0)
     GPIO.cleanup()
 	
-

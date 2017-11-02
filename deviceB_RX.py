@@ -76,7 +76,7 @@ try:
             if radio_Rx.available(0):
                 print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-                #print(chr(frame[0]))
+                print(str(frame))
                 #print(str(flag))
                 if(chr(frame[0]) == flag):
                     for c in range(1, len(frame)):
