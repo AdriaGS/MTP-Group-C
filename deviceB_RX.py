@@ -64,7 +64,7 @@ try:
     frame = []
     str_frame = ""
     time_ack = 1
-    outputFile = open("ReceivedFile1MB.txt", "wb")
+    outputFile = open("ReceivedFileQM.txt", "wb")
     receivedPacket = 0
     radio_Rx.startListening()
     while(1):
