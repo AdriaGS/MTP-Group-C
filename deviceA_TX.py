@@ -64,7 +64,7 @@ try:
     time_ack = 0.5
     ack = []
     ack_received = 0
-    inFile = open("1MBFile.txt", "rb")
+    inFile = open("QuickModeFile.txt", "rb")
     data2Tx = inFile.read()
     inFile.close()
     packets = []
