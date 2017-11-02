@@ -72,7 +72,7 @@ try:
         flag = chr(ord(original_flag) + flag_n)
         # radio_Rx.openReadingPipe(1, pipes[1])
         while not (receivedPacket):
-	    str_frame = ""
+            str_frame = ""
             if radio_Rx.available(0):
                 print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
@@ -85,8 +85,8 @@ try:
                     outputFile.write(str_frame)
                     radio_Tx.write(list("ACK") + list(flag))
                     receivedPacket = 1
-		else:
-		    print("Wrong flag")
+                else:
+                    print("Wrong flag")
                     if flag_n == 0:
                         radio_Tx.write(list("ACK") + list('J'))
                     else:
