@@ -35,8 +35,8 @@ try:
     radio_Rx.setChannel(channel_RX)
 
     #We set the Transmission Rate
-    radio_Tx.setDataRate(NRF24.BR_1MBPS)
-    radio_Rx.setDataRate(NRF24.BR_1MBPS)
+    radio_Tx.setDataRate(NRF24.BR_250KBPS)
+    radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
     #Configuration of the power level to be used by the transceiver
     radio_Tx.setPALevel(NRF24.PA_LOW)
@@ -72,11 +72,11 @@ try:
         flag = chr(ord(original_flag) + flag_n)
         # radio_Rx.openReadingPipe(1, pipes[1])
         while not (receivedPacket):
-	    str_frame = ""
+            str_frame = ""
             if radio_Rx.available(0):
                 print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-                print(chr(frame[0]))
+                print(str(frame))
                 print(str(flag))
                 if(chr(frame[0]) == flag):
                     for c in range(1, len(frame)):
@@ -85,8 +85,8 @@ try:
                     outputFile.write(str_frame)
                     radio_Tx.write(list("ACK") + list(flag))
                     receivedPacket = 1
-		else:
-		    print("Wrong flag")
+                else:
+                    print("Wrong flag")
                     if flag_n == 0:
                         radio_Tx.write(list("ACK") + list('J'))
                     else:

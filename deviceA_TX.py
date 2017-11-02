@@ -126,4 +126,3 @@ except KeyboardInterrupt:
     GPIO.output(24,0)
     GPIO.cleanup()
 	
-
