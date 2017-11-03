@@ -38,8 +38,8 @@ try:
     radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
     #Configuration of the power level to be used by the transceiver
-    radio_Tx.setPALevel(NRF24.PA_MIN)
-    radio_Rx.setPALevel(NRF24.PA_MIN)
+    radio_Tx.setPALevel(NRF24.PA_LOW)
+    radio_Rx.setPALevel(NRF24.PA_LOW)
 
     #We disable the Auto Acknowledgement
     radio_Tx.setAutoAck(False)
@@ -87,19 +87,19 @@ try:
     	radio_Tx.write(message2Send)
 	#radio_Tx.write(message)
 	#time.sleep(1)
-    	print("Message sent: {}".format(message))
+    	#print("Message sent: {}".format(message))
     	timeout = time.time() + time_ack
 	radio_Rx.startListening()
-	print("Waiting ACK...")
+	#print("Waiting ACK...")
 	str_ack = ""
     	while not (ack_received):
     		if radio_Rx.available(0):
 			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
     			for c in range(0, len(ack)):
     				str_ack = str_ack + chr(ack[c])
-    			print("ACK received: " + str_ack)
+    			#print("ACK received: " + str_ack)
     			if(list(str_ack) != (list("ACK") + list(flag))):
-    				print(list("ACK") + list(flag))
+    				#print(list("ACK") + list(flag))
     				radio_Tx.write(list(flag) + list(message))
     				timeout = time.time() + time_ack
     				print("Message Lost")
@@ -109,7 +109,7 @@ try:
     		if((time.time() + 0.01) > timeout):
 			print("No ACK received resending message")
     			retransmisions += 1
-    			print("Number of retransmision for message " + flag + " = " + str(retransmisions))
+    			#print("Number of retransmision for message " + flag + " = " + str(retransmisions))
     			radio_Tx.write(message2Send)
     			timeout = time.time() + time_ack
 	ack_received = 0

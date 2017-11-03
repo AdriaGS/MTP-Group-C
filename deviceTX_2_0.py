@@ -34,8 +34,8 @@ try:
 	radio_Rx.setChannel(channel_RX)
 
 	#We set the Transmission Rate
-	radio_Tx.setDataRate(NRF24.BR_1MBPS)
-	radio_Rx.setDataRate(NRF24.BR_1MBPS)
+	radio_Tx.setDataRate(NRF24.BR_250KBPS)
+	radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 	#Configuration of the power level to be used by the transceiver
 	radio_Tx.setPALevel(NRF24.PA_LOW)
@@ -65,7 +65,7 @@ try:
 	ack = []
 	ack_received = 0
 	controlAck_received = 0
-	inFile = open("1MBFile.txt", "rb")
+	inFile = open("prova1.txt", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
 	packets = []
@@ -82,7 +82,6 @@ try:
 
 	#Start time
 	start = time.time()
-
 	#We send a first packet to tell the receiver how many packets we'll be sending
 	radio_Tx.write(str(numberofPackets))
 	#time.sleep(1)
@@ -98,11 +97,11 @@ try:
 				radio_Tx.write(str(numberofPackets))
 				timeout = time.time() + time_ack
 				print("Control Message Lost")
-			str_ack = ""
+				str_ack = ""
 			else:
 				controlAck_received = 1
 		if((time.time() + 0.01) > timeout):
-		print("No Control ACK received resending message")
+			print("No Control ACK received resending message")
 			radio_Tx.write(str(numberofPackets))
 			timeout = time.time() + time_ack
 
@@ -130,7 +129,7 @@ try:
 				else:
 					ack_received = 1
 			if((time.time() + 0.2) > timeout):
-			print("No ACK received resending message")
+				print("No ACK received resending message")
 				radio_Tx.write(message2Send)
 				timeout = time.time() + time_ack
 		ack_received = 0
