@@ -39,8 +39,8 @@ try:
     radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
     #Configuration of the power level to be used by the transceiver
-    radio_Tx.setPALevel(NRF24.PA_MIN)
-    radio_Rx.setPALevel(NRF24.PA_MIN)
+    radio_Tx.setPALevel(NRF24.PA_LOW)
+    radio_Rx.setPALevel(NRF24.PA_LOW)
 
     #We disable the Auto Acknowledgement
     radio_Tx.setAutoAck(False)
@@ -74,25 +74,25 @@ try:
         while not (receivedPacket):
             str_frame = ""
             if radio_Rx.available(0):
-                print("RECEIVED PKT")
+                #print("RECEIVED PKT")
                 radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
                 #print(str(frame))
-                print("Expected flag: "+str(flag))
-                print("Received flag: "+str(frame[0]))
+                #print("Expected flag: "+str(flag))
+                #print("Received flag: "+str(frame[0]))
 	        if(chr(frame[0]) == flag):
                     for c in range(1, len(frame)):
                 	str_frame = str_frame + chr(frame[c])
-                    print(str_frame)
+                    #print(str_frame)
                     outputFile.write(str_frame)
                     radio_Tx.write(list("ACK") + list(flag))
                     receivedPacket = 1
                 else:
                     print("Wrong flag")
                     if flag_n == 0:
-                        print("Sending ACK of J")
+                        #print("Sending ACK of J")
                         radio_Tx.write(list("ACK") + list('J'))
                     else:
-			print("Sending ACK of "+chr(ord(original_flag)+flag_n-1))
+			#print("Sending ACK of "+chr(ord(original_flag)+flag_n-1))
                         radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
                 timeout = time.time() + time_ack
             #if((time.time() + 0.3) > timeout):

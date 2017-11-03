@@ -35,8 +35,8 @@ try:
 	radio_Rx.setChannel(channel_RX)
 
 	#We set the Transmission Rate
-	radio_Tx.setDataRate(NRF24.BR_1MBPS)
-	radio_Rx.setDataRate(NRF24.BR_1MBPS)
+	radio_Tx.setDataRate(NRF24.BR_250KBPS)
+	radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 	#Configuration of the power level to be used by the transceiver
 	radio_Tx.setPALevel(NRF24.PA_LOW)
@@ -64,7 +64,7 @@ try:
 	frame = []
 	str_frame = ""
 	time_ack = 1
-	outputFile = open("ReceivedFile1MB.txt", "wb")
+	outputFile = open("ReceivedFile2.txt", "wb")
 	receivedPacket = 0
 	receivedControlPacket = 0
 	numberOfPackets = 0
@@ -74,25 +74,29 @@ try:
 	while not (receivedControlPacket):
 		str_Controlframe = ""
 		if radio_Rx.available(0):
+			print("RECEIVED CTRL")
 			radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-			for c in range(1, len(frame)):
+			for c in range(0, len(frame)):
 				str_Controlframe = str_Controlframe + chr(frame[c])
+			print("CTRL frame: " + str_Controlframe)
+			print("Sending ACK to CTRL")
 			radio_Tx.write(list("ACK"))
 			receivedControlPacket = 1
 
 	numberOfPackets = int(float(str_Controlframe))
-	
-	radio_Rx.startListening()
+	print(numberOfPackets)
+	#radio_Rx.startListening()
 	for i in range(0,numberOfPackets):
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
 		while not (receivedPacket):
 			str_frame = ""
 			if radio_Rx.available(0):
+				#print("RECEIVED PKT")
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
 					for c in range(1, len(frame)):
-					str_frame = str_frame + chr(frame[c])
+					    str_frame = str_frame + chr(frame[c])
 					outputFile.write(str_frame)
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
