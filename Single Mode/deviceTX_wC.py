@@ -135,7 +135,7 @@ def main():
 	dataControlSize = payloadSize
 	#Now we conform all the packets in a list
 	for i in range (0, len(division), dataControlSize):
-		if((i+dataSize) < len(data2Tx)):
+		if((i+dataSize) < len(division)):
 			packets.append(division[i:i+dataSize])
 		else:
 			packets.append(division[i:])
@@ -144,7 +144,7 @@ def main():
 	dataSize = payloadSize - overhead
 	#Now we conform all the packets in a list
 	for i in range (0, len(data2Tx_compressed), dataSize):
-		if((i+dataSize) < len(data2Tx)):
+		if((i+dataSize) < len(data2Tx_compressed)):
 			packets.append(data2Tx_compressed[i:i+dataSize])
 		else:
 			packets.append(data2Tx_compressed[i:])
