@@ -130,8 +130,8 @@ def main():
 			if radio_Rx.available(0):
 				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
 				print(ctrlFrame)
-				print(ord(ctrl_flag))
-				if(chr(ctrlFrame[0]) == ord(ctrl_flag)):
+				print(ctrl_flag)
+				if(chr(ctrlFrame[0]) == ctrl_flag):
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
 					receivedControlPacket = 1
 				else:

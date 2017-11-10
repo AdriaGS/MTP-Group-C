@@ -140,11 +140,11 @@ def main():
 		numberofPackets += 1
 
 	#Now we conform all the control packets in a list
-	controlList = ""
+	controlList = []
 	
 	for val in data2Tx_compressed:
 		division = int(val/256)
-		controlList += str(division)
+		controlList.append(chr(division))
 
 	dataControlSize = payloadSize - overhead
 	#Now we conform all the packets in a list
@@ -180,7 +180,6 @@ def main():
 			timeout = time.time() + time_ack
 
 	for controlMessage in control_packets:
-		print(type(controlMessage))
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = str(ctrl_flag) + controlMessage
 		print(list(ctrlMessage))
