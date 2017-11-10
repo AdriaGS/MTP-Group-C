@@ -7,33 +7,34 @@ import csv
 import scipy.io
 import mat4py as m4p
 import array
+from bitarray import bitarray
 
 def compress(uncompressed):
-    """Compress a string to a list of output symbols."""
+	"""Compress a string to a list of output symbols."""
  
-    # Build the dictionary.
-    dict_size = 256
-    dictionary = {chr(i): i for i in range(dict_size)}
-    #dictionary = dict((chr(i), i) for i in xrange(dict_size))
-    # in Python 3: dictionary = {chr(i): i for i in range(dict_size)}
+	# Build the dictionary.
+	dict_size = 256
+	dictionary = {chr(i): i for i in range(dict_size)}
+	#dictionary = dict((chr(i), i) for i in xrange(dict_size))
+	# in Python 3: dictionary = {chr(i): i for i in range(dict_size)}
  
-    w = ""
-    result = []
-    for c in uncompressed:
-        wc = w + c
-        if wc in dictionary:
-            w = wc
-        else:
-            result.append(dictionary[w])
-            # Add wc to the dictionary.
-            dictionary[wc] = dict_size
-            dict_size += 1
-            w = c
+	w = ""
+	result = []
+	for c in uncompressed:
+		wc = w + c
+		if wc in dictionary:
+			w = wc
+		else:
+			result.append(dictionary[w])
+			# Add wc to the dictionary.
+			dictionary[wc] = dict_size
+			dict_size += 1
+			w = c
  
-    # Output the code for w.
-    if w:
-        result.append(dictionary[w])
-    return result
+	# Output the code for w.
+	if w:
+		result.append(dictionary[w])
+	return result
 
 def printSummary(file1, file2):
 	"""
@@ -55,7 +56,7 @@ def printSummary(file1, file2):
 	sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n')
 
 def main():	
-	file='ElQuijote.txt'
+	file='SampleTextFile1Mb.txt'
 	f = open(file,'r')
 	comp = compress(f.read())
 	f.close()
@@ -65,11 +66,16 @@ def main():
 
 	print(max(comp))
 	print(len(comp))
+	print(bin(max(comp)))
 
-	str1 = ''.join(str(comp))
+	#string = "".join(chr(val) for val in comp)
+
+	#print(string)
+
+	#print(bitarray(str1))
 
 	#for i in str1:
-	 	#print(i)
+		#print(i)
 
 if __name__ == '__main__':
 	main()

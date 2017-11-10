@@ -6,6 +6,7 @@ import sqlite3
 import csv
 import scipy.io
 import mat4py as m4p
+import bitarray
 
 def compress(uncompressed):
     """Compress a string to a list of output symbols."""
