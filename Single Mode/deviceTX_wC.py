@@ -144,7 +144,7 @@ def main():
 	
 	for val in data2Tx_compressed:
 		division = int(val/256)
-		controlList.append(chr(division))
+		controlList.append(division)
 
 	dataControlSize = payloadSize - overhead
 	#Now we conform all the packets in a list
