@@ -145,9 +145,9 @@ def main():
 	#Now we conform all the packets in a list
 	for i in range (0, len(controlList), dataControlSize):
 		if((i+dataControlSize) < len(controlList)):
-			packets.append(str(controlList[i:i+dataControlSize]))
+			packets.append(controlList[i:i+dataControlSize])
 		else:
-			packets.append(str(controlList[i:]))
+			packets.append(controlList[i:])
 		numberofControlPackets += 1
 	
 	print(numberofPackets)
@@ -177,7 +177,7 @@ def main():
 			timeout = time.time() + time_ack
 
 	for controlMessage in controlList:
-		radio_Tx.write(controlMessage)
+		radio_Tx.write(str(controlMessage))
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_ack = ""
