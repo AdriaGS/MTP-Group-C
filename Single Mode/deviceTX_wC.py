@@ -125,11 +125,11 @@ def main():
 	numberofControlPackets = 0
 
 	data2Tx_compressed = compress(data2Tx)
-	division = []
+	division = ""
 	i = 0
 	
 	for val in data2Tx_compressed:
-		division.append(chr(int(val/256)))
+		division += (chr(int(val/256)))
 
 	print(division)
 
