@@ -120,8 +120,8 @@ def main():
 	print(controlFrame[0])
 	print(controlFrame[1])
 
-	numberofControlPackets = int(float(controlframe[1]))
-	numberOfPackets = int(float(controlframe[0]))
+	numberofControlPackets = int(float(controlFrame[1]))
+	numberOfPackets = int(float(controlFrame[0]))
 	print(numberOfPackets)
 	#radio_Rx.startListening()
 
