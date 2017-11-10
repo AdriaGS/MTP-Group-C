@@ -9,6 +9,7 @@ import numpy
 import pickle
 import sqlite3
 import mat4py as m4p
+import os
 
 def compress(uncompressed):
 	"""Compress a string to a list of output symbols."""
@@ -142,6 +143,9 @@ def main():
 	
 	for val in data2Tx_compressed:
 		controlList += chr(int(val/256))
+
+	print(controlList)
+	os.system("pause")
 
 	dataControlSize = payloadSize - overhead
 	#Now we conform all the packets in a list
