@@ -110,27 +110,47 @@ def main():
 	radio_Rx.printDetails()
 	print("*------------------------------------------------------------------------------------------------------------*")
 
+	###############################################################################################################################
+	###############################################################################################################################
+	###############################################################################################################################
+
+	#Read file to transmit
+	inFile = open("ElQuijote.txt", "rb")
+	data2Tx = inFile.read()
+	inFile.close()
+
+	#flag variables
 	original_flag = 'A'
 	flag = ""
 	ctrl_flag_n = 0
 	flag_n = 0
+
+	#packet realted variables
 	overhead = 1
-	time_ack = 0.5
+	dataSize = payloadSize - overhead
+	dataControlSize = payloadSize - overhead
+	#Control Packets
+	control_packets = []
+	numberofControlPackets = 0
+	#Data Packets
+	packets = []
+	numberofPackets = 0
+
+	#ACK related variables
 	ack = []
+	handshake = []
+	ctrl_ack = []
 	ack_received = 0
 	controlAck_received = 0
 	handshakeAck_received = 0
-	inFile = open("ElQuijote.txt", "rb")
-	data2Tx = inFile.read()
-	inFile.close()
-	packets = []
-	control_packets = []
-	numberofPackets = 0
-	numberofControlPackets = 0
 
+	#Time variables
+	time_ack = 0.5
+
+
+	#Compression of the data to transmit into data2Tx_compressed
 	data2Tx_compressed = compress(data2Tx)
 
-	dataSize = payloadSize - overhead
 	#Now we conform all the data packets in a list
 	for i in range (0, len(data2Tx_compressed), dataSize):
 		if((i+dataSize) < len(data2Tx_compressed)):
@@ -139,17 +159,16 @@ def main():
 			packets.append(data2Tx_compressed[i:])
 		numberofPackets += 1
 
-	#Now we conform all the control packets in a list
+	#We create the string with the packets needed to decompress the file transmitted
 	controlList = []
 	
 	for val in data2Tx_compressed:
 		division = int(val/256)
 		controlList.append(division)
 
-	dataControlSize = payloadSize - overhead
-	#Now we conform all the packets in a list
+	#Now we conform all the control packets in a list
 	for x in range (0, len(controlList), dataControlSize):
-		if((i+dataControlSize) < len(controlList)):
+		if((x+dataControlSize) < len(controlList)):
 			control_packets.append(controlList[x:x+dataControlSize])
 		else:
 			control_packets.append(controlList[x:])
@@ -160,49 +179,67 @@ def main():
 	radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
-	str_ack = ""
+	str_Handshake = ""
+
+	#While we don't receive the handshake ack we keep trying
 	while not (handshakeAck_received):
+
 		if radio_Rx.available(0):
-			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
-			for c in range(0, len(ack)):
-				str_ack = str_ack + chr(ack[c])
-			if(list(str_ack) != list("ACK")):
-				radio_Tx.write(str(numberofPackets))
+			radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
+
+			for c in range(0, len(handshake)):
+				str_Handshake = str_Handshake + chr(handshake[c])
+
+			#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
+			if(list(str_Handshake) != list("ACK")):												#####Can we avoid the for above? using directly ack received from .read()
+				radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
 				timeout = time.time() + time_ack
 				print("Handshake Message Lost")
-				str_ack = ""
+				str_Handshake = ""
 			else:
-				print("Handshake accomplished")
+				print("Handshake done")
 				handshakeAck_received = 1
+
+		#If an established time passes and we have not received anything we retransmit the handshake packet
 		if((time.time() + 0.01) > timeout):
 			print("No Handshake ACK received resending message")
-			radio_Tx.write(str(numberofPackets))
+			radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
 			timeout = time.time() + time_ack
 
+	#We send all control packets
 	for controlMessage in control_packets:
+
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = list(ctrl_flag) + controlMessage
-		print(ctrlMessage)
+		#print(ctrlMessage)
 		radio_Tx.write(list(ctrlMessage))
+
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
-		str_ack = ""
+		str_controlAck = ""
+
+		#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
 		while not (controlAck_received):
-			time.sleep(1)
+			#time.sleep(1)
+
 			if radio_Rx.available(0):
-				radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
-				for c in range(0, len(ack)):
-					str_ack = str_ack + chr(ack[c])
-				if(list(str_ack) != (list("ACK") + list(ctrl_flag))):
+				radio_Rx.read(ctrl_ack, radio_Rx.getDynamicPayloadSize())
+
+				for c in range(0, len(ctrl_ack)):
+					str_controlAck = str_controlAck + chr(ctrl_ack[c])
+
+				#If the received ACK does not match the expected one we retransmit, else we set the received control ack to 1
+				if(list(str_controlAck) != (list("ACK") + list(ctrl_flag))):
 					radio_Tx.write(ctrlMessage)
 					timeout = time.time() + time_ack
-					print("Control Message Lost")
-					str_ack = ""
+					print("Control ACK received but not the expected one --> resending message")
+					str_controlAck = ""
 				else:
 					controlAck_received = 1
 
+			#If an established time passes and we have not received anything we retransmit the control packet
 			if((time.time() + 0.01) > timeout):
-				print("No Control ACK received resending message")
+				print("No Control ACK received --> resending message")
 				radio_Tx.write(ctrlMessage)
 				timeout = time.time() + time_ack
 
@@ -211,31 +248,39 @@ def main():
 
 	#We iterate over every packet to be sent
 	for message in packets:
+
 		flag = chr(ord(original_flag) + flag_n)
 		message2Send = list(flag) + message
 		radio_Tx.write(message2Send)
 		#time.sleep(1)
+
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_ack = ""
+
+		#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
 		while not (ack_received):
 			if radio_Rx.available(0):
 				radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
+
 				for c in range(0, len(ack)):
 					str_ack = str_ack + chr(ack[c])
-				#print("ACK received: " + str_ack)
+
+				#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
 				if(list(str_ack) != (list("ACK") + list(flag))):
-					#print(list("ACK") + list(flag))
 					radio_Tx.write(list(flag) + list(message))
 					timeout = time.time() + time_ack
-					print("Message Lost")
+					print("Data ACK received but not the expected one --> resending message")
 					str_ack = ""
 				else:
 					ack_received = 1
-			if((time.time() + 0.2) > timeout):
-				print("No ACK received resending message")
+
+			#If an established time passes and we have not received anything we retransmit the data packet
+			if((time.time() + 0.01) > timeout):
+				print("No Data ACK received resending message")
 				radio_Tx.write(message2Send)
 				timeout = time.time() + time_ack
+				
 		ack_received = 0
 		flag_n = (flag_n + 1) % 10
 

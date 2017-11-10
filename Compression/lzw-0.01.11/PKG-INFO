@@ -1,0 +1,22 @@
+Metadata-Version: 1.0
+Name: lzw
+Version: 0.01.11
+Summary: Low Level, pure python lzw compression/decompression library
+Home-page: http://www.joe-bowers.com/static/lzw
+Author: Joe Bowers
+Author-email: joerbowers@gmail.com
+License: MIT License
+Download-URL: http://pypi.python.org/packages/source/l/lzw/lzw-0.01.tar.gz
+Description: 
+        A pure python module for compressing and decompressing streams of
+        data, built around iterators. Requires python 2.6
+        
+Platform: Python 2.6
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Programming Language :: Python
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: System :: Archiving
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English

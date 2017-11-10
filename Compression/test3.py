@@ -56,17 +56,27 @@ def printSummary(file1, file2):
 	sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n')
 
 def main():	
-	file='SampleTextFile1Mb.txt'
-	f = open(file,'r')
-	comp = compress(f.read())
-	f.close()
 
+	finalData = ""
+	file='ElQuijote.txt'
+	f = open(file,'rb')
+	comp = compress(f.read())
+
+	for x in comp:
+		finalData += str(x)
+
+	print(finalData)
+
+	print(type(f.read()))
 	print(type(comp))
-	#print(comp)
 
 	print(max(comp))
 	print(len(comp))
 	print(bin(max(comp)))
+
+	f.close()
+
+
 
 	#string = "".join(chr(val) for val in comp)
 

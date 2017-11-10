@@ -88,55 +88,73 @@ def main():
 	radio_Rx.printDetails()
 	print("*------------------------------------------------------------------------------------------------------------*")
 
+	###############################################################################################################################
+	###############################################################################################################################
+	###############################################################################################################################
+
+	#Open file to save the transmitted data
+	outputFile = open("RxFileCompressed.txt", "wb")
+
+	#Flag variables
 	original_flag = 'A'
 	flag = ""
 	flag_n = 0
 	ctrl_flag_n = 0
+
+	#Packet related variables
 	frame = []
 	ctrlFrame = []
-	str_frame = ""
-	time_ack = 1
-	outputFile = open("RxFileCompressed.txt", "wb")
+	handshake_frame = []
+
+	#ACK related variables
+	time_ack = 0.5
 	receivedPacket = 0
 	receivedHandshakePacket = 0
 	receivedControlPacket = 0
-	numberOfPackets = 0
 
 	#We listen for the control packet
 	radio_Rx.startListening()
 	while not (receivedHandshakePacket):
-		str_Controlframe = ""
+		str_Handshakeframe = ""
+
 		if radio_Rx.available(0):
-			print("RECEIVED CTRL")
-			radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-			for c in range(0, len(frame)):
-				str_Controlframe = str_Controlframe + chr(frame[c])
-			#print("CTRL frame: " + str_Controlframe)
-			print("Sending ACK to CTRL")
+			radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
+
+			for c in range(0, len(handshake_frame)):
+				str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
+
+			#print("Handshake frame: " + str_Controlframe)
+			print("Handshake received sending ACK")
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	numberOfPackets, numberofControlPackets = str_Controlframe.split(",")
-	print(numberOfPackets)
-	print(numberofControlPackets)
+	numberOfPackets, numberofControlPackets = str_Handshakeframe.split(",")
+	print("The number of control packets that will be transmitted: " + numberofControlPackets)
+	print("The number of data packets that will be transmitted: " + numberOfPackets)
+	print(int(numberofControlPackets))
+	print(int(numberOfPackets))
 	
 	radio_Rx.startListening()
 
-	for x in range(0,int(numberofControlPackets)):
+	#For all the control packets that are to be received we send a control ack for every one we receive correctly
+	for x in range(0, int(numberofControlPackets)):
+
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		timeout = time.time() + time_ack
+
+		#While we don't receive the expected control packet we keep trying
 		while not (receivedControlPacket):
-			str_frame = ""
+			str_controlFrame = ""
 			if radio_Rx.available(0):
 				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
-				print(ctrlFrame)
-				print(ctrl_flag)
+
+				#We check if the received packet is the expected one
 				if(chr(ctrlFrame[0]) == ctrl_flag):
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
 					receivedControlPacket = 1
 				else:
-					print("Wrong message -> asking for retransmission")
-					if flag_n == 0:
+					print("Message received but not the expected one -> retransmit please")
+					if ctrl_flag_n == 0:
 						radio_Tx.write(list("ACK") + list('J'))
 					else:
 						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
