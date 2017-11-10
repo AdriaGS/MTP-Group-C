@@ -181,7 +181,7 @@ def main():
 	for controlMessage in control_packets:
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = list(ctrl_flag) + list(controlMessage)
-		radio_Tx.write(str(ctrlMessage))
+		radio_Tx.write(ctrlMessage)
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_ack = ""
