@@ -91,7 +91,9 @@ def main():
 	original_flag = 'A'
 	flag = ""
 	flag_n = 0
+	ctrl_flag_n = 0
 	frame = []
+	ctrlFrame = []
 	str_frame = ""
 	time_ack = 1
 	outputFile = open("RxFileCompressed.txt", "wb")
@@ -101,7 +103,7 @@ def main():
 
 	#We listen for the control packet
 	radio_Rx.startListening()
-	while not (receivedControlPacket):
+	while not (receivedHandshakePacket):
 		str_Controlframe = ""
 		if radio_Rx.available(0):
 			print("RECEIVED CTRL")
@@ -111,16 +113,42 @@ def main():
 			print("CTRL frame: " + str_Controlframe)
 			print("Sending ACK to CTRL")
 			radio_Tx.write(list("ACK"))
-			receivedControlPacket = 1
+			receivedHandshakePacket = 1
 
 	controlFrame = str_Controlframe.split(" ")
 	print(controlFrame[0])
 	print(controlFrame[1])
 
-	numberofControlPackets = int(float(Controlframe[1]))
-	numberOfPackets = int(float(Controlframe[0]))
+	numberofControlPackets = int(float(controlframe[1]))
+	numberOfPackets = int(float(controlframe[0]))
 	print(numberOfPackets)
 	#radio_Rx.startListening()
+
+	for x in range(0,numberOfControlPackets):
+		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
+		timeout = time.time() + time_ack
+		while not (receivedControlPacket):
+			str_frame = ""
+			if radio_Rx.available(0):
+				#print("RECEIVED PKT")
+				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
+				if(chr(ctrlFrame[0]) == ctrl_flag):
+					for c in range(1, len(ctrlFrame)):
+					    str_frame = str_frame + chr(ctrlFrame[c])
+					#str_decompressed = decompress(frame)
+					#outputFile.write(str_decompressed)
+					radio_Tx.write(list("ACK") + list(ctrl_flag))
+					receivedControlPacket = 1
+				else:
+					print("Wrong message -> asking for retransmission")
+					if flag_n == 0:
+						radio_Tx.write(list("ACK") + list('J'))
+					else:
+						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
+					timeout = time.time() + time_ack
+		ctrl_flag_n = (ctrl_flag_n + 1) % 10
+		receivedControlPacket = 0
+
 	for i in range(0,numberOfPackets):
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)

@@ -111,12 +111,14 @@ def main():
 
 	original_flag = 'A'
 	flag = ""
+	ctrl_flag_n = 0
 	flag_n = 0
 	overhead = 1
 	time_ack = 0.5
 	ack = []
 	ack_received = 0
 	controlAck_received = 0
+	handshakeAck_received = 0
 	inFile = open("ElQuijote.txt", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
@@ -141,7 +143,7 @@ def main():
 	for val in data2Tx_compressed:
 		controlList .append(int(val/256))
 
-	dataControlSize = payloadSize
+	dataControlSize = payloadSize - overhead
 	#Now we conform all the packets in a list
 	for i in range (0, len(controlList), dataControlSize):
 		if((i+dataControlSize) < len(controlList)):
@@ -159,7 +161,7 @@ def main():
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_ack = ""
-	while not (controlAck_received):
+	while not (handshakeAck_received):
 		if radio_Rx.available(0):
 			radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
 			for c in range(0, len(ack)):
@@ -170,14 +172,16 @@ def main():
 				print("Control Message Lost")
 				str_ack = ""
 			else:
-				controlAck_received = 1
+				handshakeAck_received = 1
 		if((time.time() + 0.01) > timeout):
 			print("No Control ACK received resending message")
 			radio_Tx.write(str(numberofPackets))
 			timeout = time.time() + time_ack
 
 	for controlMessage in controlList:
-		radio_Tx.write(str(controlMessage))
+		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
+		ctrlMessage = list(ctrl_flag) + list(controlMessage)
+		radio_Tx.write(str(ctrlMessage))
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_ack = ""
@@ -186,8 +190,8 @@ def main():
 				radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
 				for c in range(0, len(ack)):
 					str_ack = str_ack + chr(ack[c])
-				if(list(str_ack) != list("ACK")):
-					radio_Tx.write(str(numberofPackets))
+				if(list(str_ack) != (list("ACK") + list(ctrl_flag))):
+					radio_Tx.write(list(ctrl_flag) + list(controlMessage))
 					timeout = time.time() + time_ack
 					print("Control Message Lost")
 					str_ack = ""
@@ -197,6 +201,8 @@ def main():
 				print("No Control ACK received resending message")
 				radio_Tx.write(str(numberofPackets))
 				timeout = time.time() + time_ack
+		controlAck_received = 0
+		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 
 	#We iterate over every packet to be sent
 	for message in packets:
