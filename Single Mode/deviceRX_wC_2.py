@@ -126,7 +126,7 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	numberOfPackets = int(handshake_frame)
+	numberOfPackets = int(str_Handshakeframe)
 	print("The number of control packets that will be transmitted: " + str(numberofControlPackets))
 
 	radio_Rx.startListening()
