@@ -6,7 +6,6 @@ import spidev
 import sys
 import os.path
 import pickle
-import csv
 
 def decompress(compressed):
     """Decompress a list of output ks to a string."""
@@ -95,7 +94,7 @@ def main():
 	frame = []
 	str_frame = ""
 	time_ack = 1
-	outputFile = open("ReceivedFileQMCompressed.txt", "wb")
+	outputFile = open("RxFileCompressed.txt", "wb")
 	receivedPacket = 0
 	receivedControlPacket = 0
 	numberOfPackets = 0
@@ -128,7 +127,8 @@ def main():
 				if(chr(frame[0]) == flag):
 					for c in range(1, len(frame)):
 					    str_frame = str_frame + chr(frame[c])
-					outputFile.write(str_frame)
+					str_decompressed = decompress(str_frame)
+					outputFile.write(str_decompressed)
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
@@ -140,6 +140,7 @@ def main():
 					timeout = time.time() + time_ack
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
+	outputFile.close()
 
 if __name__ == '__main__':
 	main()

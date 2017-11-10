@@ -8,10 +8,7 @@ import os.path
 import numpy
 import pickle
 import sqlite3
-import csv
-import scipy.io
 import mat4py as m4p
-import array
 
 def compress(uncompressed):
 	"""Compress a string to a list of output symbols."""
@@ -138,14 +135,15 @@ def main():
 		numberofPackets += 1
 
 	# dataSize = payloadSize - overhead
-	# #Now we conform all the packets in a list
-	# for i in range (0, len(data2Tx), dataSize):
+	#Now we conform all the packets in a list
+	#for i in range (0, len(data2Tx), dataSize):
 	# 	if((i+dataSize) < len(data2Tx)):
 	# 		packets.append(data2Tx[i:i+dataSize])
 	# 	else:
 	# 		packets.append(data2Tx[i:])
 	# 	numberofPackets += 1
-
+	
+	print(numberofPackets)
 	#Start time
 	start = time.time()
 	#We send a first packet to tell the receiver how many packets we'll be sending
