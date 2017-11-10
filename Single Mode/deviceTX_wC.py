@@ -129,10 +129,7 @@ def main():
 	i = 0
 	
 	for val in data2Tx_compressed:
-		if(int(val/256) != 0):
-			division.append(i)
-			division.append(int(val/256))
-		i += 1	
+		division.append(chr(int(val/256)))
 
 	print(division)
 
