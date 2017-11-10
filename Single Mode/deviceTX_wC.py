@@ -124,6 +124,7 @@ def main():
 	data2Tx = inFile.read()
 	inFile.close()
 	packets = []
+	control_packets = []
 	numberofPackets = 0
 	numberofControlPackets = 0
 
@@ -150,9 +151,9 @@ def main():
 	#Now we conform all the packets in a list
 	for x in range (0, len(controlList), dataControlSize):
 		if((i+dataControlSize) < len(controlList)):
-			packets.append(controlList[i:i+dataControlSize])
+			control_packets.append(controlList[i:i+dataControlSize])
 		else:
-			packets.append(controlList[i:])
+			control_packets.append(controlList[i:])
 		numberofControlPackets += 1
 	
 	print(numberofPackets)
@@ -181,7 +182,7 @@ def main():
 			radio_Tx.write(str(numberofPackets))
 			timeout = time.time() + time_ack
 
-	for controlMessage in controlList:
+	for controlMessage in control_packets:
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = str(ctrl_flag) + controlMessage
 		radio_Tx.write(str(ctrlMessage))
