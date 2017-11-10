@@ -194,6 +194,8 @@ def main():
 				radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
 				for c in range(0, len(ack)):
 					str_ack = str_ack + chr(ack[c])
+
+				print(str_ack)
 				if(list(str_ack) != (list("ACK") + list(ctrl_flag))):
 					radio_Tx.write(list(ctrlMessage))
 					timeout = time.time() + time_ack
@@ -201,11 +203,12 @@ def main():
 					str_ack = ""
 				else:
 					controlAck_received = 1
+
 			if((time.time() + 0.1) > timeout):
 				print("No Control ACK received resending message")
 				radio_Tx.write(list(ctrlMessage))
 				timeout = time.time() + time_ack
-				
+
 		controlAck_received = 0
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 
