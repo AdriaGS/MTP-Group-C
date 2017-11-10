@@ -44,6 +44,8 @@ try:
         print(str_frame)
             
 except KeyboardInterrupt:
-    GPIO.output(23,0)
-    GPIO.output(24,0)
+    radio.stopListening()
+    radio.closeReadingPipe(1)
+    GPIO.output(22,0)
+    #GPIO.output(24,0)
     GPIO.cleanup()
