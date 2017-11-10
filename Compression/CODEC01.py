@@ -173,7 +173,7 @@ def main():
 				f_comp.close()
 
 				printSummary(sys.argv[1], sys.argv[2])
-			except Exception,e:
+			except Exception:
 				# print e
 				printError(0)
 		elif sys.argv[3] == 'decompress':
@@ -193,7 +193,7 @@ def main():
 				f.close()
 
 				printSummary(sys.argv[1], sys.argv[2])
-			except Exception,e:
+			except Exception:
 				# print e
 				printError(1)
 		else:

@@ -6,6 +6,7 @@ import sqlite3
 import csv
 import scipy.io
 import mat4py as m4p
+import array
 
 def compress(uncompressed):
     """Compress a string to a list of output symbols."""
@@ -60,31 +61,15 @@ def main():
 	f.close()
 
 	print(type(comp))
-
-	str1 = ''.join(bin(e) for e in comp)
-
-	f1 = open('testCompressed.dat', 'wb')
-	f1.write(str1)
-	f1.close()
-	
 	#print(comp)
-	
-	#save
-	f_comp = open('co/testCompress.txt','wb')
-	pickle.dump(comp,f_comp)
-	f_comp.close()
-	
-	f_comp = open('co/testCompress.np','wb')
-	numpy.save(f_comp,comp)
-	f_comp.close()
-	
-	f_comp = csv.writer(open("co/testCompress.csv", "w"))
-	f_comp.writerow(comp)
-	
-	m4p.savemat('co/testCompress.mat', {'dic':comp})
 
-	
-	printSummary(file, 'co/testCompress.txt')
+	print(max(comp))
+	print(len(comp))
+
+	str1 = ''.join(str(comp))
+
+	#for i in str1:
+	 	#print(i)
 
 if __name__ == '__main__':
 	main()

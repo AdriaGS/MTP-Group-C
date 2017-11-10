@@ -32,6 +32,7 @@ def decompress(compressed):
  
         w = entry
     return result.getvalue()
+
 def printSummary(file1, file2):
 	"""
 	printSummary() prints out the number of bytes in the original file and in
@@ -50,6 +51,7 @@ def printSummary(file1, file2):
 
 	sys.stderr.write(str(file1) + ': ' + str(f1_bytes) + ' bytes\n')
 	sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n')
+
 def main():	
 	
 	#Load file
@@ -61,5 +63,6 @@ def main():
 	f.write(decompressed)
 	f.close()
 	printSummary('test.txt','testDecompress.txt')
+	
 if __name__ == '__main__':
 	main()
