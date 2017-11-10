@@ -123,7 +123,12 @@ def main():
 	packets = []
 	numberofPackets = 0
 
-	data2Tx_compressed = compress(data2Tx)
+	compression = compress(data2Tx)
+	data2Tx_compressed = []
+	
+	for val in compression:
+		data2Tx_compressed += (val&255) + ((val<<8)&255) + ((val<<16)&256)
+
 	print(data2Tx_compressed)
 
 	dataSize = payloadSize - overhead
@@ -134,15 +139,6 @@ def main():
 		else:
 			packets.append(data2Tx_compressed[i:])
 		numberofPackets += 1
-
-	# dataSize = payloadSize - overhead
-	#Now we conform all the packets in a list
-	#for i in range (0, len(data2Tx), dataSize):
-	# 	if((i+dataSize) < len(data2Tx)):
-	# 		packets.append(data2Tx[i:i+dataSize])
-	# 	else:
-	# 		packets.append(data2Tx[i:])
-	# 	numberofPackets += 1
 	
 	print(numberofPackets)
 	#Start time
