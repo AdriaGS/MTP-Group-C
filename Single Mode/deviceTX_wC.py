@@ -203,7 +203,7 @@ def main():
 					controlAck_received = 1
 			if((time.time() + 0.01) > timeout):
 				print("No Control ACK received resending message")
-				radio_Tx.write(str(numberofPackets))
+				radio_Tx.write(list(str(ctrl_flag) + controlMessage))
 				timeout = time.time() + time_ack
 		controlAck_received = 0
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
