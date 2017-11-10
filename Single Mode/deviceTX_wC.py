@@ -135,7 +135,7 @@ def main():
 	dataControlSize = payloadSize
 	#Now we conform all the packets in a list
 	for i in range (0, len(division), dataControlSize):
-		if((i+dataSize) < len(division)):
+		if((i+dataControlSize) < len(division)):
 			packets.append(division[i:i+dataSize])
 		else:
 			packets.append(division[i:])
