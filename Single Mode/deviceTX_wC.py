@@ -143,7 +143,7 @@ def main():
 	controlList = ""
 	
 	for val in data2Tx_compressed:
-		controlList += str(int(val/256))
+		controlList.append(chr(int(val/256)))
 
 	dataControlSize = payloadSize - overhead
 	#Now we conform all the packets in a list
@@ -182,8 +182,6 @@ def main():
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = list(ctrl_flag) + list(controlMessage)
 		radio_Tx.write(str(ctrlMessage))
-		print(str(ctrlMessage))
-		time.sleep(1)
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_ack = ""

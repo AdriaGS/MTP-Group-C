@@ -111,7 +111,7 @@ def main():
 			radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 			for c in range(0, len(frame)):
 				str_Controlframe = str_Controlframe + chr(frame[c])
-			print("CTRL frame: " + str_Controlframe)
+			#print("CTRL frame: " + str_Controlframe)
 			print("Sending ACK to CTRL")
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
@@ -129,8 +129,6 @@ def main():
 			str_frame = ""
 			if radio_Rx.available(0):
 				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
-				print(chr(ctrlFrame[0]))
-				print(ctrl_flag)
 				if(chr(ctrlFrame[0]) == ctrl_flag):
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
 					receivedControlPacket = 1
