@@ -146,8 +146,6 @@ def main():
 		division = int(val/256)
 		controlList += str(division)
 
-	print(controlList[0:100])
-
 	dataControlSize = payloadSize - overhead
 	#Now we conform all the packets in a list
 	for x in range (0, len(controlList), dataControlSize):
@@ -182,6 +180,7 @@ def main():
 			timeout = time.time() + time_ack
 
 	for controlMessage in control_packets:
+		print(type(controlMessage))
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = str(ctrl_flag) + controlMessage
 		print(list(ctrlMessage))
