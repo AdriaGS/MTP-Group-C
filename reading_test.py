@@ -34,6 +34,7 @@ try:
         radio.startListening()
         while not radio.available(0):
             print("No input data")
+            sleep(2)
 
         radio.read(frame, radio.getDynamicPayloadSize())
         str_frame = ""
