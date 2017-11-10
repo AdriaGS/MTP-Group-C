@@ -122,7 +122,7 @@ def main():
 	print(numberofControlPackets)
 	#radio_Rx.startListening()
 
-	for x in range(0,numberOfControlPackets):
+	for x in range(0,numberofControlPackets):
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		timeout = time.time() + time_ack
 		while not (receivedControlPacket):
