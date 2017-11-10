@@ -174,13 +174,14 @@ def main():
 				print("Handshake accomplished")
 				handshakeAck_received = 1
 		if((time.time() + 0.01) > timeout):
-			print("No Control ACK received resending message")
+			print("No Handshake ACK received resending message")
 			radio_Tx.write(str(numberofPackets))
 			timeout = time.time() + time_ack
 
 	for controlMessage in control_packets:
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = str(ctrl_flag) + controlMessage
+		print(list(ctrlMessage))
 		radio_Tx.write(list(ctrlMessage))
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
