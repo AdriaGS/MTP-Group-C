@@ -181,8 +181,8 @@ def main():
 
 	for controlMessage in control_packets:
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
-		ctrlMessage = str(ctrl_flag) + controlMessage
-		print(list(ctrlMessage))
+		ctrlMessage = list(ctrl_flag) + controlMessage
+		print(ctrlMessage)
 		radio_Tx.write(list(ctrlMessage))
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
@@ -194,7 +194,7 @@ def main():
 				for c in range(0, len(ack)):
 					str_ack = str_ack + chr(ack[c])
 				if(list(str_ack) != (list("ACK") + list(ctrl_flag))):
-					radio_Tx.write(list(ctrlMessage))
+					radio_Tx.write(ctrlMessage)
 					timeout = time.time() + time_ack
 					print("Control Message Lost")
 					str_ack = ""
@@ -203,7 +203,7 @@ def main():
 
 			if((time.time() + 0.01) > timeout):
 				print("No Control ACK received resending message")
-				radio_Tx.write(list(ctrlMessage))
+				radio_Tx.write(ctrlMessage)
 				timeout = time.time() + time_ack
 
 		controlAck_received = 0
