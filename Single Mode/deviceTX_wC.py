@@ -126,9 +126,13 @@ def main():
 
 	data2Tx_compressed = compress(data2Tx)
 	division = []
+	i = 0
 	
 	for val in data2Tx_compressed:
-		division.append(int(val/256))
+		if(int(val/256) != 0):
+			division.append(i)
+			division.append(int(val/256))
+		i++	
 
 	print(division)
 
