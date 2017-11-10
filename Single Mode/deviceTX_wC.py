@@ -132,7 +132,7 @@ def main():
 		if(int(val/256) != 0):
 			division.append(i)
 			division.append(int(val/256))
-		i++	
+		i += 1	
 
 	print(division)
 
