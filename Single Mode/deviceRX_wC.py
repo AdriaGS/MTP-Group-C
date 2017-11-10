@@ -116,7 +116,7 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	controlFrame = str_Controlframe.split(" ")
+	controlFrame = str_Controlframe.split(" ", 1)
 	print(controlFrame[0])
 	print(controlFrame[1])
 
