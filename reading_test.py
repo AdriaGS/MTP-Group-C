@@ -6,14 +6,14 @@ try:
     import spidev
 
     GPIO.setmode(GPIO.BCM)
-    #GPIO.setup(23, GPIO.OUT)
-    #GPIO.output(23,1)
+    GPIO.setup(22, GPIO.OUT)
+    GPIO.output(22,1)
     
     print("Transmitter")
     pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 
     radio = NRF24(GPIO, spidev.SpiDev())
-    radio.begin(0, 22)
+    radio.begin(0, 24)
     radio.setPayloadSize(32)
     radio.setChannel(0x60)
 
@@ -33,8 +33,8 @@ try:
     while True:
         radio.startListening()
         while not radio.available(0):
-            print("No input data")
-            sleep(2)
+            #print("No input data")
+            time.sleep(0.2)
 
         radio.read(frame, radio.getDynamicPayloadSize())
         str_frame = ""
