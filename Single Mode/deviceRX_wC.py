@@ -127,7 +127,7 @@ def main():
 				if(chr(frame[0]) == flag):
 					for c in range(1, len(frame)):
 					    str_frame = str_frame + chr(frame[c])
-					str_decompressed = decompress(str_frame)
+					str_decompressed = decompress(frame)
 					outputFile.write(str_decompressed)
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1

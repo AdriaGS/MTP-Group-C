@@ -124,6 +124,7 @@ def main():
 	numberofPackets = 0
 
 	data2Tx_compressed = compress(data2Tx)
+	print(data2Tx_compressed)
 
 	dataSize = payloadSize - overhead
 	#Now we conform all the packets in a list
@@ -172,7 +173,8 @@ def main():
 	#We iterate over every packet to be sent
 	for message in packets:
 		flag = chr(ord(original_flag) + flag_n)
-		message2Send = str(flag) + message
+		message2Send = list(flag) + message
+		#print(message2Send)
 		radio_Tx.write(message2Send)
 		#time.sleep(1)
 		timeout = time.time() + time_ack
