@@ -34,13 +34,13 @@ try:
         radio.startListening()
         while not radio.available(0):
             print("No input data")
-            sleep(2)
-        # radio.read(frame, radio.getDynamicPayloadSize())
-        # str_frame = ""
-        # for c in range(0, len(frame)):
-        #     str_frame += chr(frame[c])
-        # print("Received Message: ")
-        # print(str_frame)
+
+        radio.read(frame, radio.getDynamicPayloadSize())
+        str_frame = ""
+        for c in range(0, len(frame)):
+            str_frame += chr(frame[c])
+        print("Received Message: ")
+        print(str_frame)
             
 except KeyboardInterrupt:
     GPIO.output(23,0)
