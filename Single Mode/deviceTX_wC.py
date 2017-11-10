@@ -151,9 +151,9 @@ def main():
 	#Now we conform all the packets in a list
 	for x in range (0, len(controlList), dataControlSize):
 		if((i+dataControlSize) < len(controlList)):
-			control_packets.append(controlList[i:i+dataControlSize])
+			control_packets.append(controlList[x:x+dataControlSize])
 		else:
-			control_packets.append(controlList[i:])
+			control_packets.append(controlList[x:])
 		numberofControlPackets += 1
 	
 	print(numberofPackets)
