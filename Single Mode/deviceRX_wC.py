@@ -116,11 +116,11 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	print(str_Controlframe)
 	numberOfPackets, numberofControlPackets = str_Controlframe.split(",")
 	print(numberOfPackets)
 	print(numberofControlPackets)
-	#radio_Rx.startListening()
+	
+	radio_Rx.startListening()
 
 	for x in range(0,int(numberofControlPackets)):
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)

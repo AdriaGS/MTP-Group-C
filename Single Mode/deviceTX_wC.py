@@ -145,8 +145,6 @@ def main():
 	for val in data2Tx_compressed:
 		controlList += str(int(val/256))
 
-	print(controlList)
-
 	dataControlSize = payloadSize - overhead
 	#Now we conform all the packets in a list
 	for x in range (0, len(controlList), dataControlSize):
@@ -155,9 +153,6 @@ def main():
 		else:
 			control_packets.append(controlList[x:])
 		numberofControlPackets += 1
-	
-	print(numberofPackets)
-	print(numberofControlPackets)
 
 	#Start time
 	start = time.time()
@@ -176,6 +171,7 @@ def main():
 				print("Handshake Message Lost")
 				str_ack = ""
 			else:
+				print("Handshake accomplished")
 				handshakeAck_received = 1
 		if((time.time() + 0.01) > timeout):
 			print("No Control ACK received resending message")
@@ -184,7 +180,7 @@ def main():
 
 	for controlMessage in control_packets:
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
-		ctrlMessage = str(ctrl_flag) + controlMessage
+		ctrlMessage = list(ctrl_flag) + controlMessage
 		radio_Tx.write(str(ctrlMessage))
 		print(str(ctrlMessage))
 		time.sleep(1)
