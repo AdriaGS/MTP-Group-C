@@ -113,7 +113,7 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedControlPacket = 1
 
-	print(str_Controlframe)
+	print(str_Controlframe.split(" "))
 
 	numberOfPackets = int(float(str_Controlframe))
 	print(numberOfPackets)
