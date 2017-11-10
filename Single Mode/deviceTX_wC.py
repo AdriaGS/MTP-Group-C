@@ -122,16 +122,24 @@ def main():
 	inFile.close()
 	packets = []
 	numberofPackets = 0
+	numberofControlPackets = 0
 
-	compression = compress(data2Tx)
-	data2Tx_compressed = []
+	data2Tx_compressed = compress(data2Tx)
+	division = []
 	
-	for val in compression:
-		data2Tx_compressed.append(chr(val&255)) 
-		data2Tx_compressed.append(chr((val<<8)&255))
-		data2Tx_compressed.append(chr((val<<16)&255))
+	for val in data2Tx_compressed:
+		division.append(int(val/256))
 
-	print(data2Tx_compressed)
+	print(division)
+
+	dataControlSize = payloadSize
+	#Now we conform all the packets in a list
+	for i in range (0, len(division), dataControlSize):
+		if((i+dataSize) < len(data2Tx)):
+			packets.append(division[i:i+dataSize])
+		else:
+			packets.append(division[i:])
+		numberofControlPackets += 1
 
 	dataSize = payloadSize - overhead
 	#Now we conform all the packets in a list
@@ -143,6 +151,7 @@ def main():
 		numberofPackets += 1
 	
 	print(numberofPackets)
+	print(numberofControlPackets)
 	#Start time
 	start = time.time()
 	#We send a first packet to tell the receiver how many packets we'll be sending
