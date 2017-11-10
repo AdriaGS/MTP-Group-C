@@ -169,7 +169,7 @@ def main():
 			if(list(str_ack) != list("ACK")):
 				radio_Tx.write(str(numberofPackets))
 				timeout = time.time() + time_ack
-				print("Control Message Lost")
+				print("Handshake Message Lost")
 				str_ack = ""
 			else:
 				handshakeAck_received = 1
@@ -182,6 +182,7 @@ def main():
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = str(ctrl_flag) + str(controlMessage)
 		radio_Tx.write(str(ctrlMessage))
+		time.sleep(1)
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_ack = ""

@@ -128,13 +128,9 @@ def main():
 		while not (receivedControlPacket):
 			str_frame = ""
 			if radio_Rx.available(0):
-				#print("RECEIVED PKT")
 				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
+				print(ctrlFrame)
 				if(chr(ctrlFrame[0]) == ctrl_flag):
-					for c in range(1, len(ctrlFrame)):
-					    str_frame = str_frame + chr(ctrlFrame[c])
-					#str_decompressed = decompress(frame)
-					#outputFile.write(str_decompressed)
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
 					receivedControlPacket = 1
 				else:
