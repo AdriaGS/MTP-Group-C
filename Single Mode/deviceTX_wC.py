@@ -138,14 +138,14 @@ def main():
 		numberofPackets += 1
 
 	#Now we conform all the control packets in a list
-	controlList = []
+	controlList = ""
 	
 	for val in data2Tx_compressed:
-		controlList .append(int(val/256))
+		controlList += chr(int(val/256))
 
 	dataControlSize = payloadSize - overhead
 	#Now we conform all the packets in a list
-	for i in range (0, len(controlList), dataControlSize):
+	for x in range (0, len(controlList), dataControlSize):
 		if((i+dataControlSize) < len(controlList)):
 			packets.append(controlList[i:i+dataControlSize])
 		else:
@@ -180,7 +180,7 @@ def main():
 
 	for controlMessage in controlList:
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
-		ctrlMessage = str(ctrl_flag) + str(controlMessage)
+		ctrlMessage = str(ctrl_flag) + controlMessage
 		radio_Tx.write(str(ctrlMessage))
 		print(str(ctrlMessage))
 		time.sleep(1)
