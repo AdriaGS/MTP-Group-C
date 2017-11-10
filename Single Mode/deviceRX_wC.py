@@ -151,7 +151,7 @@ def main():
 			if radio_Rx.available(0):
 				#print("RECEIVED PKT")
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-				if(chr(int(frame[0])) == flag):
+				if(chr(frame[0]) == flag):
 					for c in range(1, len(frame)):
 					    str_frame = str_frame + chr(frame[c])
 					str_decompressed = decompress(frame)
