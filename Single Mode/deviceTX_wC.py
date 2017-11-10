@@ -182,11 +182,13 @@ def main():
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = str(ctrl_flag) + str(controlMessage)
 		radio_Tx.write(str(ctrlMessage))
+		print(str(ctrlMessage))
 		time.sleep(1)
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_ack = ""
 		while not (controlAck_received):
+			time.sleep(1)
 			if radio_Rx.available(0):
 				radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
 				for c in range(0, len(ack)):
