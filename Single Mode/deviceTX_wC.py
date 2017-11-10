@@ -127,11 +127,13 @@ def main():
 	data2Tx_compressed = compress(data2Tx)
 	division = ""
 	i = 0
+
+	print(len(data2Tx_compressed))
 	
 	for val in data2Tx_compressed:
 		division += (chr(int(val/256)))
 
-	print(division)
+	#print(division)
 
 	dataControlSize = payloadSize
 	#Now we conform all the packets in a list
