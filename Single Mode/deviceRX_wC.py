@@ -130,6 +130,7 @@ def main():
 			if radio_Rx.available(0):
 				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
 				print(ctrlFrame)
+				print(ctrl_flag)
 				if(chr(ctrlFrame[0]) == ctrl_flag):
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
 					receivedControlPacket = 1
@@ -140,6 +141,7 @@ def main():
 					else:
 						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
 					timeout = time.time() + time_ack
+
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 		receivedControlPacket = 0
 
