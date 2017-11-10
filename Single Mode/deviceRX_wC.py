@@ -98,6 +98,7 @@ def main():
 	time_ack = 1
 	outputFile = open("RxFileCompressed.txt", "wb")
 	receivedPacket = 0
+	receivedHandshakePacket = 0
 	receivedControlPacket = 0
 	numberOfPackets = 0
 
