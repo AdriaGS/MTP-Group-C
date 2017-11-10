@@ -127,9 +127,9 @@ def main():
 	data2Tx_compressed = []
 	
 	for val in compression:
-		data2Tx_compressed.append((val&255)) 
-		data2Tx_compressed.append((val<<8)&255)
-		data2Tx_compressed.append((val<<16)&255)
+		data2Tx_compressed.append(chr(val&255)) 
+		data2Tx_compressed.append(chr(val<<8)&255)
+		data2Tx_compressed.append(chr(val<<16)&255)
 
 	print(data2Tx_compressed)
 
