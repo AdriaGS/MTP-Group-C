@@ -157,7 +157,7 @@ def main():
 
 	#Start time
 	start = time.time()
-	radio_Tx.write(str(numberofPackets) + " " + str(numberofControlPackets))
+	radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_ack = ""

@@ -116,13 +116,9 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	controlFrame = str_Controlframe.split(" ", 1)
-	print(controlFrame[0])
-	print(controlFrame[1])
-
-	numberofControlPackets = int(float(controlFrame[1]))
-	numberOfPackets = int(float(controlFrame[0]))
+	numberOfPackets, numberofControlPackets = str_Controlframe.split(",")
 	print(numberOfPackets)
+	print(numberofControlPackets)
 	#radio_Rx.startListening()
 
 	for x in range(0,numberOfControlPackets):
