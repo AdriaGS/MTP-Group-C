@@ -113,6 +113,8 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedControlPacket = 1
 
+	print(str_Controlframe)
+
 	numberOfPackets = int(float(str_Controlframe))
 	print(numberOfPackets)
 	#radio_Rx.startListening()

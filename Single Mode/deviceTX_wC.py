@@ -125,41 +125,37 @@ def main():
 	numberofControlPackets = 0
 
 	data2Tx_compressed = compress(data2Tx)
-	division = ""
-	i = 0
-
-	print(len(data2Tx_compressed))
-	
-	for val in data2Tx_compressed:
-		division += (chr(int(val/256)))
-
-	#print(division)
-
-	dataControlSize = payloadSize
-	#Now we conform all the packets in a list
-	for i in range (0, len(division), dataControlSize):
-		if((i+dataControlSize) < len(division)):
-			packets.append(division[i:i+dataControlSize])
-		else:
-			packets.append(division[i:])
-		numberofControlPackets += 1
 
 	dataSize = payloadSize - overhead
-	#Now we conform all the packets in a list
+	#Now we conform all the data packets in a list
 	for i in range (0, len(data2Tx_compressed), dataSize):
 		if((i+dataSize) < len(data2Tx_compressed)):
 			packets.append(data2Tx_compressed[i:i+dataSize])
 		else:
 			packets.append(data2Tx_compressed[i:])
 		numberofPackets += 1
+
+	#Now we conform all the control packets in a list
+	controlList = []
+	
+	for val in data2Tx_compressed:
+		controlList .append(int(val/256))
+
+	dataControlSize = payloadSize
+	#Now we conform all the packets in a list
+	for i in range (0, len(controlList), dataControlSize):
+		if((i+dataControlSize) < len(controlList)):
+			packets.append(controlList[i:i+dataControlSize])
+		else:
+			packets.append(controlList[i:])
+		numberofControlPackets += 1
 	
 	print(numberofPackets)
 	print(numberofControlPackets)
+
 	#Start time
 	start = time.time()
-	#We send a first packet to tell the receiver how many packets we'll be sending
-	radio_Tx.write(str(numberofPackets))
-	#time.sleep(1)
+	radio_Tx.write(str(numberofPackets) + str(numberofControlPackets))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_ack = ""
@@ -180,11 +176,32 @@ def main():
 			radio_Tx.write(str(numberofPackets))
 			timeout = time.time() + time_ack
 
+	for controlMessage in controlList:
+		radio_Tx.write(controlMessage)
+		timeout = time.time() + time_ack
+		radio_Rx.startListening()
+		str_ack = ""
+		while not (controlAck_received):
+			if radio_Rx.available(0):
+				radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
+				for c in range(0, len(ack)):
+					str_ack = str_ack + chr(ack[c])
+				if(list(str_ack) != list("ACK")):
+					radio_Tx.write(str(numberofPackets))
+					timeout = time.time() + time_ack
+					print("Control Message Lost")
+					str_ack = ""
+				else:
+					controlAck_received = 1
+			if((time.time() + 0.01) > timeout):
+				print("No Control ACK received resending message")
+				radio_Tx.write(str(numberofPackets))
+				timeout = time.time() + time_ack
+
 	#We iterate over every packet to be sent
 	for message in packets:
 		flag = chr(ord(original_flag) + flag_n)
 		message2Send = list(flag) + message
-		#print(message2Send)
 		radio_Tx.write(message2Send)
 		#time.sleep(1)
 		timeout = time.time() + time_ack
