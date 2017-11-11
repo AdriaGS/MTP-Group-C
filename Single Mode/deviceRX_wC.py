@@ -169,13 +169,11 @@ def main():
 	for i in range(0,int(numberOfPackets)):
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
-		time.sleep(1)
 		while not (receivedPacket):
 			if radio_Rx.available(0):
 				#print("RECEIVED PKT")
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
-					print(frame)
 					compressed.append(frame)
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
