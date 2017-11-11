@@ -158,6 +158,7 @@ def main():
 		receivedPacket = 0
 
 	compressed = list(map(int, compressed))
+	print(compressed)
 	str_decompressed = decompress(compressed)
 	outputFile.write(str_decompressed)
 	outputFile.close()
