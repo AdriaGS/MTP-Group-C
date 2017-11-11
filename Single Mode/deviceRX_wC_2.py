@@ -173,7 +173,6 @@ def main():
 		binary = binary[2:len(binary)]
 		bitLength = len(binary)
 
-		print("############")
 		if(pos != (len(compressed)-1)):
 			for i in range(0, 8-bitLength):
 				binary = "0" + binary
@@ -183,7 +182,6 @@ def main():
 
 		toDecompress_mid.extend(list(binary))
 		pos += 1
-		print("&&&&&&&&&&")
 
 	toDecompress_mid = list(map(int, toDecompress_mid))
 

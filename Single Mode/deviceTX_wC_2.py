@@ -182,7 +182,7 @@ def main():
 		numberofPackets += 1
 
 	#Start sendind
-	radio_Tx.write(str(numberofPackets) + "," + str(len(data2Tx_compressed)) + "," + str(max(data2Tx_compressed)))
+	radio_Tx.write(str(numberofPackets) + "," + str(len(data2Tx_compressed)) + "," + str(len(bin(max(data2Tx_compressed)))-2))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_Handshake = ""
