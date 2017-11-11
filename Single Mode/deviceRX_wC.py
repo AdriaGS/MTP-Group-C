@@ -106,6 +106,7 @@ def main():
 	ctrlFrame = []
 	handshake_frame = []
 	compressed = []
+	multiplicationData = []
 
 	#ACK related variables
 	time_ack = 0.5
@@ -151,6 +152,7 @@ def main():
 
 				#We check if the received packet is the expected one
 				if(chr(ctrlFrame[0]) == ctrl_flag):
+					multiplicationData.append(ctrlFrame)
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
 					receivedControlPacket = 1
 				else:
@@ -167,14 +169,13 @@ def main():
 	for i in range(0,int(numberOfPackets)):
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
+		time.sleep(1)
 		while not (receivedPacket):
-			str_frame = ""
 			if radio_Rx.available(0):
 				#print("RECEIVED PKT")
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
-					for c in range(1, len(frame)):
-					    str_frame = str_frame + chr(frame[c])
+					print(frame)
 					compressed.append(frame)
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
@@ -187,7 +188,9 @@ def main():
 					timeout = time.time() + time_ack
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
-	str_decompressed = decompress(compressed)
+
+	new_mulData = [i * 256 for i in multiplicationData]
+	str_decompressed = decompress(compressed + new_mulData)
 	outputFile.write(str_decompressed)
 	outputFile.close()
 
