@@ -167,14 +167,13 @@ def main():
 	pos = 0
 	n = int(n)
 
-	print(compressed)
-
 	print("Decompression starting")
 	for x in compressed:
 		binary = bin(x)
 		binary = binary[2:len(binary)]
 		bitLength = len(binary)
 
+		print("############")
 		if(pos != (len(compressed)-1)):
 			for i in range(0, 8-bitLength):
 				binary = "0" + binary
