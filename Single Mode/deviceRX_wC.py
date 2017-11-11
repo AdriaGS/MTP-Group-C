@@ -197,8 +197,6 @@ def main():
 			new_mulData.append(i*512)
 	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
 
-	print(multiplicationData)
-
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
 	outputFile.close()
