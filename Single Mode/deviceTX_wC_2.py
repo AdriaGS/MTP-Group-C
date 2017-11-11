@@ -222,7 +222,7 @@ def main():
 					ack_received = 1
 
 			#If an established time passes and we have not received anything we retransmit the data packet
-			if((time.time() + 0.01) > timeout):
+			if((time.time() + 0.2) > timeout):
 				print("No Data ACK received resending message")
 				radio_Tx.write(list(message2Send))
 				timeout = time.time() + time_ack
