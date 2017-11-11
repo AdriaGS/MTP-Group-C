@@ -284,6 +284,8 @@ def main():
 		ack_received = 0
 		flag_n = (flag_n + 1) % 10
 
+	print(data2Tx_compressed)
+
 	final = time.time()
 	totalTime = final - start
 	print(totalTime)

@@ -65,7 +65,7 @@ def main():
 	for x in comp:
 		finalData += str(x)
 
-	print(finalData)
+	#print(finalData)
 
 	print(type(f.read()))
 	print(type(comp))
@@ -76,6 +76,8 @@ def main():
 
 	f.close()
 
+	x = [34, 21, 12]
+	print(x.pop(0))
 
 
 	#string = "".join(chr(val) for val in comp)
