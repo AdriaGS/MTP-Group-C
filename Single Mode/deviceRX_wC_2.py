@@ -191,7 +191,7 @@ def main():
 		value = 0
 		for k in range(0, len(l)):
 			value += (int(l[k]) * 2**(n-k))		
-	toDecompress.append(value)
+		toDecompress.append(value)
 
 	print(toDecompress)
 
