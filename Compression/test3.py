@@ -8,6 +8,7 @@ import scipy.io
 import mat4py as m4p
 import array
 from bitarray import bitarray
+import time
 
 def compress(uncompressed):
 	"""Compress a string to a list of output symbols."""
@@ -87,9 +88,10 @@ def printSummary(file1, file2):
 
 def main():	
 
+	start = time.time()
 	finalData = ""
 	midData = ""
-	file='ElQuijote.txt'
+	file='SampleTextFile1Mb.txt'
 	f = open(file,'rb')
 	comp = compress(f.read())
 	f.close()
@@ -103,40 +105,58 @@ def main():
 	binary = lambda n: n>0 and [n&1]+binary(n>>1) or []
 
 	for a in comp:
-		aux2=binary(a|num)
-		del aux2[-1]
-		aux += aux2[::-1]
+			aux2=binary(a|num)
+			del aux2[-1]
+			aux += aux2[::-1]
 	#print ("B"+str(aux))
 
+	for i in range(0, len(aux), 8):
+		r=aux[i:i+8]
+		char=0
+		for p in r:
+			char=char<<1
+			char=char|p
+		enviar.append(char)
 
-	i=0
-	while i < len(aux):
-	  r=aux[i:i+7]
-	  char=0
-	  for p in r:
-		char=char<<1
-		char=char|p
-	  enviar.append(char)
-	  i+=8
+	toDecompress_mid = []
+	pos = 0
+	for x in enviar:
+		binary = bin(x)
+		binary = binary[2:len(binary)]
+		bitLength = len(binary)
 
+		if(pos != (len(enviar)-1)):
+			for i in range(0, 8-bitLength):
+				binary = "0" + binary
+		else:
+			for i in range(0, (len(comp)*(n+1) - (pos)*8) - bitLength):
+				binary = "0" + binary
 
-	print(len(enviar))
+		toDecompress_mid.extend(list(binary))
+		pos += 1
 
+	toDecompress_mid = list(map(int, toDecompress_mid))
 
-	
+	toDecompress = []
+	for j in range(0, len(toDecompress_mid), n+1):
+		l = toDecompress_mid[j: j+(n+1)]
+		value = 0
+		for k in range(0, len(l)):
+			value += (int(l[k]) * 2**(n-k))
+		toDecompress.append(value)
 
+	#print(toDecompress)
 
-	for x in comp:
-		midData += str(x)
+	str_decompressed = decompress(toDecompress)
 
-	print(len(comp))
 	print("Max of first compression: " + str(max(comp)))
-	print(bin(max(comp)))
-	print(len(bin(max(comp))))
-
 	
+	outputFile = open("Deco_test3.txt", "wb")
+	outputFile.write(str_decompressed)
+	outputFile.close()
 
-
+	final = time.time()
+	print("Total time: " + str(final-start))
 
 	#string = "".join(chr(val) for val in comp)
 

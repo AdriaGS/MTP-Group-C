@@ -38,6 +38,8 @@ def decompress(compressed):
     return result.getvalue()
 
 def main():	    
+
+	start = time.time()
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(24, GPIO.OUT)
 	GPIO.output(24,1)
@@ -196,6 +198,9 @@ def main():
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
 	outputFile.close()
+	final = time.time()
+	totalTime = final - start
+	print(totalTime)
 
 if __name__ == '__main__':
 	main()

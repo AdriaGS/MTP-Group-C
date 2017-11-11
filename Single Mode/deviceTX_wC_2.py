@@ -59,6 +59,7 @@ def printSummary(file1, file2):
 
 def main():		
 
+	start = time.time()
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(24, GPIO.OUT)
 	GPIO.output(24,1)
@@ -182,8 +183,8 @@ def main():
 			packets.append(toSend[i:])
 		numberofPackets += 1
 
-	#Start time
-	start = time.time()
+	#Start sendind
+	#start = time.time()
 	radio_Tx.write(str(numberofPackets) + "," + str(len(data2Tx_compressed)) + "," + str(max(data2Tx_compressed)))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
