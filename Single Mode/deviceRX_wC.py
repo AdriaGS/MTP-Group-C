@@ -189,9 +189,11 @@ def main():
 
 	multiplicationData = [int(i) for i in multiplicationData]
 	compressed = list(map(int, compressed))
+	print(multiplicationData.pop(0))
+	print(compressed.pop(0))
 	new_mulData = [i * 256 for i in multiplicationData]
 	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
-	print(toDecompress)
+	#print(toDecompress)
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
 	outputFile.close()

@@ -77,7 +77,8 @@ def main():
 	f.close()
 
 	x = [34, 21, 12]
-	print(x.pop(0))
+	x.pop(0)
+	print(x)
 
 
 	#string = "".join(chr(val) for val in comp)
