@@ -149,15 +149,37 @@ def main():
 	#Compression of the data to transmit into data2Tx_compressed
 	data2Tx_compressed = compress(data2Tx)
 
-	for x in data2Tx_compressed:
-		finalData += str(x)
+	#Compression Preprocessing
+	n=len(bin(max(data2Tx_compressed)))-2
+	num=2**(n+1)
+	toSend = []
+
+	aux = []
+	aux2 = []
+	binary = lambda n: n>0 and [n&1]+binary(n>>1) or []
+
+	for a in data2Tx_compressed:
+			aux2=binary(a|num)
+			del aux2[-1]
+			aux += aux2[::-1]
+	print ("B"+str(aux))
+
+	for i in range(0, len(aux), 8):
+		r=aux[i:i+8]
+		char=0
+		for p in r:
+			char=char<<1
+			char=char|p
+		toSend.append(char)
+
+	#print(toSend)
 
 	#Now we conform all the data packets in a list
-	for i in range (0, len(finalData), dataSize):
-		if((i+dataSize) < len(finalData)):
-			packets.append(finalData[i:i+dataSize])
+	for i in range (0, len(toSend), dataSize):
+		if((i+dataSize) < len(toSend)):
+			packets.append(toSend[i:i+dataSize])
 		else:
-			packets.append(finalData[i:])
+			packets.append(toSend[i:])
 		numberofPackets += 1
 
 	#Start time

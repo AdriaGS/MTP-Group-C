@@ -36,32 +36,35 @@ def compress(uncompressed):
 		result.append(dictionary[w])
 	return result
 
-def secondCompress(uncompressed):
-	"""Compress a string to a list of output symbols."""
+def decompress(compressed):
+	"""Decompress a list of output ks to a string."""
+	from cStringIO import StringIO
  
 	# Build the dictionary.
-	dict_size = 10
-	dictionary = {chr(i): i for i in range(48, 58)}
-	#dictionary = dict((chr(i), i) for i in xrange(dict_size))
-	# in Python 3: dictionary = {chr(i): i for i in range(dict_size)}
+	dict_size = 256
+	dictionary = dict((i, chr(i)) for i in xrange(dict_size))
+	# in Python 3: dictionary = {i: chr(i) for i in range(dict_size)}
  
-	w = ""
-	result = []
-	for c in uncompressed:
-		wc = w + c
-		if wc in dictionary:
-			w = wc
+	# use StringIO, otherwise this becomes O(N^2)
+	# due to string concatenation in a loop
+	result = StringIO()
+	w = chr(compressed.pop(0))
+	result.write(w)
+	for k in compressed:
+		if k in dictionary:
+			entry = dictionary[k]
+		elif k == dict_size:
+			entry = w + w[0]
 		else:
-			result.append(dictionary[w])
-			# Add wc to the dictionary.
-			dictionary[wc] = dict_size
-			dict_size += 1
-			w = c
+			raise ValueError('Bad compressed k: %s' % k)
+		result.write(entry)
  
-	# Output the code for w.
-	if w:
-		result.append(dictionary[w])
-	return result
+		# Add w+entry[0] to the dictionary.
+		dictionary[dict_size] = w + entry[0]
+		dict_size += 1
+ 
+		w = entry
+	return result.getvalue()
 
 def printSummary(file1, file2):
 	"""
@@ -86,26 +89,54 @@ def main():
 
 	finalData = ""
 	midData = ""
-	file='MTP_Prev.txt'
+	file='ElQuijote.txt'
 	f = open(file,'rb')
 	comp = compress(f.read())
+	f.close()
+
+	n=len(bin(max(comp)))-2
+	num=2**(n+1)
+	enviar = []
+
+	aux = []
+	aux2 = []
+	binary = lambda n: n>0 and [n&1]+binary(n>>1) or []
+
+	for a in comp:
+		aux2=binary(a|num)
+		del aux2[-1]
+		aux += aux2[::-1]
+	#print ("B"+str(aux))
+
+
+	i=0
+	while i < len(aux):
+	  r=aux[i:i+7]
+	  char=0
+	  for p in r:
+		char=char<<1
+		char=char|p
+	  enviar.append(char)
+	  i+=8
+
+
+	print(len(enviar))
+
+
+	
+
 
 	for x in comp:
 		midData += str(x)
 
-	second_compress = secondCompress(midData)
-
-	#for i in second_compress:
-	#	finalData += str(i)
-
 	print(len(comp))
-	print(len(second_compress))
-
 	print("Max of first compression: " + str(max(comp)))
-	print("Max of second compression: " + str(max(second_compress)))
-	print(bin(max(second_compress)))
+	print(bin(max(comp)))
+	print(len(bin(max(comp))))
 
-	f.close()
+	
+
+
 
 	#string = "".join(chr(val) for val in comp)
 

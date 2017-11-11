@@ -157,9 +157,38 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	compressed = list(map(int, compressed))
-	print(compressed)
-	str_decompressed = decompress(compressed)
+
+	#Decompression postprocessing
+	toDecompress_mid = []
+	pos = 0
+	for x in compressed:
+		binary = bin(x)
+		binary = binary[2:len(binary)]
+		bitLength = len(binary)
+
+		if(pos != (len(compressed)-1)):
+			for i in range(0, 8-bitLength):
+				binary = "0" + binary
+		else:
+			for i in range(0, (len(lista)*(n+1) - (pos)*8) - bitLength):
+				binary = "0" + binary
+
+		toDecompress_mid.extend(list(binary))
+		pos += 1
+
+	toDecompress_mid = list(map(int, toDecompress_mid))
+
+	#print(toDecompress_mid)
+
+	toDecompress = []
+	for j in range(0, len(toDecompress_mid), n+1):
+		l = toDecompress_mid[j: j+(n+1)]
+		value = 0
+		for k in range(0, len(l)):
+			value += (int(l[k]) * 2**(n-k))		
+	toDecompress.append(value)
+
+	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
 	outputFile.close()
 

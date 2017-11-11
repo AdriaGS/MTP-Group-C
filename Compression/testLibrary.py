@@ -5,7 +5,7 @@ compressed = lzw.compress(infile)
 lzw.writebytes("My Compressed File.lzw", compressed)
 
 print(type(compressed))
-print(lzw.unpackbyte(compressed))
+print(str(compressed))
 
 infile = lzw.readbytes("My Compressed File.lzw", compressed)
 uncompressed = lzw.decompress(infile)
