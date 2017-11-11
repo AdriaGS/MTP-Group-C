@@ -187,8 +187,8 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	new_mulData = [i * 256 for i in multiplicationData]
-	str_decompressed = decompress(compressed + new_mulData)
+	new_mulData = [int(i) * 256 for i in multiplicationData]
+	str_decompressed = decompress(int(compressed) + new_mulData)
 	outputFile.write(str_decompressed)
 	outputFile.close()
 
