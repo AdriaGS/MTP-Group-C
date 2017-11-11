@@ -183,6 +183,7 @@ def main():
 
 		toDecompress_mid.extend(list(binary))
 		pos += 1
+		print("&&&&&&&&&&")
 
 	toDecompress_mid = list(map(int, toDecompress_mid))
 
