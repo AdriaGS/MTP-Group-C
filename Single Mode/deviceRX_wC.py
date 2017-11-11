@@ -152,7 +152,7 @@ def main():
 
 				#We check if the received packet is the expected one
 				if(chr(ctrlFrame[0]) == ctrl_flag):
-					multiplicationData.append(ctrlFrame)
+					multiplicationData.extend(ctrlFrame)
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
 					receivedControlPacket = 1
 				else:
@@ -174,7 +174,7 @@ def main():
 				#print("RECEIVED PKT")
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
-					compressed.append(frame)
+					compressed.extend(frame)
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
@@ -187,7 +187,7 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	multiplicationData = list(map(int, multiplicationData))
+	multiplicationData = [int(i) for i in multiplicationData]
 	compressed = list(map(int, compressed))
 	new_mulData = [i * 256 for i in multiplicationData]
 	str_decompressed = decompress([sum(x) for x in zip(compressed, new_mulData)])
