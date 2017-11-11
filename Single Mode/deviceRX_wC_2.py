@@ -127,9 +127,10 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	numberOfPackets, listLength = str_Handshakeframe.split(",")
+	numberOfPackets, listLength, n = str_Handshakeframe.split(",")
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
 	print("Length of list: " + listLength)
+	print("maximum value of list: " + n)
 
 	radio_Rx.startListening()
 
