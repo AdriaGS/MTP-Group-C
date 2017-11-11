@@ -63,7 +63,7 @@ def main():
 	comp = compress(f.read())
 
 	for x in comp:
-		finalData += chr(x)
+		finalData += str(x)
 
 	print(finalData)
 
