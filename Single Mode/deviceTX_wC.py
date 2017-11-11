@@ -162,17 +162,9 @@ def main():
 
 	#We create the string with the packets needed to decompress the file transmitted
 	controlList = []
-	i = 0
-	l = 0
 	
 	for val in data2Tx_compressed:
-		if (val < 256):
-			division = 0
-		else:
-			division = int(val/512) + i + l
-			l = (l + 1) % 2
-		if (l != 0):
-			i += 1
+		division = int(val/256)
 		controlList.append(division)
 
 	#Now we conform all the control packets in a list
