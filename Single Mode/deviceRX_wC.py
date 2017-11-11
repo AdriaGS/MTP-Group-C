@@ -187,13 +187,11 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	multiplicationData = [int(i) for i in multiplicationData]
+	multiplicationData = list(map(int, multiplicationData))
 	compressed = list(map(int, compressed))
-	print(multiplicationData[0:10])
-	print(compressed[0:10])
 	new_mulData = [i * 256 for i in multiplicationData]
 	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
-	#print(toDecompress)
+	
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
 	outputFile.close()

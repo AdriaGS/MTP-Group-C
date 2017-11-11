@@ -140,7 +140,7 @@ def main():
 				#print("RECEIVED PKT")
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
-					compressed.append(frame)
+					compressed.extend(frame[1:len(frame)])
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
@@ -152,6 +152,8 @@ def main():
 					timeout = time.time() + time_ack
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
+
+	compressed = list(map(int, compressed))
 	str_decompressed = decompress(compressed)
 	outputFile.write(str_decompressed)
 	outputFile.close()
