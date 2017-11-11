@@ -183,7 +183,6 @@ def main():
 
 	#Start sendind
 	n = len(bin(max(data2Tx_compressed)))-2
-	print(n)
 	radio_Tx.write(str(numberofPackets) + "," + str(len(data2Tx_compressed)) + "," + str(n))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
