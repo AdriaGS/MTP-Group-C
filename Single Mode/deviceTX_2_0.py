@@ -65,7 +65,7 @@ try:
 	ack = []
 	ack_received = 0
 	controlAck_received = 0
-	inFile = open("SampleTextFile1Mb.txt", "rb")
+	inFile = open("MTP_Prev.txt", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
 	packets = []
