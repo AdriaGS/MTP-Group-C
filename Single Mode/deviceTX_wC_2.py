@@ -162,7 +162,7 @@ def main():
 			aux2=binary(a|num)
 			del aux2[-1]
 			aux += aux2[::-1]
-	print ("B"+str(aux))
+	#print ("B"+str(aux))
 
 	for i in range(0, len(aux), 8):
 		r=aux[i:i+8]
