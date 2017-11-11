@@ -164,6 +164,8 @@ def main():
 	toDecompress_mid = []
 	pos = 0
 	n = int(n)
+
+	print("Decompression starting")
 	for x in compressed:
 		binary = bin(x)
 		binary = binary[2:len(binary)]
@@ -181,7 +183,7 @@ def main():
 
 	toDecompress_mid = list(map(int, toDecompress_mid))
 
-	#print(toDecompress_mid)
+	print("Got binary files --> now to integers")
 
 	toDecompress = []
 	for j in range(0, len(toDecompress_mid), n+1):
