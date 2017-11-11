@@ -172,7 +172,7 @@ def main():
 			char=char|p
 		toSend.append(char)
 
-	#print(toSend)
+	print(len(data2Tx_compressed))
 
 	#Now we conform all the data packets in a list
 	for i in range (0, len(toSend), dataSize):
@@ -184,7 +184,7 @@ def main():
 
 	#Start time
 	start = time.time()
-	radio_Tx.write(str(numberofPackets))
+	radio_Tx.write(str(numberofPackets) + "," + str(len(data2Tx_compressed)))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_Handshake = ""

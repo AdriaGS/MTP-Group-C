@@ -127,12 +127,13 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	numberOfPackets = int(str_Handshakeframe)
-	print("The number of data packets that will be transmitted: " + str(numberOfPackets))
+	numberOfPackets, listLength = str_Handshakeframe.split(",")
+	print("The number of data packets that will be transmitted: " + numberOfPackets)
+	print("Length of list: " + listLength)
 
 	radio_Rx.startListening()
 
-	for i in range(0, numberOfPackets):
+	for i in range(0, int(numberOfPackets)):
 
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
@@ -170,7 +171,7 @@ def main():
 			for i in range(0, 8-bitLength):
 				binary = "0" + binary
 		else:
-			for i in range(0, (len(lista)*(n+1) - (pos)*8) - bitLength):
+			for i in range(0, (int(listLength)*(n+1) - (pos)*8) - bitLength):
 				binary = "0" + binary
 
 		toDecompress_mid.extend(list(binary))
