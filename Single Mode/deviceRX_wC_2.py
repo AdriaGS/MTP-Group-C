@@ -167,6 +167,8 @@ def main():
 	pos = 0
 	n = int(n)
 
+	print(compressed)
+
 	print("Decompression starting")
 	for x in compressed:
 		binary = bin(x)

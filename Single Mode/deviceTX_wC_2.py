@@ -173,7 +173,7 @@ def main():
 			char=char|p
 		toSend.append(char)
 
-	print(len(data2Tx_compressed))
+	print(toSend)
 
 	#Now we conform all the data packets in a list
 	for i in range (0, len(toSend), dataSize):
@@ -184,7 +184,6 @@ def main():
 		numberofPackets += 1
 
 	#Start sendind
-	#start = time.time()
 	radio_Tx.write(str(numberofPackets) + "," + str(len(data2Tx_compressed)) + "," + str(max(data2Tx_compressed)))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
