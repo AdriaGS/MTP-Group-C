@@ -185,8 +185,6 @@ def main():
 
 	toDecompress_mid = list(map(int, toDecompress_mid))
 
-	print("Got binary files --> now to integers")
-
 	toDecompress = []
 	for j in range(0, len(toDecompress_mid), n+1):
 		l = toDecompress_mid[j: j+(n+1)]
@@ -194,6 +192,8 @@ def main():
 		for k in range(0, len(l)):
 			value += (int(l[k]) * 2**(n-k))		
 	toDecompress.append(value)
+
+	print(toDecompress)
 
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
