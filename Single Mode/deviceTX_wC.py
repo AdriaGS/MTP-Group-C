@@ -115,7 +115,8 @@ def main():
 	###############################################################################################################################
 
 	#Read file to transmit
-	inFile = open("SampleTextFile1Mb.txt", "rb")
+	#inFile = open("SampleTextFile1Mb.txt", "rb")
+	inFile = open("ElQuijote.txt", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
 
@@ -163,7 +164,12 @@ def main():
 	controlList = []
 	
 	for val in data2Tx_compressed:
-		division = int(val/256)
+		if (val < 256):
+			division = 0
+		elif (val < 512):
+			division = 1
+		else:
+			division = int(val/512)
 		controlList.append(division)
 
 	#Now we conform all the control packets in a list
@@ -284,7 +290,7 @@ def main():
 		ack_received = 0
 		flag_n = (flag_n + 1) % 10
 
-	print(controlList)
+	#print(controlList)
 
 	final = time.time()
 	totalTime = final - start

@@ -189,7 +189,12 @@ def main():
 
 	multiplicationData = list(map(int, multiplicationData))
 	compressed = list(map(int, compressed))
-	new_mulData = [i * 256 for i in multiplicationData]
+	new_mulData = []
+	for i in multiplicationData:
+		if i == 1:
+			new_mulData.append(i)
+		else:
+			new_mulData.append(i*512)
 	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
 
 	print(multiplicationData)
