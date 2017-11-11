@@ -36,6 +36,33 @@ def compress(uncompressed):
 		result.append(dictionary[w])
 	return result
 
+def secondCompress(uncompressed):
+	"""Compress a string to a list of output symbols."""
+ 
+	# Build the dictionary.
+	dict_size = 10
+	dictionary = {chr(i): i for i in range(48, 58)}
+	#dictionary = dict((chr(i), i) for i in xrange(dict_size))
+	# in Python 3: dictionary = {chr(i): i for i in range(dict_size)}
+ 
+	w = ""
+	result = []
+	for c in uncompressed:
+		wc = w + c
+		if wc in dictionary:
+			w = wc
+		else:
+			result.append(dictionary[w])
+			# Add wc to the dictionary.
+			dictionary[wc] = dict_size
+			dict_size += 1
+			w = c
+ 
+	# Output the code for w.
+	if w:
+		result.append(dictionary[w])
+	return result
+
 def printSummary(file1, file2):
 	"""
 	printSummary() prints out the number of bytes in the original file and in
@@ -58,21 +85,25 @@ def printSummary(file1, file2):
 def main():	
 
 	finalData = ""
-	file='ElQuijote.txt'
+	midData = ""
+	file='MTP_Prev.txt'
 	f = open(file,'rb')
 	comp = compress(f.read())
 
 	for x in comp:
-		finalData += str(x)
+		midData += str(x)
 
-	print(finalData)
+	second_compress = secondCompress(midData)
 
-	print(type(f.read()))
-	print(type(comp))
+	#for i in second_compress:
+	#	finalData += str(i)
 
-	print(max(comp))
 	print(len(comp))
-	print(bin(max(comp)))
+	print(len(second_compress))
+
+	print("Max of first compression: " + str(max(comp)))
+	print("Max of second compression: " + str(max(second_compress)))
+	print(bin(max(second_compress)))
 
 	f.close()
 
