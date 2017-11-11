@@ -93,7 +93,7 @@ def main():
 	###############################################################################################################################
 
 	#Open file to save the transmitted data
-	outputFile = open("RxFileCompressed.txt", "wb")
+	outputFile = open("RxFileCompressed2.txt", "wb")
 
 	#Flag variables
 	original_flag = 'A'
@@ -136,15 +136,11 @@ def main():
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
 		while not (receivedPacket):
-			str_frame = ""
 			if radio_Rx.available(0):
 				#print("RECEIVED PKT")
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
-					for c in range(1, len(frame)):
-					    str_frame = str_frame + chr(frame[c])
-					str_compressed += str_frame
-					#outputFile.write(str_decompressed)
+					compressed.append(frame)
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
@@ -156,8 +152,9 @@ def main():
 					timeout = time.time() + time_ack
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
+	str_decompressed = decompress(compressed)
+	outputFile.write(str_decompressed)
 	outputFile.close()
-	print(str_compressed)
 
 if __name__ == '__main__':
 	main()

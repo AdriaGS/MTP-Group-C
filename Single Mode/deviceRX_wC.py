@@ -105,6 +105,7 @@ def main():
 	frame = []
 	ctrlFrame = []
 	handshake_frame = []
+	compressed = []
 
 	#ACK related variables
 	time_ack = 0.5
@@ -174,8 +175,7 @@ def main():
 				if(chr(frame[0]) == flag):
 					for c in range(1, len(frame)):
 					    str_frame = str_frame + chr(frame[c])
-					str_decompressed = decompress(frame)
-					outputFile.write(str_decompressed)
+					compressed.append(frame)
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
@@ -187,6 +187,8 @@ def main():
 					timeout = time.time() + time_ack
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
+	str_decompressed = decompress(compressed)
+	outputFile.write(str_decompressed)
 	outputFile.close()
 
 if __name__ == '__main__':
