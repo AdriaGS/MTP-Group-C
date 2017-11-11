@@ -130,6 +130,7 @@ def main():
 	print("The number of data packets that will be transmitted: " + str(numberOfPackets))
 
 	radio_Rx.startListening()
+	str_compressed = ""
 
 	for i in range(0,int(numberOfPackets)):
 		timeout = time.time() + time_ack
