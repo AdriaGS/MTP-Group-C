@@ -188,7 +188,8 @@ def main():
 		receivedPacket = 0
 
 	new_mulData = [int(i) * 256 for i in multiplicationData]
-	str_decompressed = decompress(int(compressed) + new_mulData)
+	compressed = list(map(int, compressed))
+	str_decompressed = decompress([sum(x) for x in zip(compressed, new_mulData)])
 	outputFile.write(str_decompressed)
 	outputFile.close()
 
