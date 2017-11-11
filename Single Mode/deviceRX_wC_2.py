@@ -193,7 +193,7 @@ def main():
 			value += (int(l[k]) * 2**(n-k))		
 		toDecompress.append(value)
 
-	print(toDecompress)
+	#print(toDecompress)
 
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
