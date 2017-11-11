@@ -163,6 +163,7 @@ def main():
 	#Decompression postprocessing
 	toDecompress_mid = []
 	pos = 0
+	n = int(n)
 	for x in compressed:
 		binary = bin(x)
 		binary = binary[2:len(binary)]
