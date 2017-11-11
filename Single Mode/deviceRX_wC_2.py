@@ -127,7 +127,7 @@ def main():
 			receivedHandshakePacket = 1
 
 	numberOfPackets = int(str_Handshakeframe)
-	print("The number of data packets that will be transmitted: " + str(numberofPackets))
+	print("The number of data packets that will be transmitted: " + str(numberOfPackets))
 
 	radio_Rx.startListening()
 
