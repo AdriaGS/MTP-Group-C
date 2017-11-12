@@ -143,12 +143,15 @@ def main():
 	#Time variables
 	time_ack = 0.5
 
-
+	start_c = time.time()
 	#Compression of the data to transmit into data2Tx_compressed
 	enc = lzw.ByteEncoder(12)
 	bigstr = data2Tx
 	encoding = enc.encodetobytes(bigstr)
 	encoded = b"".join( b for b in encoding )
+	
+	final_c = time.time()
+	print(final_c - start_c)
 
 	#Now we conform all the data packets in a list
 	for i in range (0, len(encoded), dataSize):

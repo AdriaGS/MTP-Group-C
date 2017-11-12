@@ -160,7 +160,7 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-
+	start_d = time.time()
 	#Decompression postprocessing
 	encoded = ''.join(chr(e) for e in compressed)
 	dec = lzw.ByteDecoder()
@@ -170,9 +170,12 @@ def main():
 	outputFile.write(decoded)
 	outputFile.close()
 
+	final_d = time.time()
+	print(final_d - start_d)
+
 	final = time.time()
 	totalTime = final - start
-	print(totalTime)
+	print("Total time: " + str(totalTime))
 
 if __name__ == '__main__':
 	main()
