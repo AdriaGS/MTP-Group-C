@@ -144,10 +144,9 @@ def main():
 	time_ack = 0.5
 
 	start_c = time.time()
-	#Compression of the data to transmit into data2Tx_compressed
-	enc = lzw.ByteEncoder(12)
-	bigstr = data2Tx
-	encoding = enc.encodetobytes(bigstr)
+	#Compression of the data to transmit into encoded variable
+	enc = lzw.ByteEncoder(20)
+	encoding = enc.encodetobytes(data2Tx)
 	encoded = b"".join( b for b in encoding )
 	
 	final_c = time.time()
