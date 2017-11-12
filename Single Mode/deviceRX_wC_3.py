@@ -129,14 +129,12 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	numberOfPackets, listLength, n = str_Handshakeframe.split(",")
-	print("The number of data packets that will be transmitted: " + numberOfPackets)
-	print("Length of list: " + listLength)
-	print("maximum value of list: " + n)
+	numberOfPackets = int(str_Handshakeframe)
+	print("The number of data packets that will be transmitted: " + str(numberOfPackets))
 
 	radio_Rx.startListening()
 
-	for i in range(0, int(numberOfPackets)):
+	for i in range(0, numberOfPackets):
 
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
