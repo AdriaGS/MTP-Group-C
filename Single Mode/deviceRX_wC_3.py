@@ -161,7 +161,7 @@ def main():
 
 
 	#Decompression postprocessing
-	encoded = ''.join(compressed)
+	encoded = ''.join(chr(e) for e in compressed)
 	dec = lzw.ByteDecoder()
 	decoding = dec.decodefrombytes(encoded)
 	decoded = b"".join(decoding)
