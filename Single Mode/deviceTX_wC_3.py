@@ -145,7 +145,7 @@ def main():
 
 	start_c = time.time()
 	#Compression of the data to transmit into encoded variable
-	enc = lzw.ByteEncoder(20)
+	enc = lzw.ByteEncoder(50)
 	encoding = enc.encodetobytes(data2Tx)
 	encoded = b"".join( b for b in encoding )
 	
