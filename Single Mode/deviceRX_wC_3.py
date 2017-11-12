@@ -95,7 +95,7 @@ def main():
 	###############################################################################################################################
 
 	#Open file to save the transmitted data
-	outputFile = open("RxFileCompressed2.txt", "wb")
+	outputFile = open("RxFileCompressed3.txt", "wb")
 
 	#Flag variables
 	original_flag = 'A'
@@ -170,7 +170,7 @@ def main():
 
 	outputFile.write(decoded)
 	outputFile.close()
-	
+
 	final = time.time()
 	totalTime = final - start
 	print(totalTime)
