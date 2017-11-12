@@ -146,7 +146,7 @@ def main():
 
 	#Compression of the data to transmit into data2Tx_compressed
 	enc = lzw.ByteEncoder(12)
-	bigstr = inFile.read()
+	bigstr = data2Tx
 	encoding = enc.encodetobytes(bigstr)
 	encoded = b"".join( b for b in encoding )
 
