@@ -91,7 +91,7 @@ def main():
 	start = time.time()
 	finalData = ""
 	midData = ""
-	file='SampleTextFile1Mb.txt'
+	file='ElQuijote.txt'
 	f = open(file,'rb')
 	comp = compress(f.read())
 	f.close()
@@ -118,6 +118,9 @@ def main():
 			char=char|p
 		enviar.append(char)
 
+	print(len(comp))
+	print(len(enviar))
+
 	toDecompress_mid = []
 	pos = 0
 	for x in enviar:
@@ -129,6 +132,7 @@ def main():
 			for i in range(0, 8-bitLength):
 				binary = "0" + binary
 		else:
+			print((len(comp)*(n+1) - (pos)*8) - bitLength)
 			for i in range(0, (len(comp)*(n+1) - (pos)*8) - bitLength):
 				binary = "0" + binary
 
@@ -145,7 +149,7 @@ def main():
 			value += (int(l[k]) * 2**(n-k))
 		toDecompress.append(value)
 
-	#print(toDecompress)
+	print(toDecompress)
 
 	str_decompressed = decompress(toDecompress)
 

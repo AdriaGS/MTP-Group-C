@@ -1,11 +1,17 @@
 import lzw
 
-infile = lzw.readbytes("ElQuijote.txt")
-compressed = lzw.compress(infile)
-lzw.writebytes("My Compressed File.lzw", compressed)
+inFile = open("MTP_Prev.txt", 'rb')
 
-print(type(compressed))
-print(str(compressed))
+enc = lzw.ByteEncoder(12)
+bigstr = inFile.read()
+encoding = enc.encodetobytes(bigstr)
+encoded = b"".join( b for b in encoding )
 
-infile = lzw.readbytes("My Compressed File.lzw", compressed)
-uncompressed = lzw.decompress(infile)
+outFile = open("Compressed.txt", 'wb')
+outFile.write(encoded)
+
+dec = lzw.ByteDecoder()
+decoding = dec.decodefrombytes(encoded)
+decoded = b"".join(decoding)
+
+print(decoded == bigstr)
