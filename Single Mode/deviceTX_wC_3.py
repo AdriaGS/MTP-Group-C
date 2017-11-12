@@ -5,10 +5,6 @@ import time
 import spidev
 import sys
 import os.path
-import numpy
-import pickle
-import sqlite3
-import mat4py as m4p
 import os
 import lzw
 
