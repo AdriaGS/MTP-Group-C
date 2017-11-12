@@ -64,7 +64,7 @@ try:
 	frame = []
 	str_frame = ""
 	time_ack = 1
-	outputFile = open("ReceivedFileQM.txt", "wb")
+	outputFile = open("ReceivedFileNoCompression.txt", "wb")
 	receivedPacket = 0
 	receivedControlPacket = 0
 	numberOfPackets = 0

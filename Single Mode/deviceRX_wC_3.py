@@ -96,7 +96,7 @@ def main():
 	###############################################################################################################################
 
 	#Open file to save the transmitted data
-	outputFile = open("RxFileCompressed3.txt", "wb")
+	outputFile = open("ReceivedFileCompressed3.txt", "wb")
 
 	#Flag variables
 	original_flag = 'A'

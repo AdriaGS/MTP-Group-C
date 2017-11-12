@@ -113,7 +113,7 @@ def main():
 	###############################################################################################################################
 
 	#Read file to transmit
-	inFile = open("MTP_Prev.txt", "rb")
+	inFile = open("ElQuijote.txt", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
 
@@ -145,7 +145,7 @@ def main():
 
 	start_c = time.time()
 	#Compression of the data to transmit into encoded variable
-	enc = lzw.ByteEncoder(50)
+	enc = lzw.ByteEncoder(20)
 	encoding = enc.encodetobytes(data2Tx)
 	encoded = b"".join( b for b in encoding )
 	
