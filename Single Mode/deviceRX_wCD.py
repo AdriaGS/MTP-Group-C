@@ -15,6 +15,7 @@ def decompress(compressed):
     """Decompress a list of output ks to a string."""
     from cStringIO import StringIO
     global dictionary
+    global dict_size
  
     # use StringIO, otherwise this becomes O(N^2)
     # due to string concatenation in a loop
