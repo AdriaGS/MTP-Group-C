@@ -269,12 +269,16 @@ def main():
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 
 	#We iterate over every packet to be sent
+	dec_ready = 0
 	for message in packets:
 
 		flag = chr(ord(original_flag) + flag_n)
 		message2Send = list(flag) + message
 		radio_Tx.write(message2Send)
-		#time.sleep(1)
+		
+		if(dec_ready == 200):
+			time.sleep(0.3)
+			dec_ready = 0
 
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
@@ -302,7 +306,8 @@ def main():
 				print("No Data ACK received resending message")
 				radio_Tx.write(message2Send)
 				timeout = time.time() + time_ack
-				
+		
+		dec_ready = 0
 		ack_received = 0
 		flag_n = (flag_n + 1) % 10
 

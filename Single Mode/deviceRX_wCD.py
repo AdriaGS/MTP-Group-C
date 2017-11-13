@@ -41,11 +41,9 @@ def decompressionOnTheGo(compressedFile, multiplicationList):
 
 	#Open file to save the transmitted data
 	outputFile = open("ReceivedFileCompressed1.txt", "wb")
-	print("Decompressing on the go")
 
 	new_mulData = [il * 256 for il in multiplicationList]
 	toDecompress = [sum(x) for x in zip(compressedFile, new_mulData)]
-	print(toDecompress)
 
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
@@ -192,7 +190,7 @@ def main():
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
-					if(dec_ready == 100):
+					if(dec_ready == 200):
 						compressed = list(map(int, compressed))
 						decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)])
 						dec_ready = 0
