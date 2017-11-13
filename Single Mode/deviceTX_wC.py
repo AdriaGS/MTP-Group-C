@@ -177,7 +177,7 @@ def main():
 			division = int(val/256)
 			controlList_extended.append(division)
 
-	for val2 in controlList:
+	for val2 in controlList_mid:
 		def_val = val2
 		if val2 > 256:
 			def_val -= 256
