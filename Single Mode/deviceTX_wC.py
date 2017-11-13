@@ -178,6 +178,8 @@ def main():
 
 	controlList.extend(controlList_extended)
 
+	print(controlList)
+
 	final_c = time.time()
 	print("Compression time: " + str(final_c-start_c))
 

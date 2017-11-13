@@ -37,7 +37,7 @@ def decompress(compressed):
         w = entry
     return result.getvalue()
 
-def decompressionOnTheGo(compressed, multiplicationList, ExtendedVersion):
+def decompressionOnTheGo(compressedFile, multiplicationList, ExtendedVersion):
 
 	#Open file to save the transmitted data
 	outputFile = open("ReceivedFileCompressed1.txt", "wb")
@@ -48,7 +48,7 @@ def decompressionOnTheGo(compressed, multiplicationList, ExtendedVersion):
 		multiplicationList = [sum(xk) for xk in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData1)]
 
 	new_mulData = [il * 256 for il in multiplicationList]
-	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
+	toDecompress = [sum(x) for x in zip(compressedFile, new_mulData)]
 	print(toDecompress)
 
 	str_decompressed = decompress(toDecompress)
