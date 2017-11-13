@@ -7,14 +7,13 @@ import sys
 import os.path
 import pickle
 
+# Build the dictionary.
+dict_size = 256
+dictionary = dict((i, chr(i)) for i in xrange(dict_size))
+
 def decompress(compressed):
     """Decompress a list of output ks to a string."""
     from cStringIO import StringIO
- 
-    # Build the dictionary.
-    dict_size = 256
-    dictionary = dict((i, chr(i)) for i in xrange(dict_size))
-    # in Python 3: dictionary = {i: chr(i) for i in range(dict_size)}
  
     # use StringIO, otherwise this becomes O(N^2)
     # due to string concatenation in a loop
