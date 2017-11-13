@@ -180,6 +180,7 @@ def main():
 	radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
+	str_Handshake = ""
 
 	#While we don't receive the handshake ack we keep trying
 	while not (handshakeAck_received):
@@ -187,11 +188,15 @@ def main():
 		if radio_Rx.available(0):
 			radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
 
+			for c in range(0, len(handshake)):
+				str_Handshake = str_Handshake + chr(handshake[c])
+
 			#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
-			if(list(handshake) != list("ACK")):
+			if(list(str_Handshake) != list("ACK")):												#####Can we avoid the for above? using directly ack received from .read()
 				radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
 				timeout = time.time() + time_ack
 				print("Handshake Message Lost")
+				str_Handshake = ""
 			else:
 				print("Handshake done")
 				handshakeAck_received = 1
@@ -212,6 +217,7 @@ def main():
 
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
+		str_controlAck = ""
 
 		#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
 		while not (controlAck_received):
@@ -220,11 +226,15 @@ def main():
 			if radio_Rx.available(0):
 				radio_Rx.read(ctrl_ack, radio_Rx.getDynamicPayloadSize())
 
+				for c in range(0, len(ctrl_ack)):
+					str_controlAck = str_controlAck + chr(ctrl_ack[c])
+
 				#If the received ACK does not match the expected one we retransmit, else we set the received control ack to 1
-				if(list(ctrl_ack) != (list("ACK") + list(ctrl_flag))):
+				if(list(str_controlAck) != (list("ACK") + list(ctrl_flag))):
 					radio_Tx.write(ctrlMessage)
 					timeout = time.time() + time_ack
 					print("Control ACK received but not the expected one --> resending message")
+					str_controlAck = ""
 				else:
 					controlAck_received = 1
 
