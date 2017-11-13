@@ -161,29 +161,24 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-
+	start_d = time.time()
 	#Decompression postprocessing
 	toDecompress_mid = []
 	pos = 0
 	n = int(n)
 
 	print("Decompression starting")
-	for x in compressed:
-		binary = bin(x)
-		binary = binary[2:len(binary)]
-		bitLength = len(binary)
-
-		if(pos != (len(compressed)-1)):
-			for i in range(0, 8-bitLength):
-				binary = "0" + binary
+	for x in enviar:
+		
+		if(pos != (len(enviar)-1)):
+			binary = lzw.inttobits(x, 8)
 		else:
-			for i in range(0, (int(listLength)*(n+1) - (pos)*8) - bitLength):
-				binary = "0" + binary
-
-		toDecompress_mid.extend(list(binary))
+			binary = lzw.inttobits(x, (len(comp)*(n+1) - (pos)*8))
+	
+		toDecompress_mid.extend(binary)
 		pos += 1
 
-	toDecompress_mid = list(map(int, toDecompress_mid))
+	#toDecompress_mid = list(map(int, toDecompress_mid))
 
 	toDecompress = []
 	for j in range(0, len(toDecompress_mid), n+1):
@@ -198,9 +193,12 @@ def main():
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
 	outputFile.close()
+	final_d = time.time()
+	print("Time to decompress: " + str(final_d - start_d))
+
 	final = time.time()
 	totalTime = final - start
-	print(totalTime)
+	print("Total time: " + str(totalTime))
 
 if __name__ == '__main__':
 	main()

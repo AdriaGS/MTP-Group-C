@@ -146,7 +146,7 @@ def main():
 	#Time variables
 	time_ack = 0.5
 
-
+	start_c = time.time()
 	#Compression of the data to transmit into data2Tx_compressed
 	data2Tx_compressed = compress(data2Tx)
 
@@ -157,13 +157,10 @@ def main():
 
 	aux = []
 	aux2 = []
-	binary = lambda n: n>0 and [n&1]+binary(n>>1) or []
 
 	for a in data2Tx_compressed:
-			aux2=binary(a|num)
-			del aux2[-1]
-			aux += aux2[::-1]
-	#print ("B"+str(aux))
+		aux2 = lzw.inttobits(a, n+1)
+		aux.extend(aux2)
 
 	for i in range(0, len(aux), 8):
 		r=aux[i:i+8]
@@ -180,6 +177,9 @@ def main():
 		else:
 			packets.append(toSend[i:])
 		numberofPackets += 1
+
+	final_c = time.time()
+	print("Time to compress: " + str(final_c - start_c))
 
 	#Start sendind
 	n = len(bin(max(data2Tx_compressed)))-2

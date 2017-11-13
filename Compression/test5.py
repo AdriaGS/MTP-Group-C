@@ -89,10 +89,10 @@ def printSummary(file1, file2):
 
 def main():	
 
-	start = time.time()
+	start_c = time.time()
 	finalData = ""
 	midData = ""
-	file='SampleTextFile1Mb.txt'
+	file='MTP_Prev.txt'
 	f = open(file,'rb')
 	comp = compress(f.read())
 	f.close()
@@ -103,13 +103,10 @@ def main():
 
 	aux = []
 	aux2 = []
-	binary = lambda n: n>0 and [n&1]+binary(n>>1) or []
 
 	for a in comp:
-			aux2=binary(a|num)
-			del aux2[-1]
-			aux += aux2[::-1]
-	#print ("B"+str(aux))
+		aux2 = lzw.inttobits(a, n+1)
+		aux.extend(aux2)
 
 	for i in range(0, len(aux), 8):
 		r=aux[i:i+8]
@@ -119,58 +116,42 @@ def main():
 			char=char|p
 		enviar.append(char)
 
-	print(len(comp))
-	print(len(enviar))
+	final_c = time.time()
+	print("Total time compression: " + str(final_c-start_c))
 
+	start_d = time.time()
 	toDecompress_mid = []
 	pos = 0
 	for x in enviar:
-		binary = bin(x)
-		binary = binary[2:len(binary)]
-		bitLength = len(binary)
 		
 		if(pos != (len(enviar)-1)):
-			for i in range(0, 8-bitLength):
-				binary = "0" + binary
+			binary = lzw.inttobits(x, 8)
 		else:
-			print((len(comp)*(n+1) - (pos)*8) - bitLength)
-			for i in range(0, (len(comp)*(n+1) - (pos)*8) - bitLength):
-				binary = "0" + binary
-
-		toDecompress_mid.extend(list(binary))
+			binary = lzw.inttobits(x, (len(comp)*(n+1) - (pos)*8))
+	
+		toDecompress_mid.extend(binary)
 		pos += 1
 
-	toDecompress_mid = list(map(int, toDecompress_mid))
+	#toDecompress_mid = list(map(int, toDecompress_mid))
 
 	toDecompress = []
 	for j in range(0, len(toDecompress_mid), n+1):
 		l = toDecompress_mid[j: j+(n+1)]
-		value = 0
-		for k in range(0, len(l)):
-			value += (int(l[k]) * 2**(n-k))
+		value = lzw.intfrombits(l)
 		toDecompress.append(value)
 
 	#print(toDecompress)
 
 	str_decompressed = decompress(toDecompress)
 
-	print("Max of first compression: " + str(max(comp)))
+	#print("Max of compression: " + str(max(comp)))
 	
 	outputFile = open("Deco_test3.txt", "wb")
 	outputFile.write(str_decompressed)
 	outputFile.close()
 
-	final = time.time()
-	print("Total time: " + str(final-start))
-
-	#string = "".join(chr(val) for val in comp)
-
-	#print(string)
-
-	#print(bitarray(str1))
-
-	#for i in str1:
-		#print(i)
+	final_d = time.time()
+	print("Total time decompression: " + str(final_d-start_d))
 
 if __name__ == '__main__':
 	main()
