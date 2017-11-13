@@ -169,12 +169,12 @@ def main():
 	n = int(n)
 
 	print("Decompression starting")
-	for x in enviar:
+	for x in toDecompress:
 		
-		if(pos != (len(enviar)-1)):
+		if(pos != (len(toDecompress)-1)):
 			binary = lzw.inttobits(x, 8)
 		else:
-			binary = lzw.inttobits(x, (len(comp)*(n+1) - (pos)*8))
+			binary = lzw.inttobits(x, (int(listLength)*(n+1) - (pos)*8))
 	
 		toDecompress_mid.extend(binary)
 		pos += 1
