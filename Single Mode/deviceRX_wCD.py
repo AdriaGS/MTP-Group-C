@@ -183,6 +183,7 @@ def main():
 		multiplicationData = [sum(xk) for xk in zip(multiplicationData[0:len(multiplicationData)/2], multiplicationData_mid)]
 
 	dec_ready = 0
+	add = 0
 	for i in range(0,int(numberOfPackets)):
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
@@ -192,9 +193,10 @@ def main():
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
-					if(dec_ready == 200):
+					if(dec_ready == 200 + add):
 						compressed = list(map(int, compressed))
 						decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)])
+						add += 50
 						dec_ready = 0
 						print("On the way to the win")
 					radio_Tx.write(list("ACK") + list(flag))
