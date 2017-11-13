@@ -160,7 +160,7 @@ def main():
 	aux2 = []
 
 	for a in data2Tx_compressed:
-		aux2 = lzw.inttobits(a, n)
+		aux2 = lzw.inttobits(a, n+1)
 		aux.extend(aux2)
 
 	for i in range(0, len(aux), 8):
