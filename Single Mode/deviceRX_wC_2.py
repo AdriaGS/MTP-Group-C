@@ -6,6 +6,7 @@ import spidev
 import sys
 import os.path
 import pickle
+import lzw
 
 def decompress(compressed):
     """Decompress a list of output ks to a string."""

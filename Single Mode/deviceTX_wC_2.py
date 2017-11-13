@@ -10,6 +10,7 @@ import pickle
 import sqlite3
 import mat4py as m4p
 import os
+import lzw
 
 def compress(uncompressed):
 	"""Compress a string to a list of output symbols."""
