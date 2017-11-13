@@ -125,6 +125,7 @@ def main():
 	receivedHandshakePacket = 0
 	receivedControlPacket = 0
 
+	start = time.time()
 	#We listen for the control packet
 	radio_Rx.startListening()
 	while not (receivedHandshakePacket):
@@ -211,6 +212,8 @@ def main():
 
 	compressed = list(map(int, compressed))
 	decompressionOnTheGo(compressed, multiplicationData)
+	final = time.time()
+	print("Total time: " + str(final-start))
 
 if __name__ == '__main__':
 	main()
