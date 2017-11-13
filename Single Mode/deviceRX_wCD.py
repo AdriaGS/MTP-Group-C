@@ -43,13 +43,12 @@ def decompressionOnTheGo(compressed, multiplicationList, ExtendedVersion):
 	outputFile = open("ReceivedFileCompressed1.txt", "wb")
 
 	if(ExtendedVersion):
-		multiplicationData1 = [i * 256 for i in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
-		multiplicationData_T = [sum(x) for x in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData1)]
+		multiplicationData1 = [ik * 256 for ik in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
+		new_mulData = [sum(xk) for xk in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData1)]
 
 	else:
-		multiplicationData_T = [i * 256 for i in multiplicationList]
+		new_mulData = [il * 256 for il in multiplicationList]
 
-	new_mulData = [i * 256 for i in multiplicationData_T]
 	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
 
 	str_decompressed = decompress(toDecompress)
@@ -184,6 +183,7 @@ def main():
 
 	multiplicationData = list(map(int, multiplicationData))
 
+	dec_ready = 0
 	for i in range(0,int(numberOfPackets)):
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
@@ -193,8 +193,10 @@ def main():
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
-					compressed = list(map(int, compressed))
-					decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)], (int(n)>16))
+					if(dec_ready == 100):
+						compressed = list(map(int, compressed))
+						decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)], (int(n)>16))
+						dec_ready = 0
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
@@ -204,6 +206,7 @@ def main():
 					else:
 						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
 					timeout = time.time() + time_ack
+		dec_ready += 1
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
