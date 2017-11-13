@@ -212,7 +212,7 @@ def main():
 		receivedPacket = 0
 
 	compressed = list(map(int, compressed))
-	decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)], (int(n)>16))
+	decompressionOnTheGo(compressed, multiplicationData, (int(n)>16))
 
 if __name__ == '__main__':
 	main()
