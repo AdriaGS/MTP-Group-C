@@ -181,7 +181,7 @@ def main():
 		def_val = val2
 		if val2 > 256:
 			def_val -= 256
-		ControlList.append(def_val)
+		controlList.append(def_val)
 
 	controlList.extend(controlList_extended)
 
