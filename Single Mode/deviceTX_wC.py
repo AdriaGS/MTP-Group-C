@@ -188,7 +188,7 @@ def main():
 			radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
 
 			#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
-			if(handshake != list("ACK")):
+			if(list(handshake) != list("ACK")):
 				radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
 				timeout = time.time() + time_ack
 				print("Handshake Message Lost")
@@ -221,7 +221,7 @@ def main():
 				radio_Rx.read(ctrl_ack, radio_Rx.getDynamicPayloadSize())
 
 				#If the received ACK does not match the expected one we retransmit, else we set the received control ack to 1
-				if(ctrl_ack != (list("ACK") + list(ctrl_flag))):
+				if(list(ctrl_ack) != (list("ACK") + list(ctrl_flag))):
 					radio_Tx.write(ctrlMessage)
 					timeout = time.time() + time_ack
 					print("Control ACK received but not the expected one --> resending message")
