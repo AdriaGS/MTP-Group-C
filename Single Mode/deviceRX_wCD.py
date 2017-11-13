@@ -37,7 +37,7 @@ def decompress(compressed):
         w = entry
     return result.getvalue()
 
-def decompressionOnTheGo(compressedFile, multiplicationList, ExtendedVersion):
+def decompressionOnTheGo(compressedFile, multiplicationList):
 
 	#Open file to save the transmitted data
 	outputFile = open("ReceivedFileCompressed1.txt", "wb")
@@ -178,7 +178,7 @@ def main():
 		receivedControlPacket = 0
 
 	multiplicationData = list(map(int, multiplicationData))
-	if(ExtendedVersion):
+	if(int(n)>16):
 		multiplicationData_mid = [ik * 256 for ik in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
 		multiplicationData = [sum(xk) for xk in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData_mid)]
 
@@ -194,7 +194,7 @@ def main():
 					compressed.extend(frame[1:len(frame)])
 					if(dec_ready == 100):
 						compressed = list(map(int, compressed))
-						decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)], (int(n)>16))
+						decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)])
 						dec_ready = 0
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
