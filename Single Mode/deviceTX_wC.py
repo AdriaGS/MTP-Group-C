@@ -148,7 +148,7 @@ def main():
 	#Time variables
 	time_ack = 0.5
 
-
+	start_c = time.time()
 	#Compression of the data to transmit into data2Tx_compressed
 	data2Tx_compressed = compress(data2Tx)
 	n=len(bin(max(data2Tx_compressed)))-2
@@ -168,10 +168,15 @@ def main():
 		division = int(val/256)
 		controlList.append(division)
 
+	print("A")
+
 	if(n > 16):
 		for val in controlList:
 			division = int(val/256)
 			controlList.append(division)
+
+	final_c = time.time()
+	print("Compression time: " + str(final_c-start_c))
 
 	#Now we conform all the control packets in a list
 	for x in range (0, len(controlList), dataControlSize):
