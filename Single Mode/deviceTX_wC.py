@@ -296,14 +296,14 @@ def main():
 				if(list(str_ack) != (list("ACK") + list(flag))):
 					radio_Tx.write(list(flag) + list(message))
 					timeout = time.time() + time_ack
-					print("Data ACK received but not the expected one --> resending message")
+					#print("Data ACK received but not the expected one --> resending message")
 					str_ack = ""
 				else:
 					ack_received = 1
 
 			#If an established time passes and we have not received anything we retransmit the data packet
 			if((time.time() + 0.01) > timeout):
-				print("No Data ACK received resending message")
+				#print("No Data ACK received resending message")
 				radio_Tx.write(message2Send)
 				timeout = time.time() + time_ack
 		
