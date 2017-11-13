@@ -45,12 +45,11 @@ def decompressionOnTheGo(compressed, multiplicationList, ExtendedVersion):
 
 	if(ExtendedVersion):
 		multiplicationData1 = [ik * 256 for ik in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
-		new_mulData = [sum(xk) for xk in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData1)]
+		multiplicationList = [sum(xk) for xk in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData1)]
 
-	else:
-		new_mulData = [il * 256 for il in multiplicationList]
-
+	new_mulData = [il * 256 for il in multiplicationList]
 	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
+	print(toDecompress)
 
 	str_decompressed = decompress(toDecompress)
 	outputFile.write(str_decompressed)
