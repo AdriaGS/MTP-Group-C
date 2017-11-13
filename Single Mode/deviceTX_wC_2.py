@@ -117,7 +117,7 @@ def main():
 	###############################################################################################################################
 
 	#Read file to transmit
-	inFile = open("ElQuijote.txt", "rb")
+	inFile = open("SampleTextFile1Mb", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
 
