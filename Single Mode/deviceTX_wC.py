@@ -151,6 +151,7 @@ def main():
 
 	#Compression of the data to transmit into data2Tx_compressed
 	data2Tx_compressed = compress(data2Tx)
+	n=len(bin(max(data2Tx_compressed)))-2
 
 	#Now we conform all the data packets in a list
 	for i in range (0, len(data2Tx_compressed), dataSize):
@@ -167,6 +168,11 @@ def main():
 		division = int(val/256)
 		controlList.append(division)
 
+	if(n > 16):
+		for val in controlList:
+			division = int(val/256)
+			controlList.append(division)
+
 	#Now we conform all the control packets in a list
 	for x in range (0, len(controlList), dataControlSize):
 		if((x+dataControlSize) < len(controlList)):
@@ -177,7 +183,7 @@ def main():
 
 	#Start time
 	start = time.time()
-	radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
+	radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets) + "," + str(n))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_Handshake = ""

@@ -37,12 +37,19 @@ def decompress(compressed):
         w = entry
     return result.getvalue()
 
-def decompressionOnTheGo(compressed, multiplicationList):
+def decompressionOnTheGo(compressed, multiplicationList, ExtendedVersion):
 
 	#Open file to save the transmitted data
 	outputFile = open("ReceivedFileCompressed1.txt", "wb")
 
-	new_mulData = [i * 256 for i in multiplicationData]
+	if(ExtendedVersion):
+		multiplicationData1 = [i * 256 for i in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
+		multiplicationData_T = [sum(x) for x in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData1)]
+
+	else:
+		multiplicationData_T = [i * 256 for i in multiplicationList]
+
+	new_mulData = [i * 256 for i in multiplicationData_T]
 	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
 
 	str_decompressed = decompress(toDecompress)
@@ -140,11 +147,10 @@ def main():
 			radio_Tx.write(list("ACK"))
 			receivedHandshakePacket = 1
 
-	numberOfPackets, numberofControlPackets = str_Handshakeframe.split(",")
+	numberOfPackets, numberofControlPackets, n = str_Handshakeframe.split(",")
 	print("The number of control packets that will be transmitted: " + numberofControlPackets)
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
-	print(int(numberofControlPackets))
-	print(int(numberOfPackets))
+	print("maximum value of list: " + n)
 	
 	radio_Rx.startListening()
 
@@ -188,7 +194,7 @@ def main():
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
 					compressed = list(map(int, compressed))
-					decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)])
+					decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)], (int(n)>16))
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
