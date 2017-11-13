@@ -162,19 +162,21 @@ def main():
 		numberofPackets += 1
 
 	#We create the string with the packets needed to decompress the file transmitted
-	controlList_mid = []
+	controlList_extended = []
 	controlList = []
 	
 	for val in data2Tx_compressed:
 		division = int(val/256)
-		controlList_mid.append(division)
+		controlList.append(division)
 
 	print("A")
 
 	if(n > 16):
-		for val in controlList_mid:
+		for val in controlList:
 			division = int(val/256)
-			controlList.append(division)
+			controlList_extended.append(division)
+
+	controlList.extend(controlList_extended)
 
 	final_c = time.time()
 	print("Compression time: " + str(final_c-start_c))
