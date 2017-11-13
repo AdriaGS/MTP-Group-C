@@ -43,10 +43,6 @@ def decompressionOnTheGo(compressedFile, multiplicationList, ExtendedVersion):
 	outputFile = open("ReceivedFileCompressed1.txt", "wb")
 	print("Decompressing on the go")
 
-	if(ExtendedVersion):
-		multiplicationData1 = [ik * 256 for ik in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
-		multiplicationList = [sum(xk) for xk in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData1)]
-
 	new_mulData = [il * 256 for il in multiplicationList]
 	toDecompress = [sum(x) for x in zip(compressedFile, new_mulData)]
 	print(toDecompress)
@@ -182,6 +178,9 @@ def main():
 		receivedControlPacket = 0
 
 	multiplicationData = list(map(int, multiplicationData))
+	if(ExtendedVersion):
+		multiplicationData_mid = [ik * 256 for ik in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
+		multiplicationData = [sum(xk) for xk in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData_mid)]
 
 	dec_ready = 0
 	for i in range(0,int(numberOfPackets)):
