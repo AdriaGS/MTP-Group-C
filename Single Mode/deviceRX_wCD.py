@@ -41,6 +41,7 @@ def decompressionOnTheGo(compressed, multiplicationList, ExtendedVersion):
 
 	#Open file to save the transmitted data
 	outputFile = open("ReceivedFileCompressed1.txt", "wb")
+	print("Decompressing on the go")
 
 	if(ExtendedVersion):
 		multiplicationData1 = [ik * 256 for ik in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
@@ -209,6 +210,9 @@ def main():
 		dec_ready += 1
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
+
+	compressed = list(map(int, compressed))
+	decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)], (int(n)>16))
 
 if __name__ == '__main__':
 	main()
