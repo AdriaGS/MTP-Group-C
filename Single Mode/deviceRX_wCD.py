@@ -179,8 +179,8 @@ def main():
 
 	multiplicationData = list(map(int, multiplicationData))
 	if(int(n)>16):
-		multiplicationData_mid = [ik * 256 for ik in multiplicationList[len(multiplicationList)/2:len(multiplicationList)]]
-		multiplicationData = [sum(xk) for xk in zip(multiplicationList[0:len(multiplicationList)/2], multiplicationData_mid)]
+		multiplicationData_mid = [ik * 256 for ik in multiplicationData[len(multiplicationData)/2:len(multiplicationData)]]
+		multiplicationData = [sum(xk) for xk in zip(multiplicationData[0:len(multiplicationData)/2], multiplicationData_mid)]
 
 	dec_ready = 0
 	for i in range(0,int(numberOfPackets)):
