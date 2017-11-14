@@ -202,9 +202,6 @@ def main():
 						multData_extended.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
 						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
-					print(compressed)
-					print(multData)
-
 					if(dec_ready == 900):
 						compressed = list(map(int, compressed))
 						multData = list(map(int, multData))

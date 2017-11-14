@@ -221,8 +221,7 @@ def main():
 		flag = chr(ord(original_flag_data) + flag_n)
 		message2Send = list(flag) + message
 		radio_Tx.write(message2Send)
-		print(message)
-		
+
 		if(dec_ready == 200):
 			time.sleep(0.3)
 			dec_ready = 0
@@ -230,8 +229,6 @@ def main():
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_ack = ""
-
-		time.sleep(10)
 
 		#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
 		while not (ack_received):
