@@ -183,7 +183,7 @@ def main():
 						multData.extend([frame[i] for i in indexing_1])
 						if(n > 16):
 							multData_extended.extend([frame[i] for i in indexing_2])
-						nextIndexing = (nextIndexing + 1) % int(n/2)+1
+						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
 					elif (nextIndexing == 1):
 
@@ -194,13 +194,13 @@ def main():
 						else:
 							compressed.extend([frame[i] for i in indexing_1])
 							multData.extend([frame[i] for i in indexing_0])
-						nextIndexing = (nextIndexing + 1) % int(n/2)+1
+						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
 					else:
 						compressed.extend([frame[i] for i in indexing_1])
 						multData.extend([frame[i] for i in indexing_2])
 						multData_extended.extend([frame[i] for i in indexing_0])
-						nextIndexing = (nextIndexing + 1) % int(n/2)+1
+						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
 					if(dec_ready == 900):
 						compressed = list(map(int, compressed))
