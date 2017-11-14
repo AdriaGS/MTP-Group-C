@@ -177,13 +177,14 @@ def main():
 				if(chr(frame[0]) == flag):
 
 					frame = frame[1:len(frame)]
+					print(nextIndexing)
 					if (nextIndexing == 0):
 
 						compressed.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
 						multData.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
 						if(n > 16):
 							multData_extended.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
-						nextIndexing = (nextIndexing + 1) % int(n/8)+1
+						nextIndexing = (nextIndexing + 1) % (int(n/8)+1)
 
 					elif (nextIndexing == 1):
 
@@ -194,13 +195,13 @@ def main():
 						else:
 							compressed.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
 							multData.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
-						nextIndexing = (nextIndexing + 1) % int(n/8)+1
+						nextIndexing = (nextIndexing + 1) % (int(n/8)+1)
 
 					else:
 						compressed.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
 						multData.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
 						multData_extended.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
-						nextIndexing = (nextIndexing + 1) % int(n/8)+1
+						nextIndexing = (nextIndexing + 1) % (int(n/8)+1)
 
 					if(dec_ready == 900):
 						compressed = list(map(int, compressed))
@@ -224,8 +225,6 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	print(compressed)
-	print(multData)
 	decompressionOnTheGo(compressed, multData, multData_extended, int(n/8) + 1)
 	final = time.time()
 	print("Total time: " + str(final-start))
