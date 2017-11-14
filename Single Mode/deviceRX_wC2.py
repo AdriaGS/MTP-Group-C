@@ -207,7 +207,7 @@ def main():
 						multData = list(map(int, multData))
 						if(n > 16):
 							multData_extended = list(map(int, multData_extended))
-						decompressionOnTheGo(compressed, multiplicationData, multData_extended, int(n/8.5) + 1)
+						decompressionOnTheGo(compressed, multData, multData_extended, int(n/8.5) + 1)
 						add += 50
 						dec_ready = 0
 						print("On the way to the win")
