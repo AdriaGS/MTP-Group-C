@@ -225,7 +225,7 @@ def main():
 				handshakeAck_received = 1
 
 		#If an established time passes and we have not received anything we retransmit the handshake packet
-		if((time.time() + 0.2) > timeout):
+		if((time.time() + 0.01) > timeout):
 			print("No Handshake ACK received resending message")
 			radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets) + "," + str(n))
 			timeout = time.time() + time_ack
