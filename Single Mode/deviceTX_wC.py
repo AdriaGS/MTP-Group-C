@@ -317,6 +317,9 @@ def main():
 	totalTime = final - start
 	print(totalTime)
 
+	GPIO.output(22, 0)
+	GPIO.output(24, 0)
+
 if __name__ == '__main__':
 	main()
 	
