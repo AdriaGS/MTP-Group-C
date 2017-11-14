@@ -69,8 +69,8 @@ def main():
 	pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 	pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 	payloadSize = 32
-	channel_TX = 0x20
-	channel_RX = 0x25
+	channel_TX = 0x40
+	channel_RX = 0x45
 
 	#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 	radio_Tx = NRF24(GPIO, spidev.SpiDev())
@@ -91,8 +91,8 @@ def main():
 	radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 	#Configuration of the power level to be used by the transceiver
-	radio_Tx.setPALevel(NRF24.PA_LOW)
-	radio_Rx.setPALevel(NRF24.PA_LOW)
+	radio_Tx.setPALevel(NRF24.PA_MAX)
+	radio_Rx.setPALevel(NRF24.PA_MAX)
 
 	#We disable the Auto Acknowledgement
 	radio_Tx.setAutoAck(False)
@@ -116,23 +116,19 @@ def main():
 
 	#Read file to transmit
 	#inFile = open("SampleTextFile1Mb.txt", "rb")
-	inFile = open("SampleTextFile1Mb.txt", "rb")
+	inFile = open("MTP_Prev.txt", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
 
 	#flag variables
-	original_flag = 'A'
+	original_flag_data = 'A'
 	flag = ""
-	ctrl_flag_n = 0
 	flag_n = 0
 
 	#packet realted variables
 	overhead = 1
 	dataSize = payloadSize - overhead
 	dataControlSize = payloadSize - overhead
-	#Control Packets
-	control_packets = []
-	numberofControlPackets = 0
 	#Data Packets
 	packets = []
 	numberofPackets = 0
@@ -140,9 +136,7 @@ def main():
 	#ACK related variables
 	ack = []
 	handshake = []
-	ctrl_ack = []
 	ack_received = 0
-	controlAck_received = 0
 	handshakeAck_received = 0
 
 	#Time variables
@@ -153,52 +147,41 @@ def main():
 	data2Tx_compressed = compress(data2Tx)
 	n=len(bin(max(data2Tx_compressed)))-2
 
-	#Now we conform all the data packets in a list
-	for i in range (0, len(data2Tx_compressed), dataSize):
-		if((i+dataSize) < len(data2Tx_compressed)):
-			packets.append(data2Tx_compressed[i:i+dataSize])
-		else:
-			packets.append(data2Tx_compressed[i:])
-		numberofPackets += 1
-
 	#We create the string with the packets needed to decompress the file transmitted
 	controlList_extended = []
-	controlList_mid = []
 	controlList = []
 	
 	for val in data2Tx_compressed:
 		division = int(val/256)
-		controlList_mid.append(division)
-
-	print("A")
+		controlList.append(division)
 
 	if(n > 16):
 		for val in controlList_mid:
 			division = int(val/256)
 			controlList_extended.append(division)
 
-	for val2 in controlList_mid:
-		def_val = val2
-		if val2 > 256:
-			def_val -= 256
-		controlList.append(def_val)
-
-	controlList.extend(controlList_extended)
-
 	final_c = time.time()
 	print("Compression time: " + str(final_c-start_c))
 
-	#Now we conform all the control packets in a list
-	for x in range (0, len(controlList), dataControlSize):
-		if((x+dataControlSize) < len(controlList)):
-			control_packets.append(controlList[x:x+dataControlSize])
+	data2Send = []
+	for iterator in range(0, len(controlList)):
+		data2Send.append(data2Tx_compressed[iterator])
+		data2Send.append(controlList[iterator])
+		if(n > 16):
+			data2Send.append(controlList_extended[iterator])
+
+	#Now we conform all the data packets in a list
+	for i in range (0, len(data2Send), dataSize):
+		if((i+dataSize) < len(data2Send)):
+			packets.append(data2Send[i:i+dataSize])
 		else:
-			control_packets.append(controlList[x:])
-		numberofControlPackets += 1
+			packets.append(data2Send[i:])
+		numberofPackets += 1
+
 
 	#Start time
 	start = time.time()
-	radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets) + "," + str(n))
+	radio_Tx.write(str(numberofPackets) + "," + str(n))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_Handshake = ""
@@ -212,9 +195,11 @@ def main():
 			for c in range(0, len(handshake)):
 				str_Handshake = str_Handshake + chr(handshake[c])
 
+			print(str_Handshake)
+
 			#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
-			if(list(str_Handshake) != list("ACK")):												#####Can we avoid the for above? using directly ack received from .read()
-				radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
+			if(list(str_Handshake) != list("ACK")):	
+				radio_Tx.write(str(numberofPackets) + "," + str(n))
 				timeout = time.time() + time_ack
 				print("Handshake Message Lost")
 				str_Handshake = ""
@@ -223,62 +208,17 @@ def main():
 				handshakeAck_received = 1
 
 		#If an established time passes and we have not received anything we retransmit the handshake packet
-		if((time.time() + 0.2) > timeout):
+		if((time.time() + 0.01) > timeout):
 			print("No Handshake ACK received resending message")
-			radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
+			radio_Tx.write(str(numberofPackets) + "," + str(n))
 			timeout = time.time() + time_ack
 
-	windowLength = 10
-	windowDict = []
-
-	#We send all control packets
-	for controlMessage in control_packets:
-
-		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
-		ctrlMessage = list(ctrl_flag) + controlMessage
-		windowDict[ctrl_flag] = ctrlMessage
-		radio_Tx.write(list(ctrlMessage))
-			
-		timeout = time.time() + time_ack
-		radio_Rx.startListening()
-		str_controlAck = ""
-
-		#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
-		while not (controlAck_received):
-			#time.sleep(1)
-
-			if radio_Rx.available(0):
-				radio_Rx.read(ctrl_ack, radio_Rx.getDynamicPayloadSize())
-
-				for c in range(0, len(ctrl_ack)):
-					str_controlAck = str_controlAck + chr(ctrl_ack[c])
-
-				for ack_flag in str_controlAck:
-					del windowDict[ack_flag]
-
-				#If the received ACK does not match the expected one we retransmit, else we set the received control ack to 1
-				if(list(str_controlAck) != (list("ACK") + list(ctrl_flag))):
-					radio_Tx.write(ctrlMessage)
-					timeout = time.time() + time_ack
-					print("Control ACK received but not the expected one --> resending message")
-					str_controlAck = ""
-				else:
-					controlAck_received = 1
-
-			#If an established time passes and we have not received anything we retransmit the control packet
-			if((time.time() + 0.2) > timeout):
-				print("No Control ACK received --> resending message")
-				radio_Tx.write(ctrlMessage)
-				timeout = time.time() + time_ack
-
-		controlAck_received = 0
-		ctrl_flag_n = (ctrl_flag_n + 1) % 10
-
+	
 	#We iterate over every packet to be sent
 	dec_ready = 0
 	for message in packets:
 
-		flag = chr(ord(original_flag) + flag_n)
+		flag = chr(ord(original_flag_data) + flag_n)
 		message2Send = list(flag) + message
 		radio_Tx.write(message2Send)
 		
@@ -317,7 +257,6 @@ def main():
 		ack_received = 0
 		flag_n = (flag_n + 1) % 10
 
-	#print(controlList)
 
 	final = time.time()
 	totalTime = final - start

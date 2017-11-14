@@ -35,12 +35,16 @@ def decompress(compressed):
 		w = entry
 	return result.getvalue()
 
-def decompressionOnTheGo(compressedFile, multiplicationList):
+def decompressionOnTheGo(compressedFile, multList, multList_extended, value_n):
 
 	#Open file to save the transmitted data
 	outputFile = open("ReceivedFileCompressed1.txt", "wb")
 
-	new_mulData = [il * 256 for il in multiplicationList]
+	if(value_n > 2):
+		multList_extended = [ik * 256 for ik in multList_extended]
+		multList = [sum(xk) for xk in zip(multList, multList_extended)]
+
+	new_mulData = [il * 256 for il in multList]
 	toDecompress = [sum(x) for x in zip(compressedFile, new_mulData)]
 
 	str_decompressed = decompress(toDecompress)
@@ -58,8 +62,8 @@ def main():
 	print("Receiver")
 	pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 	payloadSize = 32
-	channel_RX = 0x20
-	channel_TX = 0x25
+	channel_RX = 0x40
+	channel_TX = 0x45
 
 	#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 	radio_Tx = NRF24(GPIO, spidev.SpiDev())
@@ -80,8 +84,8 @@ def main():
 	radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 	#Configuration of the power level to be used by the transceiver
-	radio_Tx.setPALevel(NRF24.PA_LOW)
-	radio_Rx.setPALevel(NRF24.PA_LOW)
+	radio_Tx.setPALevel(NRF24.PA_MAX)
+	radio_Rx.setPALevel(NRF24.PA_MAX)
 
 	#We disable the Auto Acknowledgement
 	radio_Tx.setAutoAck(False)
@@ -104,23 +108,22 @@ def main():
 	###############################################################################################################################
 
 	#Flag variables
-	original_flag = 'A'
+	original_flag_data = 'A'
 	flag = ""
 	flag_n = 0
-	ctrl_flag_n = 0
 
 	#Packet related variables
 	frame = []
-	ctrlFrame = []
 	handshake_frame = []
 	compressed = []
-	multiplicationData = []
+	multData = []
+	multData_extended = []
 
 	#ACK related variables
 	time_ack = 0.5
 	receivedPacket = 0
 	receivedHandshakePacket = 0
-	receivedControlPacket = 0
+	receivedLastControlPacket = 0
 
 	start = time.time()
 	#We listen for the control packet
@@ -134,65 +137,77 @@ def main():
 			for c in range(0, len(handshake_frame)):
 				str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
 
-			#print("Handshake frame: " + str_Controlframe)
-			print("Handshake received sending ACK")
-			radio_Tx.write(list("ACK"))
-			receivedHandshakePacket = 1
+			print(str_Handshakeframe)
 
-	numberOfPackets, numberofControlPackets, n = str_Handshakeframe.split(",")
-	print("The number of control packets that will be transmitted: " + numberofControlPackets)
+			#print("Handshake frame: " + str_Controlframe)
+			if(len(str_Handshakeframe.split(",")) == 3):
+				print("Sending ACK")
+				radio_Tx.write(list("ACK"))
+				numberOfPackets, n = str_Handshakeframe.split(",")
+				n = int(n)
+				indexing_0 = range(0, 31, int(int(n)/2)+1)[0:]
+				indexing_1 = range(1, 31, int(int(n)/2)+1)[0:]
+				if(n > 16):
+					indexing_2 = range(2, 31, 3)[0:]
+			
+			else:
+				if(chr(handshake_frame[0]) == original_flag_data):
+					compressed.extend([handshake_frame[i] for i in indexing_0])
+					multData.extend([handshake_frame[i] for i in indexing_1])
+					if(n > 16):
+						multData_extended.extend([handshake_frame[i] for i in indexing_2])
+					radio_Tx.write(list("ACK") + list(original_flag_data))
+					flag_n = (flag_n + 1) % 10
+					nextIndexing = 1
+					receivedHandshakePacket = 1
+
+	print("Handshake done")
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
 	print("maximum value of list: " + n)
-	
-	radio_Rx.startListening()
-
-	#For all the control packets that are to be received we send a control ack for every one we receive correctly
-	for x in range(0, int(numberofControlPackets)):
-
-		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
-		timeout = time.time() + time_ack
-
-		#While we don't receive the expected control packet we keep trying
-		while not (receivedControlPacket):
-			str_controlFrame = ""
-			if radio_Rx.available(0):
-				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
-
-				#We check if the received packet is the expected one
-				if(chr(ctrlFrame[0]) == ctrl_flag):
-					multiplicationData.extend(ctrlFrame[1:len(ctrlFrame)])
-					radio_Tx.write(list("ACK") + list(ctrl_flag))
-					receivedControlPacket = 1
-				else:
-					#print("Message received but not the expected one -> retransmit please")
-					if ctrl_flag_n == 0:
-						radio_Tx.write(list("ACK") + list('J'))
-					else:
-						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
-					timeout = time.time() + time_ack
-
-		ctrl_flag_n = (ctrl_flag_n + 1) % 10
-		receivedControlPacket = 0
-
-	multiplicationData = list(map(int, multiplicationData))
-	if(int(n)>16):
-		multiplicationData_mid = [ik * 256 for ik in multiplicationData[len(multiplicationData)/2:len(multiplicationData)]]
-		multiplicationData = [sum(xk) for xk in zip(multiplicationData[0:len(multiplicationData)/2], multiplicationData_mid)]
 
 	dec_ready = 0
 	add = 0
-	for i in range(0,int(numberOfPackets)):
+	for i in range(0,int(numberOfPackets)-1):
+
 		timeout = time.time() + time_ack
-		flag = chr(ord(original_flag) + flag_n)
+		flag = chr(ord(original_flag_data) + flag_n)
+
 		while not (receivedPacket):
 			if radio_Rx.available(0):
-				#print("RECEIVED PKT")
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 				if(chr(frame[0]) == flag):
-					compressed.extend(frame[1:len(frame)])
-					if(dec_ready == 200 + add):
+
+					if (nextIndexing == 0):
+
+						compressed.extend([frame[i] for i in indexing_0])
+						multData.extend([frame[i] for i in indexing_1])
+						if(n > 16):
+							multData_extended.extend([frame[i] for i in indexing_2])
+						nextIndexing = (nextIndexing + 1) % int(n/2)+1
+
+					elif (nextIndexing == 1):
+
+						if(n > 16):
+							compressed.extend([frame[i] for i in indexing_2])
+							multData.extend([frame[i] for i in indexing_0])
+							multData_extended.extend([frame[i] for i in indexing_1])
+						else:
+							compressed.extend([frame[i] for i in indexing_1])
+							multData.extend([frame[i] for i in indexing_0])
+						nextIndexing = (nextIndexing + 1) % int(n/2)+1
+
+					else:
+						compressed.extend([frame[i] for i in indexing_1])
+						multData.extend([frame[i] for i in indexing_2])
+						multData_extended.extend([frame[i] for i in indexing_0])
+						nextIndexing = (nextIndexing + 1) % int(n/2)+1
+
+					if(dec_ready == 900):
 						compressed = list(map(int, compressed))
-						decompressionOnTheGo(compressed, multiplicationData[0:len(compressed)])
+						multData = list(map(int, multData))
+						if(n > 16):
+							multData_extended = list(map(int, multData_extended))
+						decompressionOnTheGo(compressed, multiplicationData, multData_extended, int(n/8) + 1)
 						add += 50
 						dec_ready = 0
 						print("On the way to the win")
@@ -203,7 +218,7 @@ def main():
 					if flag_n == 0:
 						radio_Tx.write(list("ACK") + list('J'))
 					else:
-						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
+						radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
 					timeout = time.time() + time_ack
 		dec_ready += 1
 		flag_n = (flag_n + 1) % 10
