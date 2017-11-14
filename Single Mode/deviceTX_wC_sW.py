@@ -116,7 +116,7 @@ def main():
 
 	#Read file to transmit
 	#inFile = open("SampleTextFile1Mb.txt", "rb")
-	inFile = open("ElQuijote.txt", "rb")
+	inFile = open("SampleTextFile1Mb.txt", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
 
@@ -228,14 +228,17 @@ def main():
 			radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets))
 			timeout = time.time() + time_ack
 
+	windowLength = 10
+	windowDict = []
+
 	#We send all control packets
 	for controlMessage in control_packets:
 
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		ctrlMessage = list(ctrl_flag) + controlMessage
-		#print(ctrlMessage)
+		windowDict[ctrl_flag] = ctrlMessage
 		radio_Tx.write(list(ctrlMessage))
-
+			
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_controlAck = ""
@@ -249,6 +252,9 @@ def main():
 
 				for c in range(0, len(ctrl_ack)):
 					str_controlAck = str_controlAck + chr(ctrl_ack[c])
+
+				for ack_flag in str_controlAck:
+					del windowDict[ack_flag]
 
 				#If the received ACK does not match the expected one we retransmit, else we set the received control ack to 1
 				if(list(str_controlAck) != (list("ACK") + list(ctrl_flag))):
