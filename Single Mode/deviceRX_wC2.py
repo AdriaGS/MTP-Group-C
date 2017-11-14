@@ -143,8 +143,8 @@ def main():
 				radio_Tx.write(list("ACK"))
 				numberOfPackets, n = str_Handshakeframe.split(",")
 				n = int(n)
-				indexing_0 = range(0, 31, int(n/8)+1)[0:]
-				indexing_1 = range(1, 31, int(n/8)+1)[0:]
+				indexing_0 = range(0, 31, int(n/8.5)+1)[0:]
+				indexing_1 = range(1, 31, int(n/8.5)+1)[0:]
 				if(n > 16):
 					indexing_2 = range(2, 31, 3)[0:]
 			
@@ -183,7 +183,7 @@ def main():
 						multData.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
 						if(n > 16):
 							multData_extended.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
-						nextIndexing = (nextIndexing + 1) % (int(n/8)+1)
+						nextIndexing = (nextIndexing + 1) % (int(n/8.5)+1)
 
 					elif (nextIndexing == 1):
 
@@ -194,20 +194,20 @@ def main():
 						else:
 							compressed.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
 							multData.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
-						nextIndexing = (nextIndexing + 1) % (int(n/8)+1)
+						nextIndexing = (nextIndexing + 1) % (int(n/8.5)+1)
 
 					else:
 						compressed.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
 						multData.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
 						multData_extended.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
-						nextIndexing = (nextIndexing + 1) % (int(n/8)+1)
+						nextIndexing = (nextIndexing + 1) % (int(n/8.5)+1)
 
 					if(dec_ready == 900):
 						compressed = list(map(int, compressed))
 						multData = list(map(int, multData))
 						if(n > 16):
 							multData_extended = list(map(int, multData_extended))
-						decompressionOnTheGo(compressed, multiplicationData, multData_extended, int(n/8) + 1)
+						decompressionOnTheGo(compressed, multiplicationData, multData_extended, int(n/8.5) + 1)
 						add += 50
 						dec_ready = 0
 						print("On the way to the win")
@@ -224,7 +224,7 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	decompressionOnTheGo(compressed, multData, multData_extended, int(n/8) + 1)
+	decompressionOnTheGo(compressed, multData, multData_extended, int(n/8.5) + 1)
 	final = time.time()
 	print("Total time: " + str(final-start))
 
