@@ -163,7 +163,7 @@ def main():
 
 	print("Handshake done")
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
-	print("maximum value of list: " + n)
+	print("maximum value of list: " + str(n))
 
 	dec_ready = 0
 	add = 0
