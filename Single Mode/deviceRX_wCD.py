@@ -188,22 +188,24 @@ def main():
 		receivedControlPacket = 0
 
 	while not (receivedLastControlPacket):
-			str_controlFrame = ""
-			if radio_Rx.available(0):
-				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
+		str_controlFrame = ""
+		if radio_Rx.available(0):
+			radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
+			print(ctrlFrame)
 
-				#We check if the received packet is the expected one
-				if(chr(ctrlFrame[0]) == 'A'):
-					compressed.extend(ctrlFrame[1:len(ctrlFrame)])
-					radio_Tx.write(list("ACK") + list('A'))
-					receivedLastControlPacket = 1
+			#We check if the received packet is the expected one
+			if(chr(ctrlFrame[0]) == 'A'):
+				compressed.extend(ctrlFrame[1:len(ctrlFrame)])
+				radio_Tx.write(list("ACK") + list('A'))
+				receivedLastControlPacket = 1
+				flag_n = (flag_n + 1) % 10
+			else:
+				#print("Message received but not the expected one -> retransmit please")
+				if ctrl_flag_n == 0:
+					radio_Tx.write(list("ACK") + list('X'))
 				else:
-					#print("Message received but not the expected one -> retransmit please")
-					if ctrl_flag_n == 0:
-						radio_Tx.write(list("ACK") + list('X'))
-					else:
-						radio_Tx.write(list("ACK") + list(chr(ord(original_flag_control) + ctrl_flag_n-1)))
-					timeout = time.time() + time_ack
+					radio_Tx.write(list("ACK") + list(chr(ord(original_flag_control) + ctrl_flag_n-1)))
+				timeout = time.time() + time_ack
 
 	print("Control Packets received Correctly")
 
