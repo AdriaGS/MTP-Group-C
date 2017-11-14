@@ -137,7 +137,13 @@ def main():
 			#print("Handshake frame: " + str_Controlframe)
 			if(len(str_Handshakeframe.split(",")) == 3):
 				radio_Tx.write(list("ACK"))
-				receivedHandshakePacket = 1
+			
+			else:
+				if(chr(ctrlFrame[0]) == 'A'):
+					multiplicationData.extend(handshake_frame[1:len(handshake_frame)])
+					radio_Tx.write(list("ACK") + list('A'))
+					ctrl_flag_n = (ctrl_flag_n + 1) % 10
+					receivedHandshakePacket = 1
 
 	print("Handshake received sending ACK")
 	numberOfPackets, numberofControlPackets, n = str_Handshakeframe.split(",")
@@ -145,11 +151,10 @@ def main():
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
 	print("maximum value of list: " + n)
 	
-	radio_Rx.startListening()
-	tx_received_ack = 0
+	#radio_Rx.startListening()
 
 	#For all the control packets that are to be received we send a control ack for every one we receive correctly
-	for x in range(0, int(numberofControlPackets)):
+	for x in range(0, int(numberofControlPackets)-1):
 
 		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
 		timeout = time.time() + time_ack
@@ -167,16 +172,12 @@ def main():
 					tx_received_ack = 1
 					receivedControlPacket = 1
 				else:
-					if(tx_received_ack == 0):
-						radio_Tx.write(list("ACK"))
-
+					#print("Message received but not the expected one -> retransmit please")
+					if ctrl_flag_n == 0:
+						radio_Tx.write(list("ACK") + list('J'))
 					else:
-						#print("Message received but not the expected one -> retransmit please")
-						if ctrl_flag_n == 0:
-							radio_Tx.write(list("ACK") + list('J'))
-						else:
-							radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
-						timeout = time.time() + time_ack
+						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
+					timeout = time.time() + time_ack
 
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 		receivedControlPacket = 0
