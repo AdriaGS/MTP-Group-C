@@ -140,6 +140,7 @@ def main():
 			if(len(str_Handshakeframe.split(",")) == 3):
 				print("Sending ACK")
 				radio_Tx.write(list("ACK"))
+				str_hand = str_Handshakeframe
 			
 			else:
 				if(chr(handshake_frame[0]) == 'A'):
@@ -149,7 +150,7 @@ def main():
 					receivedHandshakePacket = 1
 
 	print("Handshake received sending ACK")
-	numberOfPackets, numberofControlPackets, n = str_Handshakeframe.split(",")
+	numberOfPackets, numberofControlPackets, n = str_hand.split(",")
 	print("The number of control packets that will be transmitted: " + numberofControlPackets)
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
 	print("maximum value of list: " + n)
