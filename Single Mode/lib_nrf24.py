@@ -171,7 +171,7 @@ class NRF24:
     datarate_e_str_P = ["1MBPS", "2MBPS", "250KBPS"]
     model_e_str_P = ["nRF24L01", "nRF24l01+"]
     crclength_e_str_P = ["Disabled", "8 bits", "16 bits"]
-    pa_dbm_e_str_P = ["PA_MIN", "PA_LOW", "PA_MED", "PA_HIGH"]
+    pa_dbm_e_str_P = ["PA_MIN", "PA_LOW", "PA_HIGH", "PA_MAX"]
     child_pipe = [RX_ADDR_P0, RX_ADDR_P1, RX_ADDR_P2, RX_ADDR_P3, RX_ADDR_P4, RX_ADDR_P5]
 
     child_payload_size = [RX_PW_P0, RX_PW_P1, RX_PW_P2, RX_PW_P3, RX_PW_P4, RX_PW_P5]
