@@ -146,6 +146,7 @@ def main():
 	print("maximum value of list: " + n)
 	
 	radio_Rx.startListening()
+	tx_received_ack = 0
 
 	#For all the control packets that are to be received we send a control ack for every one we receive correctly
 	for x in range(0, int(numberofControlPackets)):
@@ -163,14 +164,19 @@ def main():
 				if(chr(ctrlFrame[0]) == ctrl_flag):
 					multiplicationData.extend(ctrlFrame[1:len(ctrlFrame)])
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
+					tx_received_ack = 1
 					receivedControlPacket = 1
 				else:
-					#print("Message received but not the expected one -> retransmit please")
-					if ctrl_flag_n == 0:
-						radio_Tx.write(list("ACK") + list('J'))
+					if(tx_received_ack == 0):
+						radio_Tx.write(list("ACK"))
+
 					else:
-						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
-					timeout = time.time() + time_ack
+						#print("Message received but not the expected one -> retransmit please")
+						if ctrl_flag_n == 0:
+							radio_Tx.write(list("ACK") + list('J'))
+						else:
+							radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
+						timeout = time.time() + time_ack
 
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 		receivedControlPacket = 0
