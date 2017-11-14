@@ -104,7 +104,8 @@ def main():
 	###############################################################################################################################
 
 	#Flag variables
-	original_flag = 'A'
+	original_flag_data = 'A'
+	original_flag_control = 'O'
 	flag = ""
 	flag_n = 0
 	ctrl_flag_n = 0
@@ -121,6 +122,7 @@ def main():
 	receivedPacket = 0
 	receivedHandshakePacket = 0
 	receivedControlPacket = 0
+	receivedLastControlPacket = 0
 
 	start = time.time()
 	#We listen for the control packet
@@ -160,7 +162,7 @@ def main():
 	#For all the control packets that are to be received we send a control ack for every one we receive correctly
 	for x in range(0, int(numberofControlPackets)-1):
 
-		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
+		ctrl_flag = chr(ord(original_flag_control) + ctrl_flag_n)
 		timeout = time.time() + time_ack
 
 		#While we don't receive the expected control packet we keep trying
@@ -173,18 +175,35 @@ def main():
 				if(chr(ctrlFrame[0]) == ctrl_flag):
 					multiplicationData.extend(ctrlFrame[1:len(ctrlFrame)])
 					radio_Tx.write(list("ACK") + list(ctrl_flag))
-					tx_received_ack = 1
 					receivedControlPacket = 1
 				else:
 					#print("Message received but not the expected one -> retransmit please")
 					if ctrl_flag_n == 0:
-						radio_Tx.write(list("ACK") + list('J'))
+						radio_Tx.write(list("ACK") + list('X'))
 					else:
-						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + ctrl_flag_n-1)))
+						radio_Tx.write(list("ACK") + list(chr(ord(original_flag_control) + ctrl_flag_n-1)))
 					timeout = time.time() + time_ack
 
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 		receivedControlPacket = 0
+
+	while not (receivedLastControlPacket):
+			str_controlFrame = ""
+			if radio_Rx.available(0):
+				radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
+
+				#We check if the received packet is the expected one
+				if(chr(ctrlFrame[0]) == 'A'):
+					compressed.extend(ctrlFrame[1:len(ctrlFrame)])
+					radio_Tx.write(list("ACK") + list('A'))
+					receivedLastControlPacket = 1
+				else:
+					#print("Message received but not the expected one -> retransmit please")
+					if ctrl_flag_n == 0:
+						radio_Tx.write(list("ACK") + list('X'))
+					else:
+						radio_Tx.write(list("ACK") + list(chr(ord(original_flag_control) + ctrl_flag_n-1)))
+					timeout = time.time() + time_ack
 
 	print("Control Packets received Correctly")
 
@@ -195,9 +214,9 @@ def main():
 
 	dec_ready = 0
 	add = 0
-	for i in range(0,int(numberOfPackets)):
+	for i in range(0,int(numberOfPackets)-1):
 		timeout = time.time() + time_ack
-		flag = chr(ord(original_flag) + flag_n)
+		flag = chr(ord(original_flag_data) + flag_n)
 		while not (receivedPacket):
 			if radio_Rx.available(0):
 				#print("RECEIVED PKT")
@@ -217,7 +236,7 @@ def main():
 					if flag_n == 0:
 						radio_Tx.write(list("ACK") + list('J'))
 					else:
-						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
+						radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
 					timeout = time.time() + time_ack
 		dec_ready += 1
 		flag_n = (flag_n + 1) % 10
