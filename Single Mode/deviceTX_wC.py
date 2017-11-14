@@ -215,10 +215,10 @@ def main():
 			print(str_Handshake)
 
 			#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
-			if(list(str_Handshake) != list("ACK")):												#####Can we avoid the for above? using directly ack received from .read()
+			if(list(str_Handshake) != list("ACK")):	
 				radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets) + "," + str(n))
 				timeout = time.time() + time_ack
-				#print("Handshake Message Lost")
+				print("Handshake Message Lost")
 				str_Handshake = ""
 			else:
 				print("Handshake done")
@@ -226,7 +226,7 @@ def main():
 
 		#If an established time passes and we have not received anything we retransmit the handshake packet
 		if((time.time() + 0.2) > timeout):
-			#print("No Handshake ACK received resending message")
+			print("No Handshake ACK received resending message")
 			radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets) + "," + str(n))
 			timeout = time.time() + time_ack
 
