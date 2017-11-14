@@ -134,6 +134,8 @@ def main():
 			for c in range(0, len(handshake_frame)):
 				str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
 
+			print(str_Handshakeframe)
+
 			#print("Handshake frame: " + str_Controlframe)
 			if(len(str_Handshakeframe.split(",")) == 3):
 				radio_Tx.write(list("ACK"))
