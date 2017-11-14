@@ -145,9 +145,9 @@ def main():
 				str_hand = str_Handshakeframe
 			
 			else:
-				if(chr(handshake_frame[0]) == 'A'):
+				if(chr(handshake_frame[0]) == 'O'):
 					multiplicationData.extend(handshake_frame[1:len(handshake_frame)])
-					radio_Tx.write(list("ACK") + list('A'))
+					radio_Tx.write(list("ACK") + list('O'))
 					ctrl_flag_n = (ctrl_flag_n + 1) % 10
 					receivedHandshakePacket = 1
 
