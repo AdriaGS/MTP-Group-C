@@ -212,6 +212,8 @@ def main():
 			for c in range(0, len(handshake)):
 				str_Handshake = str_Handshake + chr(handshake[c])
 
+			print(str_Handshake)
+
 			#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
 			if(list(str_Handshake) != list("ACK")):												#####Can we avoid the for above? using directly ack received from .read()
 				radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets) + "," + str(n))
