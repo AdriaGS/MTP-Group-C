@@ -140,7 +140,7 @@ def main():
 			print(str_Handshakeframe)
 
 			#print("Handshake frame: " + str_Controlframe)
-			if(len(str_Handshakeframe.split(",")) == 3):
+			if(len(str_Handshakeframe.split(",")) == 2):
 				print("Sending ACK")
 				radio_Tx.write(list("ACK"))
 				numberOfPackets, n = str_Handshakeframe.split(",")
