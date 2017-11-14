@@ -186,6 +186,7 @@ def main():
 
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 		receivedControlPacket = 0
+		print(x)
 
 	while not (receivedLastControlPacket):
 		str_controlFrame = ""
