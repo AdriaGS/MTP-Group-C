@@ -216,7 +216,7 @@ def main():
 			if(list(str_Handshake) != list("ACK")):												#####Can we avoid the for above? using directly ack received from .read()
 				radio_Tx.write(str(numberofPackets) + "," + str(numberofControlPackets) + "," + str(n))
 				timeout = time.time() + time_ack
-				print("Handshake Message Lost")
+				#print("Handshake Message Lost")
 				str_Handshake = ""
 			else:
 				print("Handshake done")
