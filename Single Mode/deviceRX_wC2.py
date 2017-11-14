@@ -223,8 +223,7 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	compressed = list(map(int, compressed))
-	decompressionOnTheGo(compressed, multiplicationData)
+	decompressionOnTheGo(compressed, multData, multData_extended, int(n/8) + 1)
 	final = time.time()
 	print("Total time: " + str(final-start))
 
