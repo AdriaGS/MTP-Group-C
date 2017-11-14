@@ -177,7 +177,6 @@ def main():
 				if(chr(frame[0]) == flag):
 
 					frame = frame[1:len(frame)]
-					print(nextIndexing)
 					if (nextIndexing == 0):
 
 						compressed.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
