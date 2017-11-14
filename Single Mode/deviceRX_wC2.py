@@ -181,24 +181,24 @@ def main():
 						compressed.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
 						multData.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
 						if(n > 16):
-							multData_extended.extend([frame[i] for i in indexing_2])
+							multData_extended.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
 						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
 					elif (nextIndexing == 1):
 
 						if(n > 16):
-							compressed.extend([frame[i] for i in indexing_2])
-							multData.extend([frame[i] for i in indexing_0])
-							multData_extended.extend([frame[i] for i in indexing_1])
+							compressed.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
+							multData.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
+							multData_extended.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
 						else:
-							compressed.extend([frame[i] for i in indexing_1])
-							multData.extend([frame[i] for i in indexing_0])
+							compressed.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
+							multData.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
 						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
 					else:
-						compressed.extend([frame[i] for i in indexing_1])
-						multData.extend([frame[i] for i in indexing_2])
-						multData_extended.extend([frame[i] for i in indexing_0])
+						compressed.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
+						multData.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
+						multData_extended.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
 						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
 					if(dec_ready == 900):
