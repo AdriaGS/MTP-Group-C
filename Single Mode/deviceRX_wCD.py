@@ -174,6 +174,8 @@ def main():
 		ctrl_flag_n = (ctrl_flag_n + 1) % 10
 		receivedControlPacket = 0
 
+	print("Control Packets received Correctly")
+
 	multiplicationData = list(map(int, multiplicationData))
 	if(int(n)>16):
 		multiplicationData_mid = [ik * 256 for ik in multiplicationData[len(multiplicationData)/2:len(multiplicationData)]]
