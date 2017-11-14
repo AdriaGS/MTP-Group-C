@@ -141,7 +141,7 @@ def main():
 				radio_Tx.write(list("ACK"))
 			
 			else:
-				if(chr(ctrlFrame[0]) == 'A'):
+				if(chr(handshake_frame[0]) == 'A'):
 					multiplicationData.extend(handshake_frame[1:len(handshake_frame)])
 					radio_Tx.write(list("ACK") + list('A'))
 					ctrl_flag_n = (ctrl_flag_n + 1) % 10
