@@ -143,8 +143,8 @@ def main():
 				radio_Tx.write(list("ACK"))
 				numberOfPackets, n = str_Handshakeframe.split(",")
 				n = int(n)
-				indexing_0 = range(0, 31, int(int(n)/2)+1)[0:]
-				indexing_1 = range(1, 31, int(int(n)/2)+1)[0:]
+				indexing_0 = range(0, 31, int(n/8)+1)[0:]
+				indexing_1 = range(1, 31, int(n/8)+1)[0:]
 				if(n > 16):
 					indexing_2 = range(2, 31, 3)[0:]
 			
