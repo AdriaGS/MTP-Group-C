@@ -121,7 +121,8 @@ def main():
 	inFile.close()
 
 	#flag variables
-	original_flag = 'A'
+	original_flag_data = 'A'
+	original_flag_control = 'O'
 	flag = ""
 	ctrl_flag_n = 0
 	flag_n = 0
@@ -233,7 +234,7 @@ def main():
 	#We send all control packets
 	for controlMessage in control_packets:
 
-		ctrl_flag = chr(ord(original_flag) + ctrl_flag_n)
+		ctrl_flag = chr(ord(original_flag_control) + ctrl_flag_n)
 		ctrlMessage = list(ctrl_flag) + controlMessage
 		#print(ctrlMessage)
 		radio_Tx.write(list(ctrlMessage))
@@ -274,7 +275,7 @@ def main():
 	dec_ready = 0
 	for message in packets:
 
-		flag = chr(ord(original_flag) + flag_n)
+		flag = chr(ord(original_flag_data) + flag_n)
 		message2Send = list(flag) + message
 		radio_Tx.write(message2Send)
 		
