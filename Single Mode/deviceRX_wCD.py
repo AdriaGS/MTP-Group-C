@@ -151,7 +151,7 @@ def main():
 					ctrl_flag_n = (ctrl_flag_n + 1) % 10
 					receivedHandshakePacket = 1
 
-	print("Handshake received sending ACK")
+	print("Handshake done")
 	numberOfPackets, numberofControlPackets, n = str_hand.split(",")
 	print("The number of control packets that will be transmitted: " + numberofControlPackets)
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
