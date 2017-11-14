@@ -191,7 +191,6 @@ def main():
 		str_controlFrame = ""
 		if radio_Rx.available(0):
 			radio_Rx.read(ctrlFrame, radio_Rx.getDynamicPayloadSize())
-			print(ctrlFrame)
 
 			#We check if the received packet is the expected one
 			if(chr(ctrlFrame[0]) == 'A'):
