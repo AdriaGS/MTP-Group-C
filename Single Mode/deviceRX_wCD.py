@@ -135,11 +135,11 @@ def main():
 				str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
 
 			#print("Handshake frame: " + str_Controlframe)
-			print("Handshake received sending ACK")
-			radio_Tx.write(list("ACK"))
 			if(len(str_Handshakeframe.split(",")) == 3):
+				radio_Tx.write(list("ACK"))
 				receivedHandshakePacket = 1
 
+	print("Handshake received sending ACK")
 	numberOfPackets, numberofControlPackets, n = str_Handshakeframe.split(",")
 	print("The number of control packets that will be transmitted: " + numberofControlPackets)
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
