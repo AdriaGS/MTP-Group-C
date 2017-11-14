@@ -134,8 +134,6 @@ def main():
 		if radio_Rx.available(0):
 			radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 
-			print(handshake_frame)
-
 			for c in range(0, len(handshake_frame)):
 				str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
 
@@ -175,7 +173,6 @@ def main():
 		while not (receivedPacket):
 			if radio_Rx.available(0):
 				radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-				print(frame)
 				if(chr(frame[0]) == flag):
 
 					if (nextIndexing == 0):
@@ -189,18 +186,18 @@ def main():
 					elif (nextIndexing == 1):
 
 						if(n > 16):
-							compressed.extend([frame[i] for i in indexing_2])
-							multData.extend([frame[i] for i in indexing_0])
-							multData_extended.extend([frame[i] for i in indexing_1])
+							compressed.extend([frame[i] for i in indexing_2[0:len(frame)/(int(n/8)+1)]])
+							multData.extend([frame[i] for i in indexing_0[0:len(frame)/(int(n/8)+1)]])
+							multData_extended.extend([frame[i] for i in indexing_1[0:len(frame)/(int(n/8)+1)]])
 						else:
-							compressed.extend([frame[i] for i in indexing_1])
-							multData.extend([frame[i] for i in indexing_0])
+							compressed.extend([frame[i] for i in indexing_1[0:len(frame)/(int(n/8)+1)]])
+							multData.extend([frame[i] for i in indexing_0[0:len(frame)/(int(n/8)+1)]])
 						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
 					else:
-						compressed.extend([frame[i] for i in indexing_1])
-						multData.extend([frame[i] for i in indexing_2])
-						multData_extended.extend([frame[i] for i in indexing_0])
+						compressed.extend([frame[i] for i in indexing_1[0:len(frame)/(int(n/8)+1)]])
+						multData.extend([frame[i] for i in indexing_2[0:len(frame)/(int(n/8)+1)]])
+						multData_extended.extend([frame[i] for i in indexing_0[0:len(frame)/(int(n/8)+1)]])
 						nextIndexing = (nextIndexing + 1) % int(n/8)+1
 
 					if(dec_ready == 900):
