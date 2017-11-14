@@ -147,6 +147,8 @@ def main():
 	data2Tx_compressed = compress(data2Tx)
 	n=len(bin(max(data2Tx_compressed)))-2
 
+	print(data2Tx_compressed)
+
 	#We create the string with the packets needed to decompress the file transmitted
 	controlList_extended = []
 	controlList = []
