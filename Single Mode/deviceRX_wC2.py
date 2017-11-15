@@ -6,6 +6,7 @@ import spidev
 import sys
 import os.path
 import pickle
+from threading import Thread
 
 def decompress(compressed):
 	"""Decompress a list of output ks to a string."""
@@ -80,8 +81,8 @@ def main():
 	radio_Rx.setChannel(channel_RX)
 
 	#We set the Transmission Rate
-	radio_Tx.setDataRate(NRF24.BR_1MBPS)
-	radio_Rx.setDataRate(NRF24.BR_1MBPS)
+	radio_Tx.setDataRate(NRF24.BR_250KBPS)
+	radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 	#Configuration of the power level to be used by the transceiver
 	radio_Tx.setPALevel(NRF24.PA_MIN)
@@ -207,7 +208,9 @@ def main():
 						multData = list(map(int, multData))
 						if(n > 16):
 							multData_extended = list(map(int, multData_extended))
-						decompressionOnTheGo(compressed, multData, multData_extended, int(n/8.5) + 1)
+						thread = Thread(target = decompressionOnTheGo, args = (compressed, multData, multData_extended, int(n/8.5) + 1))
+						thread.start()
+						#decompressionOnTheGo(compressed, multData, multData_extended, int(n/8.5) + 1)
 						add += 50
 						dec_ready = 0
 						print("On the way to the win")
