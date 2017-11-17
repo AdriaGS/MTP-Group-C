@@ -46,7 +46,7 @@ def decompressionOnTheGo(compressedList, listMax):
 	outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 	i = 0
-	compressedString += chr(0)
+	compressedList += chr(0)
 	strJoin = 0
 	compde = []
 	x = 0
@@ -56,7 +56,7 @@ def decompressionOnTheGo(compressedList, listMax):
 
 	while i < len(compressedList) :
 	  if x < bitsMax:
-		strJoin = (strJoin<<charLength) + ord(compressedString[j])
+		strJoin = (strJoin<<charLength) + ord(compressedList[j])
 		x = x + charLength
 		j = j + 1;
 	  else:
