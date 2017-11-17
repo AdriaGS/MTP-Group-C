@@ -143,7 +143,6 @@ def main():
 					flag_n = (flag_n + 1) % 10
 					receivedHandshakePacket = 1
 
-	numberOfPackets, listLength, n = str_Handshakeframe.split(",")
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
 	print("Length of list: " + str(listLength))
 	print("maximum value of list: " + str(listMax))
