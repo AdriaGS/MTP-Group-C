@@ -51,8 +51,8 @@ def main():
 	print("Receiver")
 	pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 	payloadSize = 32
-	channel_RX = 0x60
-	channel_TX = 0x65
+	channel_RX = 0x40
+	channel_TX = 0x45
 
 	#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 	radio_Tx = NRF24(GPIO, spidev.SpiDev())
@@ -119,7 +119,7 @@ def main():
 	radio_Rx.startListening()
 	while not (receivedHandshakePacket):
 		str_Handshakeframe = ""
-		
+
 		if radio_Rx.available(0):
 			radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 			print("Something received")
