@@ -100,7 +100,7 @@ def main():
 	outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 	#Flag variables
-	original_flag = 'A'
+	original_flag_data = 'A'
 	flag = ""
 	flag_n = 0
 	ctrl_flag_n = 0
