@@ -179,6 +179,7 @@ def main():
 
 	radio_Rx.startListening()
 	suma = 0
+	str_compressed = ""
 
 	for i in range(0, int(numberOfPackets)-1):
 
