@@ -193,7 +193,7 @@ def main():
 
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
-					for c in range(0, len(compressed)):
+					for c in range(0, len(frame)):
 						str_compressed = str_compressed + chr(frame[c])
 					if (((len(compressed)*8) % (bitsMax*100)) == 0):
 						print(suma)
