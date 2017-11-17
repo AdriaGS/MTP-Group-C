@@ -186,7 +186,7 @@ def main():
 
 	#Start sendind
 	n = len(bin(max(data2Tx_compressed)))-2
-	radio_Tx.write(str(numberofPackets) + "," + str(listLenght) + "," + str(listMax))
+	radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_Handshake = ""
@@ -202,7 +202,7 @@ def main():
 
 			#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
 			if(list(str_Handshake) != list("ACK")):	
-				radio_Tx.write(str(numberofPackets) + "," + str(listLenght) + "," + str(listMax))
+				radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 				timeout = time.time() + time_ack
 				print("Handshake Message Lost")
 				str_Handshake = ""
@@ -213,7 +213,7 @@ def main():
 		#If an established time passes and we have not received anything we retransmit the handshake packet
 		if((time.time() + 0.01) > timeout):
 			print("No Handshake ACK received resending message")
-			radio_Tx.write(str(numberofPackets) + "," + str(listLenght) + "," + str(listMax))
+			radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 			timeout = time.time() + time_ack
 
 	#We iterate over every packet to be sent
