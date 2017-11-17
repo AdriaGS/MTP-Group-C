@@ -8,6 +8,7 @@ import os.path
 import pickle
 import lzw
 import numpy as np
+from threading import Thread
 
 def decompress(compressed):
     """Decompress a list of output ks to a string."""
