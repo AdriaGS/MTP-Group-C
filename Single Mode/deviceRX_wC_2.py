@@ -153,7 +153,7 @@ def main():
 	for i in range(0, int(numberOfPackets)-1):
 
 		timeout = time.time() + time_ack
-		flag = chr(ord(original_flag) + flag_n)
+		flag = chr(ord(original_flag_data) + flag_n)
 
 		while not (receivedPacket):
 
@@ -169,7 +169,7 @@ def main():
 					if flag_n == 0:
 						radio_Tx.write(list("ACK") + list('J'))
 					else:
-						radio_Tx.write(list("ACK") + list(chr(ord(original_flag) + flag_n-1)))
+						radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
 					timeout = time.time() + time_ack
 
 		flag_n = (flag_n + 1) % 10
