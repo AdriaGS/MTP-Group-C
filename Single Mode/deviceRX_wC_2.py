@@ -119,8 +119,7 @@ def main():
 	radio_Rx.startListening()
 	while not (receivedHandshakePacket):
 		str_Handshakeframe = ""
-		print("Waiting Handshake")
-
+		
 		if radio_Rx.available(0):
 			radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 			print("Something received")
