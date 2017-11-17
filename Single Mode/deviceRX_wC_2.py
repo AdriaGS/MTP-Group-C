@@ -117,12 +117,13 @@ def main():
 
 	#We listen for the control packet
 	radio_Rx.startListening()
-	radio_Rx.startListening()
 	while not (receivedHandshakePacket):
 		str_Handshakeframe = ""
+		print("Waiting Handshake")
 
 		if radio_Rx.available(0):
 			radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
+			print("Something received")
 
 			for c in range(0, len(handshake_frame)):
 				str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
@@ -137,6 +138,7 @@ def main():
 			
 			else:
 				if(chr(handshake_frame[0]) == original_flag_data):
+					print("First data packet received")
 					handshake_frame = handshake_frame[1:len(handshake_frame)]
 					compressed.extend(handshake_frame)
 					radio_Tx.write(list("ACK") + list(original_flag_data))

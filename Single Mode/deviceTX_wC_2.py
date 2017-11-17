@@ -150,7 +150,6 @@ def main():
 	start_c = time.time()
 	#Compression of the data to transmit into data2Tx_compressed
 	data2Tx_compressed = compress(data2Tx)
-	data2Tx_compressed.append(0)
 
 	#Compression Preprocessing
 	listLengh = len(data2Tx_compressed)
@@ -169,9 +168,11 @@ def main():
 		compJoin = (data2Tx_compressed[i] << bitsMax) + data2Tx_compressed[i+1]
 		toSend += chr((compJoin>>(pad+remainded))%(2**charLength))
 		remainded = remainded - charLength
-		if remainded <0:
-			i += 1
-		remainded = remainded % bitsMax
+		if remainded <=0:
+			i=i+1
+			remainded= remainded % bitsMax
+			if remainded == 0:
+			  remainded=bitsMax
 
 	final_c = time.time()
 	print("Compression time: " + str(final_c-start_c))
@@ -185,7 +186,6 @@ def main():
 		numberofPackets += 1
 
 	#Start sendind
-	n = len(bin(max(data2Tx_compressed)))-2
 	radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
