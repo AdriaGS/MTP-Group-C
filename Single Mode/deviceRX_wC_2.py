@@ -56,7 +56,7 @@ def decompressionOnTheGo(compressedList, listMax):
 	bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 	charLength = 8
 
-	while i < len(compressedList):
+	while i < (len(compressedList)*8/bitsMax):
 	  if x < bitsMax:
 		strJoin = (strJoin<<charLength) + ord(compressedList[j])
 		x = x + charLength
