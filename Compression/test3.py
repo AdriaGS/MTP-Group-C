@@ -89,88 +89,78 @@ def printSummary(file1, file2):
 
 def main():	
 
-	start = time.time()
-	finalData = ""
-	midData = ""
-	file='SampleTextFile1Mb.txt'
+	dataSize = 32
+	file='SampletextFile1Mb.txt'
 	f = open(file,'rb')
-	comp = compress(f.read())
+	data2Tx = f.read()
 	f.close()
 
-	n=len(bin(max(comp)))-2
-	num=2**(n+1)
-	enviar = []
+	start_c = time.time()
+	#Compression of the data to transmit into data2Tx_compressed
+	data2Tx_compressed = compress(data2Tx)
+	n=len(bin(max(data2Tx_compressed)))-2
 
-	aux = []
-	aux2 = []
-	binary = lambda n: n>0 and [n&1]+binary(n>>1) or []
+	#We create the string with the packets needed to decompress the file transmitted
+	controlList_extended = []
+	controlList = []
+	
+	for val in data2Tx_compressed:
+		division = int(val/256)
+		controlList.append(division)
 
-	for a in comp:
-			aux2=binary(a|num)
-			del aux2[-1]
-			aux += aux2[::-1]
-	#print ("B"+str(aux))
+	if(n > 16):
+		for val in controlList:
+			division = int(val/256)
+			controlList_extended.append(division)
 
-	for i in range(0, len(aux), 8):
-		r=aux[i:i+8]
-		char=0
-		for p in r:
-			char=char<<1
-			char=char|p
-		enviar.append(char)
+	for y in range(0, len(data2Tx_compressed)):
+		data2Tx_compressed[y] = data2Tx_compressed[y] % 256
+	for x in range(0, len(controlList)):
+		controlList[x] = controlList[x] % 256
 
-	print(len(comp))
-	print(len(enviar))
 
-	toDecompress_mid = []
-	pos = 0
-	for x in enviar:
-		binary = bin(x)
-		binary = binary[2:len(binary)]
-		bitLength = len(binary)
-		
-		if(pos != (len(enviar)-1)):
-			for i in range(0, 8-bitLength):
-				binary = "0" + binary
-		else:
-			print((len(comp)*(n+1) - (pos)*8) - bitLength)
-			for i in range(0, (len(comp)*(n+1) - (pos)*8) - bitLength):
-				binary = "0" + binary
+	data2Send = []
+	for iterator in range(0, len(controlList)):
+		data2Send.append(data2Tx_compressed[iterator])
+		data2Send.append(controlList[iterator])
+		if(n > 16):
+			data2Send.append(controlList_extended[iterator])
 
-		toDecompress_mid.extend(list(binary))
-		pos += 1
+	final_c = time.time()
+	print("Compression time: " + str(final_c-start_c))
 
-	toDecompress_mid = list(map(int, toDecompress_mid))
+	start_d = time.time()
 
-	toDecompress = []
-	for j in range(0, len(toDecompress_mid), n+1):
-		l = toDecompress_mid[j: j+(n+1)]
-		value = 0
-		for k in range(0, len(l)):
-			value += (int(l[k]) * 2**(n-k))
-		toDecompress.append(value)
+	indexing_0 = range(0, len(data2Send), int(n/8.5)+1)[0:]
+	indexing_1 = range(1, len(data2Send), int(n/8.5)+1)[0:]
+	if(n > 16):
+		indexing_2 = range(2, len(data2Send), 3)[0:]
 
-	#print(toDecompress)
+	compressed = [data2Send[i] for i in indexing_0]
+	multData = [data2Send[i] for i in indexing_1]
+	if(n > 16):
+		multData_extended = [data2Send[i] for i in indexing_2]
+
+	compressed = list(map(int, compressed))
+	multData = list(map(int, multData))
+	if(n > 16):
+		multData_extended = list(map(int, multData_extended))
+
+	outputFile = open("ReceivedFileCompressed1.txt", "wb")
+
+	if(n > 16):
+		multData_extended = [ik * 256 for ik in multData_extended]
+		multData = [sum(xk) for xk in zip(multData, multData_extended)]
+
+	new_mulData = [il * 256 for il in multData]
+	toDecompress = [sum(x) for x in zip(compressed, new_mulData)]
 
 	str_decompressed = decompress(toDecompress)
-
-	print("Max of first compression: " + str(max(comp)))
-	
-	outputFile = open("Deco_test3.txt", "wb")
 	outputFile.write(str_decompressed)
 	outputFile.close()
 
-	final = time.time()
-	print("Total time: " + str(final-start))
-
-	#string = "".join(chr(val) for val in comp)
-
-	#print(string)
-
-	#print(bitarray(str1))
-
-	#for i in str1:
-		#print(i)
+	final_d = time.time()
+	print("Decompression time: " + str(final_d-start_d))
 
 if __name__ == '__main__':
 	main()
