@@ -187,7 +187,7 @@ def main():
 	bitsMax= int(np.ceil(np.log(listMax+1)/np.log(2)))
 	charLength = 8
 
-	while i < listLengh :
+	while i < listLength :
 	  if x<bitsMax:
 		strJoin=(strJoin<<charLength)+ord(compressed[j])
 		#print("strJoin= "+str(bin(strJoin)))
