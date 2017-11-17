@@ -192,7 +192,7 @@ def main():
 
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
-					if (((len(compressed)*8) % bitsMax*100) == 0):
+					if (((len(compressed)*8) % (bitsMax*100)) == 0):
 						print(suma)
 						thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax))
 						thread.start()
