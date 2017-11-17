@@ -217,7 +217,7 @@ def main():
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
-					#print("Wrong message -> asking for retransmission")
+					print("Wrong message -> asking for retransmission")
 					if flag_n == 0:
 						radio_Tx.write(list("ACK") + list('J'))
 					else:
