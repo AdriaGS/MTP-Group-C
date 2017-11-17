@@ -56,7 +56,7 @@ def decompressionOnTheGo(compressedList, listMax):
 
 	while i < len(compressedList) :
 	  if x < bitsMax:
-		strJoin = (strJoin<<charLength) + compressedList[j]
+		strJoin = (strJoin<<charLength) + ord(compressedList[j])
 		x = x + charLength
 		j = j + 1;
 	  else:
@@ -194,8 +194,11 @@ def main():
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
 
+					for c in range(0, len(frame)):
+						str_compressed += chr(frame[c])
+
 					if (((len(compressed)*8) % (bitsMax*100)) == 0):
-						thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
+						thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 						thread.start()
 					suma += 1
 					radio_Tx.write(list("ACK") + list(flag))
