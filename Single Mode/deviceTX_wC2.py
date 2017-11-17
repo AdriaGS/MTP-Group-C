@@ -156,12 +156,9 @@ def main():
 		controlList.append(division)
 
 	if(n > 16):
-		for val in controlList_mid:
+		for val in controlList:
 			division = int(val/256)
 			controlList_extended.append(division)
-
-	final_c = time.time()
-	print("Compression time: " + str(final_c-start_c))
 
 	data2Send = []
 	for iterator in range(0, len(controlList)):
@@ -169,6 +166,9 @@ def main():
 		data2Send.append(controlList[iterator])
 		if(n > 16):
 			data2Send.append(controlList_extended[iterator])
+
+	final_c = time.time()
+	print("Compression time: " + str(final_c-start_c))
 
 	#Now we conform all the data packets in a list
 	for i in range (0, len(data2Send), dataSize):

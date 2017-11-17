@@ -116,6 +116,7 @@ def main():
 
 	#We listen for the control packet
 	radio_Rx.startListening()
+	radio_Rx.startListening()
 	while not (receivedHandshakePacket):
 		str_Handshakeframe = ""
 
@@ -126,18 +127,29 @@ def main():
 				str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
 
 			#print("Handshake frame: " + str_Controlframe)
-			print("Handshake received sending ACK")
-			radio_Tx.write(list("ACK"))
-			receivedHandshakePacket = 1
+			if(len(str_Handshakeframe.split(",")) == 3):
+				print("Sending ACK")
+				radio_Tx.write(list("ACK"))
+				numberOfPackets, listLength, listMax = str_Handshakeframe.split(",")
+				listLength = int(listLength)
+				listMax = int(listMax)
+			
+			else:
+				if(chr(handshake_frame[0]) == original_flag_data):
+					handshake_frame = handshake_frame[1:len(handshake_frame)]
+					compressed.extend(handshake_frame)
+					radio_Tx.write(list("ACK") + list(original_flag_data))
+					flag_n = (flag_n + 1) % 10
+					receivedHandshakePacket = 1
 
 	numberOfPackets, listLength, n = str_Handshakeframe.split(",")
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
-	print("Length of list: " + listLength)
-	print("maximum value of list: " + n)
+	print("Length of list: " + str(listLength))
+	print("maximum value of list: " + str(listMax))
 
 	radio_Rx.startListening()
 
-	for i in range(0, int(numberOfPackets)):
+	for i in range(0, int(numberOfPackets)-1):
 
 		timeout = time.time() + time_ack
 		flag = chr(ord(original_flag) + flag_n)
@@ -164,34 +176,30 @@ def main():
 
 	start_d = time.time()
 	#Decompression postprocessing
-	toDecompress_mid = []
-	pos = 0
-	n = int(n)
-
-	print("Decompression starting")
-	for x in compressed:
-		
-		if(pos != (len(compressed)-1)):
-			binary = lzw.inttobits(x, 8)
-		else:
-			binary = lzw.inttobits(x, (int(listLength)*(n+1) - (pos)*8))
 	
-		toDecompress_mid.extend(binary)
-		pos += 1
+	i=0
+	compressed+=chr(0)
+	strJoin=0
+	compde=[]
+	x=0
+	j=0
+	bitsMax= int(np.ceil(np.log(listMax+1)/np.log(2)))
+	charLength = 8
 
-	#toDecompress_mid = list(map(int, toDecompress_mid))
+	while i < listLengh :
+	  if x<bitsMax:
+		strJoin=(strJoin<<charLength)+ord(compressed[j])
+		#print("strJoin= "+str(bin(strJoin)))
+		x=x+charLength
+		j=j+1;
+	  else:
+		compde.append(strJoin>>(x-bitsMax))
+		strJoin=strJoin&(2**(x-bitsMax)-1)
+		#print("strJoin2= "+str(bin(strJoin)))
+		i=i+1
+		x=x-bitsMax
 
-	toDecompress = []
-	for j in range(0, len(toDecompress_mid), n+1):
-		l = toDecompress_mid[j: j+(n+1)]
-		value = 0
-		for k in range(0, len(l)):
-			value += (int(l[k]) * 2**(n-k))		
-		toDecompress.append(value)
-
-	#print(toDecompress)
-
-	str_decompressed = decompress(toDecompress)
+	str_decompressed = decompress(compde)
 	outputFile.write(str_decompressed)
 	outputFile.close()
 	final_d = time.time()

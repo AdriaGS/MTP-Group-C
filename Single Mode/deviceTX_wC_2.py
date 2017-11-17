@@ -117,7 +117,7 @@ def main():
 	###############################################################################################################################
 
 	#Read file to transmit
-	inFile = open("MTP_Prev.txt", "rb")
+	inFile = open("ElQuijote.txt", "rb")
 	data2Tx = inFile.read()
 	inFile.close()
 
@@ -150,26 +150,31 @@ def main():
 	start_c = time.time()
 	#Compression of the data to transmit into data2Tx_compressed
 	data2Tx_compressed = compress(data2Tx)
+	data2Tx_compressed.append(0)
 
 	#Compression Preprocessing
-	n=len(bin(max(data2Tx_compressed)))-2
-	num=2**(n+1)
-	toSend = []
+	listLengh = len(data2Tx_compressed)
+	listMax = max(data2Tx_compressed)
+	bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
+	charLength = 8
+	data2Tx_compressed.append(0)
 
-	aux = []
-	aux2 = []
+	remainded = bitsMax
+	pad = bitsMax - charLength
 
-	for a in data2Tx_compressed:
-		aux2 = lzw.inttobits(a, n+1)
-		aux.extend(aux2)
+	toSend = ""
+	i = 0
 
-	for i in range(0, len(aux), 8):
-		r=aux[i:i+8]
-		char=0
-		for p in r:
-			char=char<<1
-			char=char|p
-		toSend.append(char)
+	while i < listLengh :
+		compJoin = (data2Tx_compressed[i] << bitsMax) + data2Tx_compressed[i+1]
+		toSend += chr((compJoin>>(pad+remainded))%(2**charLength))
+		remainded = remainded - charLength
+		if remainded <0:
+			i += 1
+		remainded = remainded % bitsMax
+
+	final_c = time.time()
+	print("Compression time: " + str(final_c-start_c))
 
 	#Now we conform all the data packets in a list
 	for i in range (0, len(toSend), dataSize):
@@ -179,12 +184,9 @@ def main():
 			packets.append(toSend[i:])
 		numberofPackets += 1
 
-	final_c = time.time()
-	print("Time to compress: " + str(final_c - start_c))
-
 	#Start sendind
 	n = len(bin(max(data2Tx_compressed)))-2
-	radio_Tx.write(str(numberofPackets) + "," + str(len(data2Tx_compressed)) + "," + str(n))
+	radio_Tx.write(str(numberofPackets) + "," + str(listLenght) + "," + str(listMax))
 	timeout = time.time() + time_ack
 	radio_Rx.startListening()
 	str_Handshake = ""
@@ -199,8 +201,8 @@ def main():
 				str_Handshake = str_Handshake + chr(handshake[c])
 
 			#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
-			if(list(str_Handshake) != list("ACK")):												#####Can we avoid the for above? using directly ack received from .read()
-				radio_Tx.write(str(numberofPackets))
+			if(list(str_Handshake) != list("ACK")):	
+				radio_Tx.write(str(numberofPackets) + "," + str(listLenght) + "," + str(listMax))
 				timeout = time.time() + time_ack
 				print("Handshake Message Lost")
 				str_Handshake = ""
@@ -211,7 +213,7 @@ def main():
 		#If an established time passes and we have not received anything we retransmit the handshake packet
 		if((time.time() + 0.01) > timeout):
 			print("No Handshake ACK received resending message")
-			radio_Tx.write(str(numberofPackets))
+			radio_Tx.write(str(numberofPackets) + "," + str(listLenght) + "," + str(listMax))
 			timeout = time.time() + time_ack
 
 	#We iterate over every packet to be sent
