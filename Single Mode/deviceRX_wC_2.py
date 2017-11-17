@@ -178,27 +178,25 @@ def main():
 	start_d = time.time()
 	#Decompression postprocessing
 	
-	i=0
-	compressed+=chr(0)
-	strJoin=0
-	compde=[]
-	x=0
-	j=0
-	bitsMax= int(np.ceil(np.log(listMax+1)/np.log(2)))
+	i = 0
+	compressed += chr(0)
+	strJoin = 0
+	compde = []
+	x = 0
+	j = 0
+	bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 	charLength = 8
 
 	while i < listLength :
-	  if x<bitsMax:
-		strJoin=(strJoin<<charLength)+ord(compressed[j])
-		#print("strJoin= "+str(bin(strJoin)))
-		x=x+charLength
-		j=j+1;
+	  if x < bitsMax:
+		strJoin = (strJoin<<charLength) + (compressed[j])
+		x = x + charLength
+		j = j + 1;
 	  else:
 		compde.append(strJoin>>(x-bitsMax))
-		strJoin=strJoin&(2**(x-bitsMax)-1)
-		#print("strJoin2= "+str(bin(strJoin)))
-		i=i+1
-		x=x-bitsMax
+		strJoin = strJoin & (2**(x-bitsMax)-1)
+		i += 1
+		x = x - bitsMax
 
 	str_decompressed = decompress(compde)
 	outputFile.write(str_decompressed)
