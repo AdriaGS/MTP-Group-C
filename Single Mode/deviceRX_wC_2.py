@@ -56,7 +56,7 @@ def decompressionOnTheGo(compressedList, listMax):
 
 	while i < len(compressedList) :
 	  if x < bitsMax:
-		strJoin = (strJoin<<charLength) + ord(compressedList[j])
+		strJoin = (strJoin<<charLength) + compressedList[j]
 		x = x + charLength
 		j = j + 1;
 	  else:
