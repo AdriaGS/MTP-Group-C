@@ -206,7 +206,7 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax)
+	thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax))
 	thread.start()
 
 	final = time.time()
