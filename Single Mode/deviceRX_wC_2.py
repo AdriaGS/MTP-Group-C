@@ -191,7 +191,7 @@ def main():
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
 					if (((len(compressed)*8) % bitsMax) == 0):
-						thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax)
+						thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax))
 						thread.start()
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
