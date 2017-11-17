@@ -39,6 +39,36 @@ def decompress(compressed):
         w = entry
     return result.getvalue()
 
+def decompressionOnTheGo(compressedList, listLength, listMax):
+
+	#Open file to save the transmitted data
+	outputFile = open("ReceivedFileCompressed2.txt", "wb")
+
+	i = 0
+	compressed += chr(0)
+	strJoin = 0
+	compde = []
+	x = 0
+	j = 0
+	bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
+	charLength = 8
+
+	while i < listLength :
+	  if x < bitsMax:
+		strJoin = (strJoin<<charLength) + (compressed[j])
+		x = x + charLength
+		j = j + 1;
+	  else:
+		compde.append(strJoin>>(x-bitsMax))
+		strJoin = strJoin & (2**(x-bitsMax)-1)
+		i += 1
+		x = x - bitsMax
+
+	str_decompressed = decompress(compde)
+	outputFile.write(str_decompressed)
+	outputFile.close()
+
+
 def main():	    
 
 	start = time.time()
@@ -95,9 +125,6 @@ def main():
 	###############################################################################################################################
 	###############################################################################################################################
 	###############################################################################################################################
-
-	#Open file to save the transmitted data
-	outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 	#Flag variables
 	original_flag_data = 'A'
@@ -162,6 +189,9 @@ def main():
 
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
+					if (((len(compressed)*8) % bitsMax) == 0):
+						thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax)
+						thread.start()
 					radio_Tx.write(list("ACK") + list(flag))
 					receivedPacket = 1
 				else:
@@ -175,34 +205,8 @@ def main():
 		flag_n = (flag_n + 1) % 10
 		receivedPacket = 0
 
-	start_d = time.time()
-	#Decompression postprocessing
-	
-	i = 0
-	compressed += chr(0)
-	strJoin = 0
-	compde = []
-	x = 0
-	j = 0
-	bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
-	charLength = 8
-
-	while i < listLength :
-	  if x < bitsMax:
-		strJoin = (strJoin<<charLength) + (compressed[j])
-		x = x + charLength
-		j = j + 1;
-	  else:
-		compde.append(strJoin>>(x-bitsMax))
-		strJoin = strJoin & (2**(x-bitsMax)-1)
-		i += 1
-		x = x - bitsMax
-
-	str_decompressed = decompress(compde)
-	outputFile.write(str_decompressed)
-	outputFile.close()
-	final_d = time.time()
-	print("Time to decompress: " + str(final_d - start_d))
+	thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax)
+	thread.start()
 
 	final = time.time()
 	totalTime = final - start
