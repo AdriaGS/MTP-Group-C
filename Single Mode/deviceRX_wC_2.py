@@ -40,13 +40,13 @@ def decompress(compressed):
         w = entry
     return result.getvalue()
 
-def decompressionOnTheGo(compressed, listLength, listMax):
+def decompressionOnTheGo(compressedList, listLength, listMax):
 
 	#Open file to save the transmitted data
 	outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 	i = 0
-	compressed += chr(0)
+	compressedList.append(chr(0))
 	strJoin = 0
 	compde = []
 	x = 0
@@ -56,8 +56,7 @@ def decompressionOnTheGo(compressed, listLength, listMax):
 
 	while i < listLength :
 	  if x < bitsMax:
-	  	print(type(compressed[j]))
-		strJoin = (strJoin<<charLength) + compressed[j]
+		strJoin = (strJoin<<charLength) + compressedList[j]
 		x = x + charLength
 		j = j + 1;
 	  else:
