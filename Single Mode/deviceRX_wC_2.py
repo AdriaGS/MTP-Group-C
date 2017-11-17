@@ -40,13 +40,13 @@ def decompress(compressed):
         w = entry
     return result.getvalue()
 
-def decompressionOnTheGo(compressedList, listLength, listMax):
+def decompressionOnTheGo(compressedString, listLength, listMax):
 
 	#Open file to save the transmitted data
 	outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 	i = 0
-	compressedList.append(0)
+	compressedString += chr(0)
 	strJoin = 0
 	compde = []
 	x = 0
@@ -56,7 +56,7 @@ def decompressionOnTheGo(compressedList, listLength, listMax):
 
 	while i < listLength :
 	  if x < bitsMax:
-		strJoin = (strJoin<<charLength) + compressedList[j]
+		strJoin = (strJoin<<charLength) + compressedString[j]
 		x = x + charLength
 		j = j + 1;
 	  else:
@@ -192,9 +192,11 @@ def main():
 
 				if(chr(frame[0]) == flag):
 					compressed.extend(frame[1:len(frame)])
+					for c in range(0, len(compressed)):
+						str_compressed = str_compressed + chr(frame[c])
 					if (((len(compressed)*8) % (bitsMax*100)) == 0):
 						print(suma)
-						thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax))
+						thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listLength, listMax))
 						thread.start()
 					suma += 1
 					radio_Tx.write(list("ACK") + list(flag))
