@@ -46,7 +46,7 @@ def decompressionOnTheGo(compressedList, listLength, listMax):
 	outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 	i = 0
-	compressedList.append(chr(0))
+	compressedList.append(0)
 	strJoin = 0
 	compde = []
 	x = 0
