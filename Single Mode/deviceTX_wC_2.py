@@ -5,7 +5,7 @@ import time
 import spidev
 import sys
 import os.path
-import numpy
+import numpy as np
 import pickle
 import sqlite3
 import mat4py as m4p
