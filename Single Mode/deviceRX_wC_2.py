@@ -175,6 +175,7 @@ def main():
 	print("The number of data packets that will be transmitted: " + numberOfPackets)
 	print("Length of list: " + str(listLength))
 	print("maximum value of list: " + str(listMax))
+	bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 
 	radio_Rx.startListening()
 
