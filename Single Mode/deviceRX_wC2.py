@@ -74,7 +74,7 @@ try:
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
 		radio_Rx = NRF24(GPIO, spidev.SpiDev())
 		radio_Tx.begin(0, 22)
-		radio_Rx.begin(1, 24)
+		radio_Rx.begin(1, 23)
 
 		#We set the Payload Size to the limit which is 32 bytes
 		radio_Tx.setPayloadSize(payloadSize)
@@ -247,4 +247,5 @@ try:
 except KeyboardInterrupt:
 	GPIO.output(22,0)
 	GPIO.output(23,0)
+	GPIO.output(24,0)
 	GPIO.cleanup()
