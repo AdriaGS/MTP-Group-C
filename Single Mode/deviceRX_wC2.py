@@ -61,6 +61,8 @@ try:
 		GPIO.output(22,1)
 		GPIO.setup(23, GPIO.OUT)
 		GPIO.output(23,1)
+		GPIO.setup(24, GPIO.OUT)
+		GPIO.output(24,1)
 
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
@@ -72,7 +74,7 @@ try:
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
 		radio_Rx = NRF24(GPIO, spidev.SpiDev())
 		radio_Tx.begin(0, 22)
-		radio_Rx.begin(1, 23)
+		radio_Rx.begin(1, 24)
 
 		#We set the Payload Size to the limit which is 32 bytes
 		radio_Tx.setPayloadSize(payloadSize)
