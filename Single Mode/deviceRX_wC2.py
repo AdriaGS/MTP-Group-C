@@ -55,7 +55,7 @@ try:
 
 
 	def main():	    
-		
+
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(22, GPIO.OUT)
 		GPIO.output(22,1)
@@ -97,8 +97,8 @@ try:
 		radio_Rx.enableDynamicPayloads()
 
 		#Open the writing and reading pipe
-		radio_Tx.openWritingPipe(pipes[1])
-		radio_Rx.openReadingPipe(0, pipes[0])
+		radio_Tx.openWritingPipe(pipes[0])
+		radio_Rx.openReadingPipe(0, pipes[1])
 
 		#We print the configuration details of both transceivers
 		#We print the configuration details of both transceivers
