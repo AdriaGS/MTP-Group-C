@@ -40,8 +40,8 @@ try:
         str_frame = ""
         for c in range(0, len(frame)):
         	str_frame += chr(frame[c])
-        #print("Received Message: ")
-        #print(str_frame)
+        print("Received Message: ")
+        print(str_frame)
         print(radio.testRPD())
             
 except KeyboardInterrupt:
