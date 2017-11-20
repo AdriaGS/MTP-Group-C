@@ -6,14 +6,14 @@ try:
     import spidev
 
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(23, GPIO.OUT)
-    GPIO.output(23, 1)
+    GPIO.setup(24, GPIO.OUT)
+    GPIO.output(24, 1)
     
     print("Transmitter")
     pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 
     radio = NRF24(GPIO, spidev.SpiDev())
-    radio.begin(0, 23)
+    radio.begin(0, 24)
     radio.setPayloadSize(32)
     radio.setChannel(0x40)
 
@@ -35,4 +35,5 @@ try:
 except KeyboardInterrupt:
     GPIO.output(22,0)
     GPIO.output(23,0)
+    GPIO.output(24,0)
     GPIO.cleanup()
