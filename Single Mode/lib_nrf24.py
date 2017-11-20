@@ -189,7 +189,7 @@ class NRF24:
         self.channel = 76
         self.data_rate = NRF24.BR_1MBPS
         self.wide_band = False # 2Mbs data rate in use?
-        self.p_variant = False # False for RF24L01 and true for RF24L01P (nrf24l01+)
+        self.p_variant = True # False for RF24L01 and true for RF24L01P (nrf24l01+)
         self.payload_size = 5 #*< Fixed size of payloads
         self.ack_payload_available = False #*< Whether there is an ack payload waiting
         self.dynamic_payloads_enabled = False #*< Whether dynamic payloads are enabled.

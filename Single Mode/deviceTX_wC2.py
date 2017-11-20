@@ -73,7 +73,7 @@ try:
 		channel_TX = 0x40
 		channel_RX = 0x45
 
-		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
+		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO23
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
 		radio_Rx = NRF24(GPIO, spidev.SpiDev())
 		radio_Tx.begin(0, 22)
