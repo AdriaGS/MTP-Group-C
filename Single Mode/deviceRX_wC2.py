@@ -158,7 +158,6 @@ try:
 				
 				else:
 					if(chr(handshake_frame[0]) == original_flag_data):
-						print(handshake_frame)
 						handshake_frame = handshake_frame[1:len(handshake_frame)]
 						compressed.extend([handshake_frame[i] for i in indexing_0])
 						multData.extend([handshake_frame[i] for i in indexing_1])
