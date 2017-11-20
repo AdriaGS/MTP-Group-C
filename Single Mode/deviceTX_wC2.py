@@ -61,10 +61,6 @@ try:
 	def main():		
 
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(24, GPIO.OUT)
-		GPIO.output(24,1)
-		GPIO.setup(26, GPIO.OUT)
-		GPIO.output(26, 1)
 		GPIO.setup(22, GPIO.OUT)
 		GPIO.output(22,1)
 		GPIO.setup(23, GPIO.OUT)
