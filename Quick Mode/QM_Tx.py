@@ -35,7 +35,7 @@ try:
         time.sleep(1)
         
 except KeyboardInterrupt:
-    GPIO.output(22,0)
+    #GPIO.output(22,0)
     GPIO.output(23,0)
-    GPIO.output(24,0)
+    #GPIO.output(24,0)
     GPIO.cleanup()
