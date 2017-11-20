@@ -136,6 +136,7 @@ try:
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 				print(radio_Rx.testRPD())
+				radio_Rx.openReadingPipe(1, pipes[0])
 
 				for c in range(0, len(handshake_frame)):
 					str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
@@ -177,6 +178,7 @@ try:
 			while not (receivedPacket):
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
+					radio_Rx.openReadingPipe(1, pipes[0])
 					#print(frame)
 					if(chr(frame[0]) == flag):
 
