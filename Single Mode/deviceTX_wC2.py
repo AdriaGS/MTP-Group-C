@@ -193,6 +193,7 @@ try:
 
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
+				radio_Rx.openReadingPipe(0, pipes[0])
 				print("Something received")
 
 				for c in range(0, len(handshake)):
@@ -239,6 +240,7 @@ try:
 			while not (ack_received):
 				if radio_Rx.available(0):
 					radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
+					radio_Rx.openReadingPipe(0, pipes[0])
 					print(radio_Rx.testRPD())
 
 					for c in range(0, len(ack)):
