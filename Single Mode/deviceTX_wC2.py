@@ -236,7 +236,7 @@ try:
 
 			#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
 			while not (ack_received):
-				if radio_Rx.available(0):
+				if radio_Rx.available(pipes[0]):
 					radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
 
 					for c in range(0, len(ack)):

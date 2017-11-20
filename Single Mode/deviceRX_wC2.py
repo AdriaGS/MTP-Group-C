@@ -180,7 +180,7 @@ try:
 			flag = chr(ord(original_flag_data) + flag_n)
 
 			while not (receivedPacket):
-				if radio_Rx.available(0):
+				if radio_Rx.available(pipes[1]):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 					print(frame)
 					if(chr(frame[0]) == flag):
