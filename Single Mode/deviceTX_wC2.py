@@ -185,9 +185,9 @@ try:
 
 		#Start time
 		start = time.time()
+		radio_Rx.startListening()
 		radio_Tx.write(str(numberofPackets) + "," + str(n))
 		timeout = time.time() + time_ack
-		radio_Rx.startListening()
 		str_Handshake = ""
 
 		#While we don't receive the handshake ack we keep trying
@@ -211,7 +211,7 @@ try:
 					handshakeAck_received = 1
 
 			#If an established time passes and we have not received anything we retransmit the handshake packet
-			if((time.time()) > timeout):
+			if((time.time() + 0.2) > timeout):
 				print("No Handshake ACK received resending message")
 				radio_Tx.write(str(numberofPackets) + "," + str(n))
 				timeout = time.time() + time_ack
