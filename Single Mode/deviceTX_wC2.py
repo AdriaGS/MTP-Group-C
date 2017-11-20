@@ -241,14 +241,14 @@ try:
 			while not (ack_received):
 				if radio_Rx.available(0):
 					radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
-					print(radio_Rx.testRPD())
 
 					for c in range(0, len(ack)):
 						str_ack = str_ack + chr(ack[c])
 
+					print(str_ack)
+
 					#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
 					if(list(str_ack) != (list("ACK") + list(flag))):
-						print(str_ack)
 						radio_Tx.write(list(flag) + list(message))
 						timeout = time.time() + time_ack
 						#print("Data ACK received but not the expected one --> resending message")
