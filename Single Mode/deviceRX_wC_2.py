@@ -74,22 +74,22 @@ def main():
 
 	start = time.time()
 	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(24, GPIO.OUT)
-	GPIO.output(24,1)
+	GPIO.setup(23, GPIO.OUT)
+	GPIO.output(23,1)
 	GPIO.setup(22, GPIO.OUT)
 	GPIO.output(22,1)
 
 	print("Receiver")
 	pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 	payloadSize = 32
-	channel_RX = 0x40
-	channel_TX = 0x45
+	channel_RX = 1
+	channel_TX = 127
 
 	#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 	radio_Tx = NRF24(GPIO, spidev.SpiDev())
 	radio_Rx = NRF24(GPIO, spidev.SpiDev())
 	radio_Tx.begin(0, 22)
-	radio_Rx.begin(1, 24)
+	radio_Rx.begin(1, 23)
 
 	#We set the Payload Size to the limit which is 32 bytes
 	radio_Tx.setPayloadSize(payloadSize)
