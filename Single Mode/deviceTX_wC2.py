@@ -65,13 +65,17 @@ try:
 		GPIO.output(24,1)
 		GPIO.setup(26, GPIO.OUT)
 		GPIO.output(26, 1)
+		GPIO.setup(22, GPIO.OUT)
+		GPIO.output(22,1)
+		GPIO.setup(23, GPIO.OUT)
+		GPIO.output(23,1)
 
 		print("Transmitter")
 		pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 		pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 		payloadSize = 32
 		channel_TX = 0x2F
-		channel_RX = 0x3E
+		channel_RX = 0x36
 
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO23
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
