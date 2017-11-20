@@ -7,7 +7,7 @@ try:
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(26, GPIO.OUT)
-    GPIO.output(26,1)
+    GPIO.output(26, 1)
     #GPIO.setup(26, GPIO.OUT)
     #GPIO.output(26,1)
     
