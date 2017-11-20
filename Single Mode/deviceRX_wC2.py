@@ -139,7 +139,7 @@ try:
 		while not (receivedHandshakePacket):
 			str_Handshakeframe = ""
 
-			if radio_Rx.available(pipes[1]):
+			if radio_Rx.available(0):
 				radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 
 				for c in range(0, len(handshake_frame)):
@@ -180,7 +180,7 @@ try:
 			flag = chr(ord(original_flag_data) + flag_n)
 
 			while not (receivedPacket):
-				if radio_Rx.available(pipes[1]):
+				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 					print(frame)
 					if(chr(frame[0]) == flag):
