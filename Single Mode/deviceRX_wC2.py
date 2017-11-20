@@ -139,7 +139,7 @@ try:
 		while not (receivedHandshakePacket):
 			str_Handshakeframe = ""
 
-			if radio_Rx.available(0):
+			if radio_Rx.available(pipes[1]):
 				radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 
 				for c in range(0, len(handshake_frame)):

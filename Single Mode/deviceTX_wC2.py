@@ -193,7 +193,7 @@ try:
 		#While we don't receive the handshake ack we keep trying
 		while not (handshakeAck_received):
 
-			if radio_Rx.available(1):
+			if radio_Rx.available(pipes[0]):
 				radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
 				print("Something received")
 
