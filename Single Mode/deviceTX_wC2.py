@@ -222,6 +222,7 @@ try:
 
 			flag = chr(ord(original_flag_data) + flag_n)
 			message2Send = list(flag) + message
+			print(message2Send)
 			radio_Tx.write(message2Send)
 			time.sleep(1)
 
