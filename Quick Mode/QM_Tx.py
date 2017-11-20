@@ -15,7 +15,7 @@ try:
     pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 
     radio = NRF24(GPIO, spidev.SpiDev())
-    radio.begin(26, 23)
+    radio.begin(0, 23)
     radio.setPayloadSize(32)
     radio.setChannel(0x20)
 
