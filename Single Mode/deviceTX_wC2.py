@@ -191,6 +191,7 @@ try:
 
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
+				print("Something received")
 				print(radio_Rx.testRPD())
 
 				for c in range(0, len(handshake)):
