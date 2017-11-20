@@ -32,8 +32,8 @@ try:
 
     while True:
         #print("Transmitting Ping")
-        message = list("PING ") + list(i)
-        radio.write(message)
+        message = "PING " + str(i)
+        radio.write(list(message))
         time.sleep(1)
         i += 1
         
