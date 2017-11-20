@@ -69,7 +69,7 @@ try:
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 		payloadSize = 32
 		channel_RX = 0x2F
-		channel_TX = 0x36
+		channel_TX = 0x2F
 
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO23
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
@@ -140,7 +140,6 @@ try:
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 				print(radio_Rx.testRPD())
-				radio_Rx.openReadingPipe(1, pipes[0])
 
 				for c in range(0, len(handshake_frame)):
 					str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
