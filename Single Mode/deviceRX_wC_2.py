@@ -81,7 +81,7 @@ def main():
 
 	print("Receiver")
 	pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
-	payloadSize = 32
+	payloadSize = 31
 	channel_RX = 1
 	channel_TX = 127
 
