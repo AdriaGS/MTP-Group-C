@@ -177,7 +177,7 @@ try:
 			while not (receivedPacket):
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-					radio_Rx.openReadingPipe(1, pipes[0])
+					print(radio_Rx.testRPD())
 					#print(frame)
 					if(chr(frame[0]) == flag):
 
