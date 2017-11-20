@@ -182,6 +182,7 @@ try:
 			while not (receivedPacket):
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
+					print(frame)
 					if(chr(frame[0]) == flag):
 
 						frame = frame[1:len(frame)]
@@ -230,6 +231,7 @@ try:
 						else:
 							radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
 						timeout = time.time() + time_ack
+
 			dec_ready += 1
 			flag_n = (flag_n + 1) % 10
 			receivedPacket = 0
