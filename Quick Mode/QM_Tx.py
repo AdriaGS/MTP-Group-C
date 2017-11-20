@@ -30,7 +30,7 @@ try:
 
     while True:
         print("Transmitting Ping")
-        message = list("PINGDEPRUEBAMTPPROJECTTEAMC")
+        message = list("PING")
         radio.write(message)
         time.sleep(1)
         
