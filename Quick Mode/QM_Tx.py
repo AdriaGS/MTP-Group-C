@@ -28,11 +28,14 @@ try:
     radio.printDetails()
     print("///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
 
+    i = 0
+
     while True:
         #print("Transmitting Ping")
-        message = list("PING")
+        message = list("PING ") + list(i)
         radio.write(message)
         time.sleep(1)
+        i += 1
         
 except KeyboardInterrupt:
     #GPIO.output(22,0)
