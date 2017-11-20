@@ -102,7 +102,7 @@ try:
 
 		#Open the writing and reading pipe
 		radio_Tx.openWritingPipe(pipes[0])
-		radio_Rx.openReadingPipe(1, pipes[1])
+		radio_Rx.openReadingPipe(0, pipes[1])
 
 		#We print the configuration details of both transceivers
 		radio_Tx.printDetails()
