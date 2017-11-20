@@ -38,6 +38,8 @@ try:
         i += 1
         
 except KeyboardInterrupt:
+
+    radio.write("HE XAPAT")
     #GPIO.output(22,0)
     GPIO.output(23,0)
     #GPIO.output(24,0)
