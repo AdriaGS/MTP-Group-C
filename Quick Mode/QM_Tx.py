@@ -32,7 +32,7 @@ try:
         #print("Transmitting Ping")
         message = list("PING")
         radio.write(message)
-        #time.sleep(1)
+        time.sleep(1)
         
 except KeyboardInterrupt:
     #GPIO.output(22,0)
