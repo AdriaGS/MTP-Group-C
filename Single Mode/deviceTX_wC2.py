@@ -101,8 +101,8 @@ try:
 		radio_Rx.enableDynamicPayloads()
 
 		#Open the writing and reading pipe
-		radio_Tx.openWritingPipe(pipes[0])
-		radio_Rx.openReadingPipe(0, pipes[1])
+		radio_Tx.openWritingPipe(pipes[1])
+		radio_Rx.openReadingPipe(0, pipes[0])
 
 		#We print the configuration details of both transceivers
 		print("Transmitter Details ##########################################################################################")
