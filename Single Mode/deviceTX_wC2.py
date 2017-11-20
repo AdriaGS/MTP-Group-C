@@ -78,7 +78,7 @@ try:
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
 		radio_Rx = NRF24(GPIO, spidev.SpiDev())
 		radio_Tx.begin(0, 22)
-		radio_Rx.begin(1, 23)
+		radio_Rx.begin(1, 24)
 
 		#We set the Payload Size to the limit which is 32 bytes
 		radio_Tx.setPayloadSize(payloadSize)
@@ -195,7 +195,6 @@ try:
 
 			if radio_Rx.available(pipes[0]):
 				radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
-				radio_Rx.openReadingPipe(0, pipes[0])
 				print("Something received")
 
 				for c in range(0, len(handshake)):
@@ -239,7 +238,6 @@ try:
 			while not (ack_received):
 				if radio_Rx.available(pipes[0]):
 					radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
-					radio_Rx.openReadingPipe(0, pipes[0])
 
 					for c in range(0, len(ack)):
 						str_ack = str_ack + chr(ack[c])
