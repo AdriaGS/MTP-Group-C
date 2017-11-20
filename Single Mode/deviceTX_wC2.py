@@ -69,14 +69,14 @@ try:
 		print("Transmitter")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 		payloadSize = 32
-		channel_TX = 1
-		channel_RX = 127
+		channel_TX = 10
+		channel_RX = 100
 
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO23
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
 		radio_Rx = NRF24(GPIO, spidev.SpiDev())
-		radio_Tx.begin(1, 22)
-		radio_Rx.begin(0, 23)
+		radio_Tx.begin(0, 22)
+		radio_Rx.begin(1, 23)
 
 		#We set the Payload Size to the limit which is 32 bytes
 		radio_Tx.setPayloadSize(payloadSize)
@@ -210,7 +210,7 @@ try:
 					handshakeAck_received = 1
 
 			#If an established time passes and we have not received anything we retransmit the handshake packet
-			if((time.time() + 0.01) > timeout):
+			if((time.time() + 0.2) > timeout):
 				print("No Handshake ACK received resending message")
 				radio_Tx.write(str(numberofPackets) + "," + str(n))
 				timeout = time.time() + time_ack
