@@ -67,8 +67,7 @@ try:
 		GPIO.output(23,1)
 
 		print("Transmitter")
-		pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
-		pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
+		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 		payloadSize = 32
 		channel_TX = 1
 		channel_RX = 127
@@ -102,8 +101,8 @@ try:
 		radio_Rx.enableDynamicPayloads()
 
 		#Open the writing and reading pipe
-		radio_Tx.openWritingPipe(pipe_Tx)
-		radio_Rx.openReadingPipe(1, pipe_Rx)
+		radio_Tx.openWritingPipe(pipes[0])
+		radio_Rx.openReadingPipe(1, pipes[1])
 
 		#We print the configuration details of both transceivers
 		radio_Tx.printDetails()
