@@ -6,8 +6,8 @@ try:
     import spidev
 
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(24, GPIO.OUT)
-    GPIO.output(24,1)
+    GPIO.setup(26, GPIO.OUT)
+    GPIO.output(26,1)
     #GPIO.setup(26, GPIO.OUT)
     #GPIO.output(26,1)
     
@@ -15,7 +15,7 @@ try:
     pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 
     radio = NRF24(GPIO, spidev.SpiDev())
-    radio.begin(1, 22)
+    radio.begin(1, 23)
     radio.setPayloadSize(32)
     radio.setChannel(0x20)
 
