@@ -70,7 +70,7 @@ def main():
 	print("Transmitter")
 	pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 	pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
-	payloadSize = 31
+	payloadSize = 32
 	channel_TX = 1
 	channel_RX = 127
 
@@ -104,7 +104,7 @@ def main():
 
 	#Open the writing and reading pipe
 	radio_Tx.openWritingPipe(pipe_Tx)
-	radio_Rx.openReadingPipe(1, pipe_Rx)
+	radio_Rx.openReadingPipe(0, pipe_Rx)
 
 	#We print the configuration details of both transceivers
 	radio_Tx.printDetails()
