@@ -45,6 +45,7 @@ try:
 
 		#Open file to save the transmitted data
 		outputFile = open("ReceivedFileCompressed2.txt", "wb")
+		print(compressedList)
 
 		i = 0
 		compressedList += chr(0)
@@ -200,7 +201,7 @@ try:
 							str_compressed += chr(frame[c])
 
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
-							print(str_compressed[1:20])
+							print(str_compressed)
 							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
