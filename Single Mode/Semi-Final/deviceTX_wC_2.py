@@ -222,6 +222,7 @@ try:
 
 		messageSent = ""
 		#We iterate over every packet to be sent
+		suma = 0
 		for message in packets:
 
 			messageSent += message
@@ -248,14 +249,16 @@ try:
 					if(list(str_ack) != (list("ACK") + list(flag))):
 						radio_Tx.write(message2Send)
 						timeout = time.time() + time_ack
-						print("Data ACK received but not the expected one --> resending message")
+						#print("Data ACK received but not the expected one --> resending message")
+						suma += 1
 						str_ack = ""
 					else:
 						ack_received = 1
 
 				#If an established time passes and we have not received anything we retransmit the data packet
-				if((time.time() + 0.2) > timeout):
-					print("No Data ACK received resending message")
+				if((time.time()) > timeout):
+					#print("No Data ACK received resending message")
+					suma += 1
 					radio_Tx.write(message2Send)
 					timeout = time.time() + time_ack
 					
@@ -266,6 +269,7 @@ try:
 		totalTime = final - start
 		print(totalTime)
 		print(messageSent == toSend)
+		print("Total retransmissions: " + str(suma))
 
 	if __name__ == '__main__':
 		main()
