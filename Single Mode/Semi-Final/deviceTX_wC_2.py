@@ -215,7 +215,7 @@ try:
 					handshakeAck_received = 1
 
 			#If an established time passes and we have not received anything we retransmit the handshake packet
-			if((time.time() + 0.01) > timeout):
+			if((time.time()) > timeout):
 				print("No Handshake ACK received resending message")
 				radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 				timeout = time.time() + time_ack
@@ -239,6 +239,8 @@ try:
 
 					for c in range(0, len(ack)):
 						str_ack = str_ack + chr(ack[c])
+
+					print(str_ack)
 
 					#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
 					if(list(str_ack) != (list("ACK") + list(flag))):
