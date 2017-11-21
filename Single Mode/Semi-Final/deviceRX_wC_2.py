@@ -201,6 +201,8 @@ try:
 							print("On the way to win")
 							for c in range(0, len(compressed)):
 								str_compressed += chr(compressed[c])
+
+							print(compressed)
 							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
