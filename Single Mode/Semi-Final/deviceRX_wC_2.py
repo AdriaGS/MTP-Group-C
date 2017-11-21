@@ -197,10 +197,10 @@ try:
 						compressed.extend(frame[1:len(frame)])
 
 						for c in range(1, len(frame)):
-							str_compressed += frame[c]
+							str_compressed += chr(frame[c])
 
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
-							print(list(str_compressed))
+							print(compressed)
 							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
