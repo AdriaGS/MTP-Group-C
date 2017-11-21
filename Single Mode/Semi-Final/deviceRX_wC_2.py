@@ -193,11 +193,13 @@ try:
 
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
+					print("Received packet")
 
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
 
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
+							print("On the way to win")
 							for c in range(0, len(compressed)):
 								str_compressed += chr(compressed[c])
 							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
