@@ -187,6 +187,7 @@ try:
 		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 
 		radio_Rx.startListening()
+		suma = 0
 
 		for i in range(0, int(numberOfPackets)-1):
 
@@ -209,6 +210,7 @@ try:
 						receivedPacket = 1
 					else:
 						#print("Wrong message -> asking for retransmission")
+						suma += 1
 						if flag_n == 0:
 							radio_Tx.write(list("ACK") + list('J'))
 						else:
@@ -224,6 +226,8 @@ try:
 		final = time.time()
 		totalTime = final - start
 		print("Total time: " + str(totalTime))
+
+		print("Number of retransmissions = " + str(suma))
 
 	if __name__ == '__main__':
 		main()
