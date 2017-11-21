@@ -180,8 +180,6 @@ try:
 		final_c = time.time()
 		print("Compression time: " + str(final_c-start_c))
 
-		print(toSend[1:20])
-
 		#Now we conform all the data packets in a list
 		for i in range (0, len(toSend), dataSize):
 			if((i+dataSize) < len(toSend)):
@@ -228,7 +226,8 @@ try:
 			flag = chr(ord(original_flag) + flag_n)
 			message2Send = list(flag) + list(message)
 			radio_Tx.write(message2Send)
-			#time.sleep(1)
+			print(message2Send)
+			time.sleep(1)
 
 			timeout = time.time() + time_ack
 			radio_Rx.startListening()
