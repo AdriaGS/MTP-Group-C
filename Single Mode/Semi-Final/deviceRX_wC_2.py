@@ -172,8 +172,10 @@ try:
 						print("First data packet received")
 						handshake_frame = handshake_frame[1:len(handshake_frame)]
 						compressed.extend(handshake_frame)
+
 						for c in range(0, len(handshake_frame)):
-							str_compressed += chr(hanshake_frame[c])
+							str_compressed += chr(handshake_frame[c])
+							
 						radio_Tx.write(list("ACK") + list(original_flag_data))
 						flag_n = (flag_n + 1) % 10
 						receivedHandshakePacket = 1
