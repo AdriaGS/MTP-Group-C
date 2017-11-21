@@ -47,7 +47,7 @@ try:
 		outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 		i = 0
-		compressedList.append(48)
+		compressedList += chr(0)
 		strJoin = 0
 		compde = []
 		x = 0
@@ -57,7 +57,7 @@ try:
 
 		while i < (len(compressedList)*8/bitsMax):
 		  if x < bitsMax:
-			strJoin = (strJoin<<charLength) + ord(chr(compressedList[j]))
+			strJoin = (strJoin<<charLength) + ord(compressedList[j])
 			x = x + charLength
 			j = j + 1;
 		  else:
@@ -140,6 +140,7 @@ try:
 		frame = []
 		handshake_frame = []
 		compressed = []
+		str_compressed = ""
 
 		#ACK related variables
 		time_ack = 0.5
@@ -171,6 +172,8 @@ try:
 						print("First data packet received")
 						handshake_frame = handshake_frame[1:len(handshake_frame)]
 						compressed.extend(handshake_frame)
+						for c in range(0, len(handshake_frame)):
+							str_compressed += chr(hanshake_frame[c])
 						radio_Tx.write(list("ACK") + list(original_flag_data))
 						flag_n = (flag_n + 1) % 10
 						receivedHandshakePacket = 1
@@ -181,7 +184,6 @@ try:
 		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 
 		radio_Rx.startListening()
-		str_compressed = ""
 
 		for i in range(0, int(numberOfPackets)-1):
 
@@ -199,11 +201,8 @@ try:
 						for c in range(1, len(frame)):
 							str_compressed += chr(frame[c])
 
-						print(str_compressed)
-
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
-							print(type(compressed))
-							thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
+							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
 						receivedPacket = 1
@@ -218,7 +217,7 @@ try:
 			flag_n = (flag_n + 1) % 10
 			receivedPacket = 0
 
-		thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
+		thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 		thread.start()
 
 		final = time.time()
