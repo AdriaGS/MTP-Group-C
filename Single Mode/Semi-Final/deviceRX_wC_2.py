@@ -47,7 +47,7 @@ try:
 		outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 		i = 0
-		compressedList += chr(0)
+		#compressedList += chr(0)
 		strJoin = 0
 		compde = []
 		x = 0
@@ -193,7 +193,6 @@ try:
 
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-					print("Received packet")
 
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
