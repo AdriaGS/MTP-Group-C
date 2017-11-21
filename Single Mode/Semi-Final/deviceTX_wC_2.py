@@ -240,8 +240,6 @@ try:
 					for c in range(0, len(ack)):
 						str_ack = str_ack + chr(ack[c])
 
-					print(str_ack)
-
 					#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
 					if(list(str_ack) != (list("ACK") + list(flag))):
 						radio_Tx.write(message2Send)
