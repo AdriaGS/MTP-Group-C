@@ -47,7 +47,7 @@ try:
 		outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 		i = 0
-		compressedList.append(0)
+		compressedList.append(48)
 		strJoin = 0
 		compde = []
 		x = 0
@@ -57,7 +57,7 @@ try:
 
 		while i < (len(compressedList)*8/bitsMax):
 		  if x < bitsMax:
-			strJoin = (strJoin<<charLength) + compressedList[j]
+			strJoin = (strJoin<<charLength) + ord(chr(compressedList[j]))
 			x = x + charLength
 			j = j + 1;
 		  else:
