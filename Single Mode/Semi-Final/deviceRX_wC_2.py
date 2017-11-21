@@ -200,7 +200,7 @@ try:
 							str_compressed += chr(frame[c])
 
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
-							print(str_compressed[1:10])
+							print(str_compressed[1:20])
 							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
@@ -216,7 +216,7 @@ try:
 			flag_n = (flag_n + 1) % 10
 			receivedPacket = 0
 
-		thread = Thread(target = decompressionOnTheGo, args = (compressed, listLength, listMax))
+		thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
 		thread.start()
 
 		final = time.time()
