@@ -197,7 +197,7 @@ try:
 						compressed.extend(frame[1:len(frame)])
 
 						for c in range(1, len(frame)):
-							str_compressed += chr(frame[c])
+							str_compressed += ord(chr(frame[c]))
 
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
 							print(list(str_compressed))
