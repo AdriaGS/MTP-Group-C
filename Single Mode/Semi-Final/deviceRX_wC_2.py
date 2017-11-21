@@ -202,7 +202,7 @@ try:
 							for c in range(0, len(compressed)):
 								str_compressed += chr(compressed[c])
 
-							print(compressed)
+							#print(compressed)
 							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
@@ -218,6 +218,7 @@ try:
 			flag_n = (flag_n + 1) % 10
 			receivedPacket = 0
 
+		str_compressed = ""
 		for c in range(0, len(compressed)):
 			str_compressed += chr(compressed[c])
 		thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
