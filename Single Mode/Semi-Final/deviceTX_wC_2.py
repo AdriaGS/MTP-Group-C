@@ -268,6 +268,7 @@ try:
 		print(messageSent == toSend)
 
 	if __name__ == '__main__':
+		GPIO.cleanup()
 		main()
 		
 except KeyboardInterrupt:

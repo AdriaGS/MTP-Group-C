@@ -230,6 +230,7 @@ try:
 		print("Number of retransmissions = " + str(suma))
 
 	if __name__ == '__main__':
+		GPIO.cleanup()
 		main()
 
 except KeyboardInterrupt:
