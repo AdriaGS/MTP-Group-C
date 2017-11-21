@@ -173,9 +173,6 @@ try:
 						handshake_frame = handshake_frame[1:len(handshake_frame)]
 						compressed.extend(handshake_frame)
 
-						for c in range(0, len(handshake_frame)):
-							str_compressed += chr(handshake_frame[c])
-							
 						radio_Tx.write(list("ACK") + list(original_flag_data))
 						flag_n = (flag_n + 1) % 10
 						receivedHandshakePacket = 1
@@ -200,10 +197,9 @@ try:
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
 
-						for c in range(1, len(frame)):
-							str_compressed += chr(frame[c])
-
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
+							for c in range(0, len(compressed)):
+								str_compressed += chr(compressed[c])
 							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
@@ -219,6 +215,8 @@ try:
 			flag_n = (flag_n + 1) % 10
 			receivedPacket = 0
 
+		for c in range(0, len(compressed)):
+			str_compressed += chr(compressed[c])
 		thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 		thread.start()
 
