@@ -99,9 +99,10 @@ def printSummary(file1, file2):
     
 def main():	
 	#OpenFile
-	file='or/test.txt'
+	file='ElQuijote.txt'
 	f = open(file,'rb')
-	comp = compress(f.read())
+	plain = f.read()
+	comp = compress(plain)
 	#print("comp= "+str(comp))
 	f.close()
 	
@@ -130,11 +131,19 @@ def main():
 		if remainded == 0:
 		  remainded=bitsMax
 	#print("string= "+string)
-	
-	#Guardar Compress
-	f_comp = open('co/testCompress.txt', 'w')
-	f_comp.write(string)
-	f_comp.close()
+
+	string_list = list(string)
+	string_env = []
+
+	for l in range(0, len(string_list)):
+		string_env.append(ord(string_list[l]))
+
+	string_reco = ""
+
+	for c in range(0, len(string_env)):
+		string_reco += chr(string_env[c])
+
+	print(string == string_reco)
 	
 	#DecodingChar
 	i=0
@@ -162,12 +171,8 @@ def main():
 
     #Decompress
 	decompressed = decompress(compde)
-	#Write file
-	f = open('dec/testDecompress.txt','w')
-	f.write(decompressed)
-	f.close()
 	
-	#Summary
-	printSummary(file, 'co/testCompress.txt')
+	print(plain == decompressed)
+
 if __name__ == '__main__':
 	main()

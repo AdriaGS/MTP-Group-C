@@ -92,7 +92,7 @@ def main():
 	start = time.time()
 	finalData = ""
 	midData = ""
-	file='SampleTextFile1Mb.txt'
+	file='ElQuijote.txt'
 	f = open(file,'rb')
 
 	start_c = time.time()
@@ -134,6 +134,21 @@ def main():
 	x=0
 	j=0;
 
+	#print(string)
+	string_list = list(string)
+	string_env = []
+
+	for l in range(0, len(string_list)):
+		string_env.append(ord(string_list[l]))
+
+	print(string_env)
+
+	string_reco = ""
+
+	for c in range(0, len(string_env)):
+		string_reco += chr(string_env[c])
+
+	print(string == string_reco)
 
 	while i < listLengh :
 	  if x<bitsMax:

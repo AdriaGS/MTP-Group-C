@@ -30,7 +30,7 @@ try:
         #print("Transmitting Ping")
         message = "PING " + str(i)
         radio.write(list(message))
-        time.sleep(1)
+        #time.sleep(1)
         i += 1
         
 except KeyboardInterrupt:
