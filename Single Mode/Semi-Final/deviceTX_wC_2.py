@@ -226,7 +226,8 @@ try:
 
 			messageSent += message
 			flag = chr(ord(original_flag) + flag_n)
-			message2Send = list(flag) + list(message)
+			#message2Send = list(flag) + list(message)
+			message2Send = str(flag) + message
 			radio_Tx.write(message2Send)
 			time.sleep(1)
 
