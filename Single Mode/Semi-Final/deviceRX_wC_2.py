@@ -47,7 +47,7 @@ try:
 		outputFile = open("ReceivedFileCompressed2.txt", "wb")
 
 		i = 0
-		compressedList += chr(0)
+		compressedList.append(0)
 		strJoin = 0
 		compde = []
 		x = 0
@@ -57,7 +57,7 @@ try:
 
 		while i < (len(compressedList)*8/bitsMax):
 		  if x < bitsMax:
-			strJoin = (strJoin<<charLength) + ord(compressedList[j])
+			strJoin = (strJoin<<charLength) + compressedList[j]
 			x = x + charLength
 			j = j + 1;
 		  else:
@@ -196,12 +196,12 @@ try:
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
 
-						for c in range(1, len(frame)):
-							str_compressed += chr(frame[c])
+						#for c in range(1, len(frame)):
+							#str_compressed += chr(frame[c])
 
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
-							print(compressed)
-							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
+							print(type(compressed))
+							thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
 						receivedPacket = 1
@@ -216,7 +216,7 @@ try:
 			flag_n = (flag_n + 1) % 10
 			receivedPacket = 0
 
-		thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
+		thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
 		thread.start()
 
 		final = time.time()
