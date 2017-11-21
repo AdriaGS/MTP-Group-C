@@ -220,9 +220,11 @@ try:
 				radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 				timeout = time.time() + time_ack
 
+		messageSent = ""
 		#We iterate over every packet to be sent
 		for message in packets:
 
+			messageSent += message
 			flag = chr(ord(original_flag) + flag_n)
 			message2Send = list(flag) + list(message)
 			radio_Tx.write(message2Send)
@@ -260,6 +262,7 @@ try:
 		final = time.time()
 		totalTime = final - start
 		print(totalTime)
+		print(messageSent == toSend)
 
 	if __name__ == '__main__':
 		main()
