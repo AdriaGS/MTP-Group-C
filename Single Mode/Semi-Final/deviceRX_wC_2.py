@@ -192,13 +192,14 @@ try:
 
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-					print(frame)
 
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
 
-						#for c in range(1, len(frame)):
-							#str_compressed += chr(frame[c])
+						for c in range(1, len(frame)):
+							str_compressed += chr(frame[c])
+
+						print(str_compressed)
 
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
 							print(type(compressed))
