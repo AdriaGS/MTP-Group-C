@@ -181,7 +181,6 @@ try:
 		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 
 		radio_Rx.startListening()
-		suma = 0
 		str_compressed = ""
 
 		for i in range(0, int(numberOfPackets)-1):
@@ -201,9 +200,9 @@ try:
 							str_compressed += chr(frame[c])
 
 						if (((len(compressed)*8) % (bitsMax*100)) == 0):
+							print(str_compressed[1:10])
 							thread = Thread(target = decompressionOnTheGo, args = (str_compressed, listMax))
 							thread.start()
-						suma += 1
 						radio_Tx.write(list("ACK") + list(flag))
 						receivedPacket = 1
 					else:
