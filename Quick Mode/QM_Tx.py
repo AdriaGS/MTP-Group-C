@@ -6,6 +6,10 @@ try:
     import spidev
 
     GPIO.setmode(GPIO.BCM)
+    GPIO.setup(23, GPIO.OUT)
+    GPIO.output(23,1)
+    GPIO.setup(22, GPIO.OUT)
+    GPIO.output(22,1)
     
     print("Transmitter")
     pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
@@ -36,7 +40,7 @@ try:
 except KeyboardInterrupt:
 
     radio.write("HE XAPAT")
-    #GPIO.output(22,0)
+    GPIO.output(22,0)
     GPIO.output(23,0)
     #GPIO.output(24,0)
     GPIO.cleanup()
