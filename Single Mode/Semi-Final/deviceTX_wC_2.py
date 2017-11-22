@@ -193,6 +193,7 @@ try:
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()
 		str_Handshake = ""
+		print("Waiting ACK")
 
 		#While we don't receive the handshake ack we keep trying
 		while not (handshakeAck_received):
@@ -200,6 +201,7 @@ try:
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
 				radio_Rx.openReadingPipe(0, pipe_Rx)
+				print("Something Received")
 
 				for c in range(0, len(handshake)):
 					str_Handshake = str_Handshake + chr(handshake[c])
