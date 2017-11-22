@@ -21,8 +21,8 @@ try:
 
     radio.setDataRate(NRF24.BR_250KBPS)#2MBPS)
     #radio.setPALevel(NRF24.PA_MIN)
-    radio.setPALevel(NRF24.PA_LOW)
-    #radio.setPALevel(NRF24.PA_HIGH)
+    #radio.setPALevel(NRF24.PA_LOW)
+    radio.setPALevel(NRF24.PA_HIGH)
     #radio.setPALevel(NRF24.PA_MAX)
     radio.setAutoAck(False)
     radio.enableDynamicPayloads()
