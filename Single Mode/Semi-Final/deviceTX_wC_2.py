@@ -148,7 +148,7 @@ try:
 		handshakeAck_received = 0
 
 		#Time variables
-		time_ack = 0.5
+		time_ack = 0.2
 
 		start_c = time.time()
 		#Compression of the data to transmit into data2Tx_compressed
