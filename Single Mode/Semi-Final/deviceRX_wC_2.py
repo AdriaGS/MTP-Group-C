@@ -198,6 +198,7 @@ try:
 
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
+					print(frame)
 
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
@@ -209,7 +210,7 @@ try:
 						radio_Tx.write(list("ACK") + list(flag))
 						receivedPacket = 1
 					else:
-						if ((suma %10) == 0):
+						if ((suma % 10) == 0):
 							print("Number of retransmissions increasing: " + str(suma))
 						suma += 1
 						if flag_n == 0:

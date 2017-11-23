@@ -96,8 +96,8 @@ try:
 		radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 		#Configuration of the power level to be used by the transceiver
-		radio_Tx.setPALevel(NRF24.PA_HIGH)
-		radio_Rx.setPALevel(NRF24.PA_HIGH)
+		radio_Tx.setPALevel(NRF24.PA_LOW)
+		radio_Rx.setPALevel(NRF24.PA_LOW)
 
 		#We disable the Auto Acknowledgement
 		radio_Tx.setAutoAck(False)
@@ -120,7 +120,7 @@ try:
 		###############################################################################################################################
 
 		#Read file to transmit
-		inFile = open("MTP_Prev.txt", "rb")
+		inFile = open("ElQuijote.txt", "rb")
 		data2Tx = inFile.read()
 		inFile.close()
 
@@ -231,7 +231,7 @@ try:
 			flag = chr(ord(original_flag) + flag_n)
 			message2Send = list(flag) + list(message)
 			radio_Tx.write(message2Send)
-			#time.sleep(1)
+			time.sleep(1)
 
 			timeout = time.time() + time_ack
 			radio_Rx.startListening()
