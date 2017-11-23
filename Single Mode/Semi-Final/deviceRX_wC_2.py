@@ -111,8 +111,8 @@ try:
 		radio_Rx.setDataRate(NRF24.BR_250KBPS)
 
 		#Configuration of the power level to be used by the transceiver
-		radio_Tx.setPALevel(NRF24.PA_MIN)
-		radio_Rx.setPALevel(NRF24.PA_MIN)
+		radio_Tx.setPALevel(NRF24.PA_LOW)
+		radio_Rx.setPALevel(NRF24.PA_LOW)
 
 		#We disable the Auto Acknowledgement
 		radio_Tx.setAutoAck(False)
