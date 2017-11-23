@@ -11,7 +11,7 @@ try:
     GPIO.setup(23, GPIO.OUT)
     GPIO.output(23,1)
     
-    print("Transmitter")
+    print("Receiver")
     pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
     #pipes = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 
