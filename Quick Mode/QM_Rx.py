@@ -12,12 +12,13 @@ try:
     #GPIO.output(26,1)
     
     print("Transmitter")
-    pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
+    #pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
+    pipes = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 
     radio = NRF24(GPIO, spidev.SpiDev())
-    radio.begin(1, 22)
+    radio.begin(1, 23)
     radio.setPayloadSize(32)
-    radio.setChannel(0x3E)
+    radio.setChannel(0x64)
 
     radio.setDataRate(NRF24.BR_250KBPS)#2MBPS)
     radio.setPALevel(NRF24.PA_MIN)
@@ -34,7 +35,7 @@ try:
 
     while True:
         radio.startListening()
-        while not radio.available(0):
+        while not radio.available(1):
             time.sleep(1/100)
        	radio.read(frame, radio.getDynamicPayloadSize())
         str_frame = ""

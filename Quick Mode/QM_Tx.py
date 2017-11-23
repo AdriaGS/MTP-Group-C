@@ -15,15 +15,15 @@ try:
     pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 
     radio = NRF24(GPIO, spidev.SpiDev())
-    radio.begin(1, 23)
+    radio.begin(1, 22)
     radio.setPayloadSize(32)
-    radio.setChannel(20)
+    radio.setChannel(0x64)
 
     radio.setDataRate(NRF24.BR_250KBPS)#2MBPS)
-    #radio.setPALevel(NRF24.PA_MIN)
+    radio.setPALevel(NRF24.PA_MIN)
     #radio.setPALevel(NRF24.PA_LOW)
     #radio.setPALevel(NRF24.PA_HIGH)
-    radio.setPALevel(NRF24.PA_MAX)
+    #radio.setPALevel(NRF24.PA_MAX)
     radio.setAutoAck(False)
     radio.enableDynamicPayloads()
 
