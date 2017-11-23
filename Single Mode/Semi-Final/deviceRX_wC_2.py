@@ -147,7 +147,7 @@ try:
 		str_compressed = ""
 
 		#ACK related variables
-		time_ack = 0.2
+		time_ack = 0.1
 		receivedPacket = 0
 		receivedHandshakePacket = 0
 
