@@ -198,7 +198,7 @@ try:
 
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-					print(frame)
+					#print(frame)
 
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
