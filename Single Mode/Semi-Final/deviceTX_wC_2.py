@@ -74,8 +74,8 @@ try:
 		pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 		pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 		payloadSize = 32
-		channel_TX = 90
-		channel_RX = 100
+		channel_TX = 40
+		channel_RX = 50
 
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
@@ -120,7 +120,7 @@ try:
 		###############################################################################################################################
 
 		#Read file to transmit
-		inFile = open("MTP_Prev.txt", "rb")
+		inFile = open("ElQuijote.txt", "rb")
 		data2Tx = inFile.read()
 		inFile.close()
 
@@ -231,7 +231,7 @@ try:
 			flag = chr(ord(original_flag) + flag_n)
 			message2Send = list(flag) + list(message)
 			radio_Tx.write(message2Send)
-			#time.sleep(1)
+			time.sleep(1)
 
 			timeout = time.time() + time_ack
 			radio_Rx.startListening()
@@ -245,7 +245,7 @@ try:
 					for c in range(0, len(ack)):
 						str_ack = str_ack + chr(ack[c])
 
-					#print(str_ack)
+					print(str_ack)
 
 					#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
 					if(list(str_ack) != (list("ACK") + list(flag))):
@@ -259,7 +259,7 @@ try:
 
 				#If an established time passes and we have not received anything we retransmit the data packet
 				if((time.time()) > timeout):
-					#print("No Data ACK received resending message")
+					print("No Data ACK received resending message")
 					suma += 1
 					radio_Tx.write(message2Send)
 					timeout = time.time() + time_ack
