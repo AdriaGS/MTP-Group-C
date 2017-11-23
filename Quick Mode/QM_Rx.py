@@ -36,7 +36,7 @@ try:
 
     while True:
         radio.startListening()
-        while not radio.available(1):
+        while not radio.available(0):
             time.sleep(1/100)
        	radio.read(frame, radio.getDynamicPayloadSize())
         str_frame = ""
