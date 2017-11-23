@@ -12,14 +12,14 @@ try:
     GPIO.output(23,1)
     
     print("Transmitter")
-    #pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
-    pipes = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
+    pipes = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
+    #pipes = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 
     radio = NRF24(GPIO, spidev.SpiDev())
     radio.begin(1, 22)
     radio.setPayloadSize(32)
     radio.setChannel(40)
-    radio.setChannel(0x64)
+    #radio.setChannel(0x64)
 
     radio.setDataRate(NRF24.BR_250KBPS)#2MBPS)
     radio.setPALevel(NRF24.PA_MIN)
@@ -47,7 +47,7 @@ try:
         print(radio.testRPD())
             
 except KeyboardInterrupt:
-    #GPIO.output(22,0)
+    GPIO.output(22,0)
     GPIO.output(23,0)
     #GPIO.output(24,0)
     GPIO.cleanup()
