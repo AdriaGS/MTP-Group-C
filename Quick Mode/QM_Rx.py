@@ -42,9 +42,9 @@ try:
         str_frame = ""
         for c in range(0, len(frame)):
         	str_frame += chr(frame[c])
-        print("Received Message: ")
-        print(str_frame)
-        print(radio.testRPD())
+        print("Received Message")
+        #print(str_frame)
+        #print(radio.testRPD())
             
 except KeyboardInterrupt:
     GPIO.output(22,0)
