@@ -209,7 +209,8 @@ try:
 						radio_Tx.write(list("ACK") + list(flag))
 						receivedPacket = 1
 					else:
-						#print("Wrong message -> asking for retransmission")
+						if ((suma %10) == 0):
+							print("Number of retransmissions increasing: " + str(suma))
 						suma += 1
 						if flag_n == 0:
 							radio_Tx.write(list("ACK") + list('J'))
