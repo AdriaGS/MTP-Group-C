@@ -63,11 +63,11 @@ try:
 
 		start = time.time()
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(23, GPIO.LOW)
+		GPIO.setup(23, GPIO.OUT)
 		GPIO.output(23, 1)
-		GPIO.setup(22, GPIO.LOW)
+		GPIO.setup(22, GPIO.OUT)
 		GPIO.output(22, 1)
-		GPIO.setup(24, GPIO.LOW)
+		GPIO.setup(24, GPIO.OUT)
 		GPIO.output(24, 1)
 
 		#GPIO.output(23, GPIO.LOW)
@@ -234,7 +234,7 @@ try:
 			flag = chr(ord(original_flag) + flag_n)
 			message2Send = list(flag) + list(message)
 			radio_Tx.write(message2Send)
-			time.sleep(1)
+			#time.sleep(1)
 
 			timeout = time.time() + time_ack
 			radio_Rx.startListening()
@@ -248,7 +248,7 @@ try:
 					for c in range(0, len(ack)):
 						str_ack = str_ack + chr(ack[c])
 
-					print(str_ack)
+					#print(str_ack)
 
 					#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
 					if(list(str_ack) != (list("ACK") + list(flag))):
@@ -262,7 +262,7 @@ try:
 
 				#If an established time passes and we have not received anything we retransmit the data packet
 				if((time.time()) > timeout):
-					print("No Data ACK received resending message")
+					#print("No Data ACK received resending message")
 					suma += 1
 					radio_Tx.write(message2Send)
 					timeout = time.time() + time_ack
