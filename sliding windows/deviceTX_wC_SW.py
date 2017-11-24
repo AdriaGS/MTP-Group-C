@@ -58,9 +58,29 @@ try:
 
 		sys.stderr.write(str(file1) + ': ' + str(f1_bytes) + ' bytes\n')
 		sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n')
+	
+	def length_OToN(compressedList, OriginalLength, NewLength ):
+		i = 0
+		strJoin = 0
+		compde = []
+		x = 0
+		j = 0
+		numPacketsOutput= len(compressedList)*OriginalLength/NewLength
+		compressedList.append(0)
 
-	def main():		
-
+		while i < (numPacketsOutput):
+			if x < NewLength:
+				strJoin = (strJoin<<OriginalLength) + ord(compressedList[j])
+				x = x + OriginalLength
+				j = j + 1;
+			else:
+				compde.append(strJoin>>(x-NewLength))
+				strJoin = strJoin & (2**(x-NewLength)-1)
+				i += 1
+				x = x - NewLengthç
+		return compde
+	
+	def init():
 		start = time.time()
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(23, GPIO.OUT)
@@ -114,11 +134,107 @@ try:
 		print("*------------------------------------------------------------------------------------------------------------*")
 		radio_Rx.printDetails()
 		print("*------------------------------------------------------------------------------------------------------------*")
+		return (radio_Tx, radio_Rx)
+		
+	def dataPackets(toSend):
+		for i in range (0, len(toSend), dataSize):
+			if((i+dataSize) < len(toSend)):
+				packets.append(toSend[i:i+dataSize])
+			else:
+				packets.append(toSend[i:])
+		return packets
+	
+	def handshakeF(packets, radio_Rx, radio_Tx,time_ack):
+		n=1
+		while (1):
+			if(n==1):
+				print("Start handshake:")
+				###STEP 1
+				print("STEP 1: Waiting SYN")
+				radio_Rx.startListening()
+				while (1):
+					if radio_Rx.available(0):
+						radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
+						print("Something received")
+						#check if it is a handshake
+						if (frame[0]==255):
+							n=2
+							break
+			if(n==2)
+				print("SYN recived")
+				###STEP 2
+				print("STEP 2: Sending ACK")
+				#Send ack_Handshake
+				radio_Tx.write(char(254)+str(numberofPackets) + str(listLengh) + "," + str(listMax) + str(slidingWindowsLength))
+				timeout = time.time() + time_ack
+				n=3
+			if(n==3)
+				###STEP 3
+				print("STEP 2: Waiting ACK")
+				while(1)
+					str_Handshakeframe = ""
+					if radio_Rx.available(0):
+						radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
+						print("Something received")
+						#check if it is a handshake
+						if (frame[0]==253):
+							print("ACK received")
+							print("HANDSHAKE DONE")
+							return (listLength, listMax, slidingWindowsLength, numberOfPackets)		
+						elif (frame[0]==255):
+							n=2
+							break
+					elif((time.time()) > timeout):
+							print("TIMEOUT")
+							n=2
+							break
+	
+	def sendingPackets(packets,windowsWindows,timeout,radio_Rx, radio_Tx):
+		suma = 0
+		messageSended = 0
+		pending=list(range(len(packets)))
+		numWindows=0
+		
+		while messageSended<numberofPackets:			
+			for x in range(0, min(slidingWindowsLength,len(pending))):				
+				flag = chr(ord(numWindows*slidingWindowsLength) + pending(x))
+				message2Send = list(flag) + list(packets(x))
+				radio_Tx.write(message2Send)
+				
+			#MIRAR TIEMPOS
+			#dsasda aisdh adsuih ads 
+			#MIRAR TIEMPOS
+			timeout = time.time() + time_ack
+			radio_Rx.startListening()
+			str_ack = ""
+			
+			#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
+			while (1):
+				if radio_Rx.available(0):
+					radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
+					
+					for c in range(0,2):
+						str_ack = str_ack + chr(ack[c])
+					
+					if (list(str_ack)!=(list("ACK"))):
+						print("Waiting ACK but wrong packet arrived")
+					else:
+						for c in range(3, len(ack)):								
+							pending.remove(ack[c])
+							messageSended+=1									
+						#ACK has been received
+						numWindows=(numWindows+1)%windowsWindows
+						break	
+				#If an established time passes and we have not received anything we retransmit the data packet
+				if((time.time()) > timeout):
+					#print("No Data ACK received resending message")
+					suma += 1
+					break	
+	
+	def main():		
 
-		###############################################################################################################################
-		###############################################################################################################################
-		###############################################################################################################################
-
+		radio_Tx, radio_Rx = init()
+		
 		#Read file to transmit
 		inFile = open("MTP_Prev.txt", "rb")
 		data2Tx = inFile.read()
@@ -132,9 +248,10 @@ try:
 		
 		#slindingWindows variables
 		slidingWindowsLength = 1
+		windowsWindows=2 
 		
 		#packet realted variables
-		overhead = 1
+		overhead = 1 # Number of bytes
 		dataSize = payloadSize - overhead
 		dataControlSize = payloadSize - overhead
 		#Data Packets
@@ -148,126 +265,34 @@ try:
 		ctrl_ack = []
 		ack_received = 0
 		controlAck_received = 0
-		handshakeAck_received = 0
 
 		#Time variables
 		time_ack = 0.2
 
 		start_c = time.time()
+		
 		#Compression of the data to transmit into data2Tx_compressed
 		data2Tx_compressed = compress(data2Tx)
 
 		#Compression Preprocessing
-		listLengh = len(data2Tx_compressed)
 		listMax = max(data2Tx_compressed)
 		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 		charLength = 8
-		data2Tx_compressed.append(0)
-
-		remainded = bitsMax
-		pad = bitsMax - charLength
-
-		toSend = ""
-		i = 0
-
-		while i < listLengh :
-			compJoin = (data2Tx_compressed[i] << bitsMax) + data2Tx_compressed[i+1]
-			toSend += chr((compJoin>>(pad+remainded))%(2**charLength))
-			remainded = remainded - charLength
-			if remainded <=0:
-				i=i+1
-				remainded= remainded % bitsMax
-				if remainded == 0:
-				  remainded=bitsMax
+		toSend = length_OToN(data2Tx_compressed, charLength, bitsMax)
 
 		final_c = time.time()
 		print("Compression time: " + str(final_c-start_c))
 
 		#Now we conform all the data packets in a list
-		for i in range (0, len(toSend), dataSize):
-			if((i+dataSize) < len(toSend)):
-				packets.append(toSend[i:i+dataSize])
-			else:
-				packets.append(toSend[i:])
-			#numberofPackets += 1.
+		packets=dataPackets(toSend)
 		numberofPackets=len(packets)
 
 		#Start sendind
-		radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax) + str(slidingWindowsLength))
-		timeout = time.time() + time_ack
-		radio_Rx.startListening()
-		str_Handshake = ""
-		print("Waiting ACK")
-
 		#While we don't receive the handshake ack we keep trying
-		while not (handshakeAck_received):
+		handshakeF(numberofPackets, listLengh, listMax, slidingWindowsLength, time_ack, radio_Rx, radio_Tx)
 
-			if radio_Rx.available(0):
-				radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
-				radio_Rx.openReadingPipe(0, pipe_Rx)
-				print("Something Received")
-
-				for c in range(0, len(handshake)):
-					str_Handshake = str_Handshake + chr(handshake[c])
-
-				#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
-				if(list(str_Handshake) != list("ACK")):	
-					radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax)+"," + str(slidingWindowsLength))
-					timeout = time.time() + time_ack
-					print("Handshake Message Lost")
-					str_Handshake = ""
-				else:
-					print("Handshake done")
-					handshakeAck_received = 1
-
-			#If an established time passes and we have not received anything we retransmit the handshake packet
-			if((time.time()) > timeout):
-				print("No Handshake ACK received resending message")
-				radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax)+"," + str(slidingWindowsLength))
-				timeout = time.time() + time_ack
-
-		#messageSent = ""
 		#We iterate over every packet to be sent
-		suma = 0
-		messageRecived = 0
-		pending=list(range(numberofPackets))
-		while messageRecived<numberofPackets:
-			
-			for x in range(0, min(slidingWindowsLength,len(pending))):
-				
-				flag = chr(ord(original_flag) + pending(x))
-				message2Send = list(flag) + list(packets(x))
-				radio_Tx.write(message2Send)
-				#time.sleep(1)
-	#MIRAR TIEMPOS
-	dsasda aisdh adsuih ads 
-	#MIRAR TIEMPOS
-				timeout = time.time() + time_ack
-				radio_Rx.startListening()
-				str_ack = ""
-	
-				#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
-				while (1):
-					if radio_Rx.available(0):
-						radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
-						
-						for c in range(0,2):
-						str_ack = str_ack + chr(ack[c])
-						
-						if (list(str_ack)!=(list("ACK")))
-						else:
-							for c in range(3, len(ack)):
-								if ack[2*c+1]==1:	
-									pending.remove(ack[2*c])
-									messageRecived+=1
-									
-							#ACK has been received
-							break	
-					#If an established time passes and we have not received anything we retransmit the data packet
-					if((time.time()) > timeout):
-						#print("No Data ACK received resending message")
-						suma += 1
-						break
+		sendingPackets(packets,windowsWindows,timeout,radio_Rx, radio_Tx)
 						
 		final = time.time()
 		totalTime = final - start
