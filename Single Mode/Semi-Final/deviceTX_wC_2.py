@@ -125,7 +125,7 @@ try:
 		###############################################################################################################################
 
 		#Read file to transmit
-		inFile = open("MTP_Prev.txt", "rb")
+		inFile = open("ElQuijote.txt", "rb")
 		data2Tx = inFile.read()
 		inFile.close()
 
