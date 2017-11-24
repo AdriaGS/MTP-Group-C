@@ -59,11 +59,12 @@ try:
 				strJoin = (strJoin<<OriginalLength) + ord(myQueue.get())
 				x = x + OriginalLength
 				j = j + 1;
-			else:
+			elif (x >= NewLength):
 				myQueue2.put(strJoin>>(x-NewLength))
 				strJoin = strJoin & (2**(x-NewLength)-1)
 				i += 1
 				x = x - NewLength
+			myQueue.task_done()
 	def decompresionOnTheGo	(listMax):	
 		##Mirar si hay conflicots con windows o donde sea por no usar binario.
 		outputFile = open("ReceivedFileCompressed2.txt", "a")
@@ -79,6 +80,7 @@ try:
 		# due to string concatenation in a loop
 		w = chr(myQueue2.get())
 		outputFile.write(w)
+		myQueue2.task_done()
 		while(1):
 			k=myQueue2.get()
 			if k in dictionary:
@@ -88,6 +90,7 @@ try:
 			else:
 				raise ValueError('Bad compressed k: %s' % k)
 			outputFile.write(entry)
+			myQueue2.task_done()
 			# Add w+entry[0] to the dictionary.
 			dictionary[dict_size] = w + entry[0]
 			dict_size += 1
@@ -299,7 +302,11 @@ try:
 		
 		#SlidingWindows
 		windowWindow=2
-
+		
+		#Threads		 
+		global myQueue
+		global myQueue2
+				    
 		#We listen for the control packet handshake		
 		#listLength, listMax, slidingWindowsLength, numberOfPackets = handshakeF(radio_Tx,radio_Rx,time_ack)
 
@@ -310,7 +317,11 @@ try:
 		
 		#recive packets
 		recivingPackets(radio_Tx,radio_Rx,windowWindow,slidingWindowsLength)
-
+		
+		myQueue.join()
+		myQueue2.join()
+		thread.stop()
+		thread2.stop()
 		final = time.time()
 		totalTime = final - start
 		print("Total time: " + str(totalTime))
