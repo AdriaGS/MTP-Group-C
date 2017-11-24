@@ -2,11 +2,11 @@ try:
     from lib_nrf24 import NRF24
     from math import *
     import time
-    #import spidev
+    import spidev
     import sys
     import os
     import numpy as np
-    #import RPi.GPIO as GPIO
+    import RPi.GPIO as GPIO
     def compress(uncompressed):
         """Compress a string to a list of output symbols."""
         # Build the dictionary.
@@ -183,7 +183,7 @@ try:
                 radio_Tx.write(message2Send)
                 
             #MIRAR TIEMPOS
-            #dsasda aisdh adsuih ads 
+            #
             #MIRAR TIEMPOS
             timeout = time.time() + time_ack
             radio_Rx.startListening()
