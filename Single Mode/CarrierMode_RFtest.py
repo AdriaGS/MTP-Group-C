@@ -22,12 +22,15 @@ try:
     time.sleep(150 / 1000000.0) #wait 150 us
     
     radio.begin(1, 22)
-    radio.ce(NRF24.HIGH) # assure ce is high
     radio.setPALevel(NRF24.PA_MIN) 
     radio.setChannel(100)
     radio.disableCRC();
     radio.printDetails()
-
+    
+    while True
+        radio.ce(NRF24.HIGH) # assure ce is high constanly to keep carrier
+    
+    
         
 except KeyboardInterrupt:
 
