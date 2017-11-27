@@ -63,21 +63,39 @@ try:
 			w = entry
 		return result.getvalue()
 
-	def decompressionOnTheGo(compressedFile, multList, multList_extended, value_n):
+	def decompressionOnTheGo(compressedList, listMax):
+
+		compressedString = ""
+		for c in range(0, len(compressedList)):
+			compressedString += chr(compressedList[c])
+
+		i = 0
+		#compressedList += chr(0)
+		strJoin = 0
+		compde = []
+		x = 0
+		j = 0
+		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
+		charLength = 8
+
+		while i < (len(compressedString)*8/bitsMax):
+		  if x < bitsMax:
+			strJoin = (strJoin<<charLength) + ord(compressedString[j])
+			x = x + charLength
+			j = j + 1;
+		  else:
+			compde.append(strJoin>>(x-bitsMax))
+			strJoin = strJoin & (2**(x-bitsMax)-1)
+			i += 1
+			x = x - bitsMax
+
+		str_decompressed = decompress(compde)
 
 		#Open file to save the transmitted data
-		outputFile = open("Rx-File_SM-GroupC.txt", "wb")
-
-		if(value_n > 2):
-			multList_extended = [ik * 256 for ik in multList_extended]
-			multList = [sum(xk) for xk in zip(multList, multList_extended)]
-
-		new_mulData = [il * 256 for il in multList]
-		toDecompress = [sum(x) for x in zip(compressedFile, new_mulData)]
-
-		str_decompressed = decompress(toDecompress)
+		outputFile = open("RxFileMTP-GroupC-SR.txt", "wb")
 		outputFile.write(str_decompressed)
 		outputFile.close()
+
 
 	def led_blink(gpio_value, stop_event):
 
@@ -90,7 +108,7 @@ try:
 	def main():
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(22, GPIO.OUT)
-		GPIO.setup(24, GPIO.OUT)
+		GPIO.setup(23, GPIO.OUT)
     	GPIO.setup(2, GPIO.OUT) #LED 1 TX_RX Running
     	GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
     	GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #ON or OFF
@@ -98,7 +116,7 @@ try:
     	GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Network Mode
 
 		GPIO.output(22, 1)
-		GPIO.output(24, 1)
+		GPIO.output(23, 1)
 
 		TX0_RX1 = True
 
@@ -124,14 +142,14 @@ try:
 				pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 				pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 				payloadSize = 32
-				channel_TX = 0x40
-				channel_RX = 0x45
+				channel_TX = 40
+				channel_RX = 50
 
 				#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 				radio_Tx = NRF24(GPIO, spidev.SpiDev())
 				radio_Rx = NRF24(GPIO, spidev.SpiDev())
 				radio_Tx.begin(0, 22)
-				radio_Rx.begin(1, 24)
+				radio_Rx.begin(1, 23)
 
 				#We set the Payload Size to the limit which is 32 bytes
 				radio_Tx.setPayloadSize(payloadSize)
@@ -142,12 +160,14 @@ try:
 				radio_Rx.setChannel(channel_RX)
 
 				#We set the Transmission Rate
-				radio_Tx.setDataRate(NRF24.BR_250KBPS)
-				radio_Rx.setDataRate(NRF24.BR_250KBPS)
+				#radio_Tx.setDataRate(NRF24.BR_250KBPS)
+				#radio_Rx.setDataRate(NRF24.BR_250KBPS)
+				radio_Tx.setDataRate(NRF24.BR_2MBPS)
+				radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
 				#Configuration of the power level to be used by the transceiver
-				radio_Tx.setPALevel(NRF24.PA_MIN)
-				radio_Rx.setPALevel(NRF24.PA_MIN)
+				radio_Tx.setPALevel(NRF24.PA_MAX)
+				radio_Rx.setPALevel(NRF24.PA_MAX)
 
 				#We disable the Auto Acknowledgement
 				radio_Tx.setAutoAck(False)
@@ -157,7 +177,7 @@ try:
 
 				#Open the writing and reading pipe
 				radio_Tx.openWritingPipe(pipe_Tx)
-				radio_Rx.openReadingPipe(1, pipe_Rx)
+				radio_Rx.openReadingPipe(0, pipe_Rx)
 
 				#We print the configuration details of both transceivers
 				radio_Tx.printDetails()
@@ -170,14 +190,14 @@ try:
 				###############################################################################################################################
 
 				#Read file to transmit
-				#inFile = open("SampleTextFile1Mb.txt", "rb")
 				inFile = open("MTP_Prev.txt", "rb")
 				data2Tx = inFile.read()
 				inFile.close()
 
 				#flag variables
-				original_flag_data = 'A'
+				original_flag = 'A'
 				flag = ""
+				ctrl_flag_n = 0
 				flag_n = 0
 
 				#packet realted variables
@@ -186,16 +206,19 @@ try:
 				dataControlSize = payloadSize - overhead
 				#Data Packets
 				packets = []
+				finalData = ""
 				numberofPackets = 0
 
 				#ACK related variables
 				ack = []
 				handshake = []
+				ctrl_ack = []
 				ack_received = 0
+				controlAck_received = 0
 				handshakeAck_received = 0
 
 				#Time variables
-				time_ack = 0.5
+				time_ack = 0.1
 
 				#LED Blinking thread
 				led_1 = Event()
@@ -204,61 +227,65 @@ try:
 				start_c = time.time()
 				#Compression of the data to transmit into data2Tx_compressed
 				data2Tx_compressed = compress(data2Tx)
-				n=len(bin(max(data2Tx_compressed)))-2
 
-				#We create the string with the packets needed to decompress the file transmitted
-				controlList_extended = []
-				controlList = []
-				
-				for val in data2Tx_compressed:
-					division = int(val/256)
-					controlList.append(division)
+				#Compression #########################################################################################################
+				listLengh = len(data2Tx_compressed)
+				listMax = max(data2Tx_compressed)
+				bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
+				charLength = 8
+				data2Tx_compressed.append(0)
 
-				if(n > 16):
-					for val in controlList_mid:
-						division = int(val/256)
-						controlList_extended.append(division)
+				remainded = bitsMax
+				pad = bitsMax - charLength
+
+				toSend = ""
+				i = 0
+
+				while i < listLengh :
+					compJoin = (data2Tx_compressed[i] << bitsMax) + data2Tx_compressed[i+1]
+					toSend += chr((compJoin>>(pad+remainded))%(2**charLength))
+					remainded = remainded - charLength
+					if remainded <=0:
+						i=i+1
+						remainded= remainded % bitsMax
+						if remainded == 0:
+						  remainded=bitsMax
 
 				final_c = time.time()
 				print("Compression time: " + str(final_c-start_c))
 
-				data2Send = []
-				for iterator in range(0, len(controlList)):
-					data2Send.append(data2Tx_compressed[iterator])
-					data2Send.append(controlList[iterator])
-					if(n > 16):
-						data2Send.append(controlList_extended[iterator])
+				########################################################################################################################
 
 				#Now we conform all the data packets in a list
-				for i in range (0, len(data2Send), dataSize):
-					if((i+dataSize) < len(data2Send)):
-						packets.append(data2Send[i:i+dataSize])
+				for i in range (0, len(toSend), dataSize):
+					if((i+dataSize) < len(toSend)):
+						packets.append(toSend[i:i+dataSize])
 					else:
-						packets.append(data2Send[i:])
+						packets.append(toSend[i:])
 					numberofPackets += 1
 
-
-				#Start time
-				start = time.time()
-				radio_Tx.write(str(numberofPackets) + "," + str(n))
+				#Start sendind
+				radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 				timeout = time.time() + time_ack
 				radio_Rx.startListening()
 				str_Handshake = ""
+				led_thread.start()
+				print("Waiting ACK")
 
 				#While we don't receive the handshake ack we keep trying
 				while not (handshakeAck_received):
 
 					if radio_Rx.available(0):
 						radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
+						radio_Rx.openReadingPipe(0, pipe_Rx)
+						print("Something Received")
 
 						for c in range(0, len(handshake)):
 							str_Handshake = str_Handshake + chr(handshake[c])
 
-						print(str_Handshake)
-
 						#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
 						if(list(str_Handshake) != list("ACK")):	
-							radio_Tx.write(str(numberofPackets) + "," + str(n))
+							radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 							timeout = time.time() + time_ack
 							print("Handshake Message Lost")
 							str_Handshake = ""
@@ -267,23 +294,21 @@ try:
 							handshakeAck_received = 1
 
 					#If an established time passes and we have not received anything we retransmit the handshake packet
-					if((time.time() + 0.01) > timeout):
+					if((time.time()) > timeout):
 						print("No Handshake ACK received resending message")
-						radio_Tx.write(str(numberofPackets) + "," + str(n))
+						radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
 						timeout = time.time() + time_ack
 
-				led_thread.start()
+				messageSent = ""
 				#We iterate over every packet to be sent
-				dec_ready = 0
+				suma = 0
 				for message in packets:
 
-					flag = chr(ord(original_flag_data) + flag_n)
-					message2Send = list(flag) + message
+					messageSent += message
+					flag = chr(ord(original_flag) + flag_n)
+					message2Send = list(flag) + list(message)
 					radio_Tx.write(message2Send)
-
-					if(dec_ready == 200):
-						time.sleep(0.3)
-						dec_ready = 0
+					#time.sleep(1)
 
 					timeout = time.time() + time_ack
 					radio_Rx.startListening()
@@ -297,47 +322,51 @@ try:
 							for c in range(0, len(ack)):
 								str_ack = str_ack + chr(ack[c])
 
+							#print(str_ack)
+
 							#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
 							if(list(str_ack) != (list("ACK") + list(flag))):
-								radio_Tx.write(list(flag) + list(message))
+								radio_Tx.write(message2Send)
 								timeout = time.time() + time_ack
 								#print("Data ACK received but not the expected one --> resending message")
+								suma += 1
 								str_ack = ""
 							else:
 								ack_received = 1
 
 						#If an established time passes and we have not received anything we retransmit the data packet
-						if((time.time() + 0.01) > timeout):
+						if((time.time()) > timeout):
 							#print("No Data ACK received resending message")
+							suma += 1
 							radio_Tx.write(message2Send)
 							timeout = time.time() + time_ack
-					
-					dec_ready = 0
+							
 					ack_received = 0
 					flag_n = (flag_n + 1) % 10
 
-
 				final = time.time()
 				totalTime = final - start
-				led_1.set()
 				print(totalTime)
+				print(messageSent == toSend)
+				print("Total retransmissions: " + str(suma))
+				led_1.set()
 
 				GPIO.output(3, 1)
 				GPIO.output(22, 0)
-				GPIO.output(24, 0)
+				GPIO.output(23, 0)
 
 			else:
 				print("Receiver")
 				pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 				payloadSize = 32
-				channel_RX = 0x40
-				channel_TX = 0x45
+				channel_RX = 40
+				channel_TX = 50
 
 				#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 				radio_Tx = NRF24(GPIO, spidev.SpiDev())
 				radio_Rx = NRF24(GPIO, spidev.SpiDev())
 				radio_Tx.begin(0, 22)
-				radio_Rx.begin(1, 24)
+				radio_Rx.begin(1, 23)
 
 				#We set the Payload Size to the limit which is 32 bytes
 				radio_Tx.setPayloadSize(payloadSize)
@@ -348,12 +377,14 @@ try:
 				radio_Rx.setChannel(channel_RX)
 
 				#We set the Transmission Rate
-				radio_Tx.setDataRate(NRF24.BR_250KBPS)
-				radio_Rx.setDataRate(NRF24.BR_250KBPS)
+				#radio_Tx.setDataRate(NRF24.BR_250KBPS)
+				#radio_Rx.setDataRate(NRF24.BR_250KBPS)
+				radio_Tx.setDataRate(NRF24.BR_2MBPS)
+				radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
 				#Configuration of the power level to be used by the transceiver
-				radio_Tx.setPALevel(NRF24.PA_MIN)
-				radio_Rx.setPALevel(NRF24.PA_MIN)
+				radio_Tx.setPALevel(NRF24.PA_MAX)
+				radio_Rx.setPALevel(NRF24.PA_MAX)
 
 				#We disable the Auto Acknowledgement
 				radio_Tx.setAutoAck(False)
@@ -363,7 +394,7 @@ try:
 
 				#Open the writing and reading pipe
 				radio_Tx.openWritingPipe(pipes[1])
-				radio_Rx.openReadingPipe(1, pipes[0])
+				radio_Rx.openReadingPipe(0, pipes[0])
 
 				#We print the configuration details of both transceivers
 				radio_Tx.printDetails()
@@ -379,25 +410,23 @@ try:
 				original_flag_data = 'A'
 				flag = ""
 				flag_n = 0
+				ctrl_flag_n = 0
 
 				#Packet related variables
 				frame = []
 				handshake_frame = []
 				compressed = []
-				multData = []
-				multData_extended = []
+				str_compressed = ""
 
 				#ACK related variables
-				time_ack = 0.5
+				time_ack = 0.1
 				receivedPacket = 0
 				receivedHandshakePacket = 0
-				receivedLastControlPacket = 0
 
 				#LED Blinking thread
 				led_1 = Event()
 				led_thread = Thread(target = led_blink, args = (2, led_1))
 
-				start = time.time()
 				#We listen for the control packet
 				radio_Rx.startListening()
 				while not (receivedHandshakePacket):
@@ -405,108 +434,84 @@ try:
 
 					if radio_Rx.available(0):
 						radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
+						print("Something received")
 
 						for c in range(0, len(handshake_frame)):
 							str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
 
 						#print("Handshake frame: " + str_Controlframe)
-						if(len(str_Handshakeframe.split(",")) == 2):
+						if(len(str_Handshakeframe.split(",")) == 3):
 							print("Sending ACK")
 							radio_Tx.write(list("ACK"))
-							numberOfPackets, n = str_Handshakeframe.split(",")
-							n = int(n)
-							indexing_0 = range(0, 31, int(n/8.5)+1)[0:]
-							indexing_1 = range(1, 31, int(n/8.5)+1)[0:]
-							if(n > 16):
-								indexing_2 = range(2, 31, 3)[0:]
+							numberOfPackets, listLength, listMax = str_Handshakeframe.split(",")
+							listLength = int(listLength)
+							listMax = int(listMax)
 						
 						else:
 							if(chr(handshake_frame[0]) == original_flag_data):
+								print("First data packet received")
+								led_thread.start()
 								handshake_frame = handshake_frame[1:len(handshake_frame)]
-								compressed.extend([handshake_frame[i] for i in indexing_0])
-								multData.extend([handshake_frame[i] for i in indexing_1])
-								if(n > 16):
-									multData_extended.extend([handshake_frame[i] for i in indexing_2])
+								compressed.extend(handshake_frame)
+
 								radio_Tx.write(list("ACK") + list(original_flag_data))
 								flag_n = (flag_n + 1) % 10
-								nextIndexing = 1
 								receivedHandshakePacket = 1
 
-				print("Handshake done")
 				print("The number of data packets that will be transmitted: " + numberOfPackets)
-				print("maximum value of list: " + str(n))
+				print("Length of list: " + str(listLength))
+				print("maximum value of list: " + str(listMax))
+				bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 
-				dec_ready = 0
-				add = 0
-				led_thread.start()
-				for i in range(0,int(numberOfPackets)-1):
+				radio_Rx.startListening()
+				suma = 0
+
+				for i in range(0, int(numberOfPackets)-1):
 
 					timeout = time.time() + time_ack
 					flag = chr(ord(original_flag_data) + flag_n)
 
 					while not (receivedPacket):
+
 						if radio_Rx.available(0):
 							radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
+							#print(frame)
+
 							if(chr(frame[0]) == flag):
+								compressed.extend(frame[1:len(frame)])
 
-								frame = frame[1:len(frame)]
-								if (nextIndexing == 0):
-
-									compressed.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
-									multData.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
-									if(n > 16):
-										multData_extended.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
-									nextIndexing = (nextIndexing + 1) % (int(n/8.5)+1)
-
-								elif (nextIndexing == 1):
-
-									if(n > 16):
-										compressed.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
-										multData.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
-										multData_extended.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
-									else:
-										compressed.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
-										multData.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
-									nextIndexing = (nextIndexing + 1) % (int(n/8.5)+1)
-
-								else:
-									compressed.extend([frame[i] for i in [i for i in indexing_1 if i < len(frame)]])
-									multData.extend([frame[i] for i in [i for i in indexing_2 if i < len(frame)]])
-									multData_extended.extend([frame[i] for i in [i for i in indexing_0 if i < len(frame)]])
-									nextIndexing = (nextIndexing + 1) % (int(n/8.5)+1)
-
-								if(dec_ready == 900):
-									compressed = list(map(int, compressed))
-									multData = list(map(int, multData))
-									if(n > 16):
-										multData_extended = list(map(int, multData_extended))
-									thread = Thread(target = decompressionOnTheGo, args = (compressed, multData, multData_extended, int(n/8.5) + 1))
+								if (((len(compressed)*8) % (bitsMax*300)) == 0):
+									print("On the way to win")
+									thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
 									thread.start()
-									#decompressionOnTheGo(compressed, multData, multData_extended, int(n/8.5) + 1)
-									add += 50
-									dec_ready = 0
-									print("On the way to the win")
 								radio_Tx.write(list("ACK") + list(flag))
 								receivedPacket = 1
 							else:
-								#print("Wrong message -> asking for retransmission")
+								if ((suma % 10) == 0):
+									print("Number of retransmissions increasing: " + str(suma))
+								suma += 1
 								if flag_n == 0:
 									radio_Tx.write(list("ACK") + list('J'))
 								else:
 									radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
 								timeout = time.time() + time_ack
-					dec_ready += 1
+
 					flag_n = (flag_n + 1) % 10
 					receivedPacket = 0
 
-				decompressionOnTheGo(compressed, multData, multData_extended, int(n/8.5) + 1)
+				thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
+				thread.start()
+
 				final = time.time()
-				print("Total time: " + str(final-start))
+				totalTime = final - start
+				print("Total time: " + str(totalTime))
 				led_1.set()
+
+				print("Number of retransmissions = " + str(suma))
 
 				GPIO.output(3, 1)
 				GPIO.output(22, 0)
-				GPIO.output(24, 0)
+				GPIO.output(23, 0)
 
 		else:
 			#Network Mode Code
@@ -519,5 +524,5 @@ try:
 
 except KeyboardInterrupt:
 	GPIO.output(22,0)
-	GPIO.output(24,0)
+	GPIO.output(23,0)
 	GPIO.cleanup()
