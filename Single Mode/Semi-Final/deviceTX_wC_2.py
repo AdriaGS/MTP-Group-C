@@ -228,121 +228,85 @@ try:
 		###############################################################################################################################
 		###############################################################################################################################
 		###############################################################################################################################
-		repeatCode = 1
+		#While we don't receive the handshake ack we keep trying
+		while not (handshakeAck_received):
 
-		while(repeatCode):
-			#While we don't receive the handshake ack we keep trying
-			while not (handshakeAck_received):
+			if radio_Rx.available(0):
+				radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
+				radio_Rx.openReadingPipe(0, pipe_Rx)
+				print("Something Received")
 
-				if radio_Rx.available(0):
-					radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
-					radio_Rx.openReadingPipe(0, pipe_Rx)
-					print("Something Received")
+				for c in range(0, len(handshake)):
+					str_Handshake = str_Handshake + chr(handshake[c])
 
-					for c in range(0, len(handshake)):
-						str_Handshake = str_Handshake + chr(handshake[c])
-
-					#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
-					if(list(str_Handshake) != list("ACK")):	
-						radio_Tx.write(handshakePacket)
-						timeout = time.time() + time_ack
-						print("Handshake Message Lost")
-						str_Handshake = ""
-					else:
-						print("Handshake done")
-						handshakeAck_received = 1
-
-				#If an established time passes and we have not received anything we retransmit the handshake packet
-				if((time.time()) > timeout):
-					print("No Handshake ACK received resending message")
-					firstTime_retransmissions += 1
+				#If the received ACK does not match the expected one we retransmit, else we set the received handshake ack to 1
+				if(list(str_Handshake) != list("ACK")):	
 					radio_Tx.write(handshakePacket)
 					timeout = time.time() + time_ack
+					print("Handshake Message Lost")
+					str_Handshake = ""
+				else:
+					print("Handshake done")
+					handshakeAck_received = 1
 
-				if(firstTime_retransmissions > 200 and time.time() < (final_c + 5)):
-					os.execv(sys.executable, ['python'] + sys.argv)
-
-			messageSent = ""
-
-			###############################################################################################################################
-			###############################################################################################################################
-			###############################################################################################################################
-
-			#We iterate over every packet to be sent
-			suma = 0
-			for message in packets:
-
-				messageSent += message
-				flag = chr(ord(original_flag) + flag_n)
-				message2Send = list(flag) + list(message)
-				radio_Tx.write(message2Send)
-				#time.sleep(1)
-
+			#If an established time passes and we have not received anything we retransmit the handshake packet
+			if((time.time()) > timeout):
+				print("No Handshake ACK received resending message")
+				firstTime_retransmissions += 1
+				radio_Tx.write(handshakePacket)
 				timeout = time.time() + time_ack
-				radio_Rx.startListening()
-				str_ack = ""
 
-				#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
-				while not (ack_received):
-					if radio_Rx.available(0):
-						radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
+			if(firstTime_retransmissions > 200 and time.time() < (final_c + 5)):
+				os.execv(sys.executable, ['python'] + sys.argv)
 
-						for c in range(0, len(ack)):
-							str_ack = str_ack + chr(ack[c])
+		messageSent = ""
 
-						#print(str_ack)
+		###############################################################################################################################
+		###############################################################################################################################
+		###############################################################################################################################
 
-						#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
-						if(list(str_ack) != (list("ACK") + list(flag))):
-							radio_Tx.write(message2Send)
-							timeout = time.time() + time_ack
-							#print("Data ACK received but not the expected one --> resending message")
-							suma += 1
-							str_ack = ""
+		#We iterate over every packet to be sent
+		suma = 0
+		for message in packets:
 
-						elif(str_ack == "OK"):
-							receivedChecksum = 1
-							repeatCode = 0
-							alreadyReceivedChecksum = 1
+			messageSent += message
+			flag = chr(ord(original_flag) + flag_n)
+			message2Send = list(flag) + list(message)
+			radio_Tx.write(message2Send)
+			#time.sleep(1)
 
-						elif(str_ack == "NOTOK"):
-							receivedChecksum = 1
-							alreadyReceivedChecksum = 1
+			timeout = time.time() + time_ack
+			radio_Rx.startListening()
+			str_ack = ""
 
-						else:
-							ack_received = 1
+			#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
+			while not (ack_received):
+				if radio_Rx.available(0):
+					radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
 
-					#If an established time passes and we have not received anything we retransmit the data packet
-					if((time.time()) > timeout):
-						#print("No Data ACK received resending message")
-						suma += 1
+					for c in range(0, len(ack)):
+						str_ack = str_ack + chr(ack[c])
+
+					#If the received ACK does not match the expected one we retransmit, else we set the received data ack to 1
+					if(list(str_ack) != (list("ACK") + list(flag))):
 						radio_Tx.write(message2Send)
 						timeout = time.time() + time_ack
-						
-				ack_received = 0
-				flag_n = (flag_n + 1) % 10
+						#print("Data ACK received but not the expected one --> resending message")
+						suma += 1
+						str_ack = ""
 
+					else:
+						ack_received = 1
 
-			timeout = time.time() + 1
-			#We check that the received and decompressed file corresponds to the transmitted one
-			while not(receivedChecksum):
-				if(alreadyReceivedChecksum == 1):
-					break
-				if radio_Rx.available(0):
-					radio_Rx.read(last_ack, radio_Rx.getDynamicPayloadSize())
-
-					for c in range(0, len(last_ack)):
-							checksum_str = checksum_str + chr(last_ack[c])
-
-					if(checksum_str == "OK"):
-						receivedChecksum = 1
-						repeatCode = 0
-
-					elif(checksum_str == "NOTOK"):
-						receivedChecksum = 1
-
-				if(time.time() > timeout):
-					break
+				#If an established time passes and we have not received anything we retransmit the data packet
+				if((time.time()) > timeout):
+					#print("No Data ACK received resending message")
+					suma += 1
+					radio_Tx.write(message2Send)
+					timeout = time.time() + time_ack
+					
+			ack_received = 0
+			flag_n = (flag_n + 1) % 10
 
 		final = time.time()
 		totalTime = final - start

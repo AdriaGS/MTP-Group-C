@@ -156,108 +156,98 @@ try:
 		###############################################################################################################################
 		###############################################################################################################################
 		###############################################################################################################################
-		repeatCode = 1
+			
+		#We listen for the control packet
+		radio_Rx.startListening()
+		while not (receivedHandshakePacket):
+			str_Handshakeframe = ""
 
-		while(repeatCode):
-			#We listen for the control packet
-			radio_Rx.startListening()
-			while not (receivedHandshakePacket):
-				str_Handshakeframe = ""
+			if radio_Rx.available(0):
+				radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
+				print("Something received")
+
+				for c in range(0, len(handshake_frame)):
+					str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
+
+				#print("Handshake frame: " + str_Controlframe)
+				if(len(str_Handshakeframe.split(",")) == 4):
+					print("Sending ACK")
+					radio_Tx.write(list("ACK"))
+					checksum, numberOfPackets, listLength, listMax = str_Handshakeframe.split(",")
+					listLength = int(listLength)
+					listMax = int(listMax)
+				
+				else:
+					if(chr(handshake_frame[0]) == original_flag_data):
+						print("First data packet received")
+						handshake_frame = handshake_frame[1:len(handshake_frame)]
+						compressed.extend(handshake_frame)
+
+						radio_Tx.write(list("ACK") + list(original_flag_data))
+						flag_n = (flag_n + 1) % 10
+						receivedHandshakePacket = 1
+
+		print("The number of data packets that will be transmitted: " + numberOfPackets)
+		print("Length of list: " + str(listLength))
+		print("maximum value of list: " + str(listMax))
+		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
+
+		###############################################################################################################################
+		###############################################################################################################################
+		###############################################################################################################################
+
+		radio_Rx.startListening()
+		suma = 0
+
+		for i in range(0, int(numberOfPackets)-1):
+
+			timeout = time.time() + time_ack
+			flag = chr(ord(original_flag_data) + flag_n)
+
+			while not (receivedPacket):
 
 				if radio_Rx.available(0):
-					radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
-					print("Something received")
+					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
+					#print(frame)
 
-					for c in range(0, len(handshake_frame)):
-						str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
+					if(chr(frame[0]) == flag):
+						compressed.extend(frame[1:len(frame)])
 
-					#print("Handshake frame: " + str_Controlframe)
-					if(len(str_Handshakeframe.split(",")) == 4):
-						print("Sending ACK")
-						radio_Tx.write(list("ACK"))
-						checksum, numberOfPackets, listLength, listMax = str_Handshakeframe.split(",")
-						listLength = int(listLength)
-						listMax = int(listMax)
-					
+						if (((len(compressed)*8) % (bitsMax*300)) == 0):
+							print("On the way to win")
+							thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
+							thread.start()
+						radio_Tx.write(list("ACK") + list(flag))
+						receivedPacket = 1
 					else:
-						if(chr(handshake_frame[0]) == original_flag_data):
-							print("First data packet received")
-							handshake_frame = handshake_frame[1:len(handshake_frame)]
-							compressed.extend(handshake_frame)
-
-							radio_Tx.write(list("ACK") + list(original_flag_data))
-							flag_n = (flag_n + 1) % 10
-							receivedHandshakePacket = 1
-
-			print("The number of data packets that will be transmitted: " + numberOfPackets)
-			print("Length of list: " + str(listLength))
-			print("maximum value of list: " + str(listMax))
-			bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
-
-			###############################################################################################################################
-			###############################################################################################################################
-			###############################################################################################################################
-
-			radio_Rx.startListening()
-			suma = 0
-
-			for i in range(0, int(numberOfPackets)-1):
-
-				timeout = time.time() + time_ack
-				flag = chr(ord(original_flag_data) + flag_n)
-
-				while not (receivedPacket):
-
-					if radio_Rx.available(0):
-						radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-						#print(frame)
-
-						if(chr(frame[0]) == flag):
-							compressed.extend(frame[1:len(frame)])
-
-							if (((len(compressed)*8) % (bitsMax*300)) == 0):
-								print("On the way to win")
-								thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
-								thread.start()
-							radio_Tx.write(list("ACK") + list(flag))
-							receivedPacket = 1
+						if ((suma % 10) == 0):
+							print("Number of retransmissions increasing: " + str(suma))
+						suma += 1
+						if flag_n == 0:
+							radio_Tx.write(list("ACK") + list('J'))
 						else:
-							if ((suma % 10) == 0):
-								print("Number of retransmissions increasing: " + str(suma))
-							suma += 1
-							if flag_n == 0:
-								radio_Tx.write(list("ACK") + list('J'))
-							else:
-								radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
-							timeout = time.time() + time_ack
+							radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
+						timeout = time.time() + time_ack
 
-				flag_n = (flag_n + 1) % 10
-				receivedPacket = 0
+			flag_n = (flag_n + 1) % 10
+			receivedPacket = 0
 
-			###############################################################################################################################
-			###############################################################################################################################
-			###############################################################################################################################
+		###############################################################################################################################
+		###############################################################################################################################
+		###############################################################################################################################
 
-			time.sleep(1)
+		time.sleep(1)
 
-			thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
-			thread.start()
+		thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
+		thread.start()
 
-			#Compute Cksum
-			textFile = "RxFile-MTPGroupC.txt"
-			command = "cksum " + textFile + " > checksum.txt"
-			os.system(command)
-			checksumFile = open("checksum.txt", 'rb')
-			checksumRx = checksumFile.read()
-			checksumRx = checksumRx[0:15]
-
-			if(checksum == checksumRx):
-				last_message = "OK"
-				repeatCode = 0
-			else:
-				last_message = "NOTOK"
-
-			radio_Tx.write(last_message)
+		#Compute Cksum
+		textFile = "RxFile-MTPGroupC.txt"
+		command = "cksum " + textFile + " > checksum.txt"
+		os.system(command)
+		checksumFile = open("checksum.txt", 'rb')
+		checksumRx = checksumFile.read()
+		print(checksumRx)
 
 		final = time.time()
 		totalTime = final - start
