@@ -1,13 +1,8 @@
 try:
     import RPi.GPIO as GPIO
     from lib_nrf24 import NRF24
-    import math
     import time
     import spidev
-    import sys
-    import os.path
-    import pickle
-    import lzw
     import numpy as np
     from threading import Thread
     import queue

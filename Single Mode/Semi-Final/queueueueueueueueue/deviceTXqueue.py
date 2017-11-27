@@ -34,26 +34,6 @@ try:
         if w:
             result.append(dictionary[w])
         return result
-
-    def printSummary(file1, file2):
-        """
-        printSummary() prints out the number of bytes in the original file and in
-        the result file.
-
-        @params: two files that are to be checked.
-        @return: n/a.
-        """
-        # Checks if the files exist in the current directory.
-        if (not os.path.isfile(file1)) or (not os.path.isfile(file2)):
-            printError(0)
-
-        # Finds out how many bytes in each file.
-        f1_bytes = os.path.getsize(file1)
-        f2_bytes = os.path.getsize(file2)
-
-        sys.stderr.write(str(file1) + ': ' + str(f1_bytes) + ' bytes\n')
-        sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n')
-
     def length_OToN(compressedList, OriginalLength, NewLength ):
         i = 0
         strJoin = 0
@@ -72,8 +52,7 @@ try:
                 strJoin = strJoin & (2**(x-NewLength)-1)
                 i += 1
                 x = x - NewLength
-        return compde
-   
+        return compde   
     def init():
         start = time.time()
         GPIO.setmode(GPIO.BCM)
@@ -129,7 +108,6 @@ try:
         radio_Rx.printDetails()
         print("*------------------------------------------------------------------------------------------------------------*")
         return (radio_Tx, radio_Rx)      
-
     def main():        
         radio_Tx, radio_Rx = init()
         #VARIABLES
@@ -321,10 +299,8 @@ try:
         print(totalTime)
         print(messageSent == toSend)
         print("Total retransmissions: " + str(suma))
-
     if __name__ == '__main__':
-        main()
-        
+        main()        
 except KeyboardInterrupt:
     GPIO.output(22,0)
     GPIO.output(23,0)
