@@ -8,6 +8,7 @@ try:
     import queue
     myQueue = queue.Queue()
     myQueue2 = queue.Queue()
+
     def decompress(compressed):
         """Decompress a list of output ks to a string."""
         from cStringIO import StringIO    
@@ -59,7 +60,7 @@ try:
                 x = x - NewLength
             myQueue.task_done()
     
-    def decompresionOnTheGo    (listMax,outputFile):    
+    def decompresionOnTheGo(listMax,outputFile):    
         ##Mirar si hay conflicots con windows o donde sea por no usar binario.
         
         ##############
@@ -178,6 +179,7 @@ try:
                 timeout = time.time() + time_ack
                 radio_Rx.startListening() #pasa algo?¿
                 str_Handshake = ""
+                n = 2
             if(n==2):
                 print("STEP 2: Waiting ACK")
                 ##STEP 2
@@ -294,7 +296,7 @@ try:
         compressed = []
 
         #ACK related variables
-        time_ack = 0.2
+        time_ack = 1
         receivedPacket = 0
         receivedHandshakePacket = 0
         

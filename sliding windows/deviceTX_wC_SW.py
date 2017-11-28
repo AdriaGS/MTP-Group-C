@@ -30,6 +30,7 @@ try:
         if w:
             result.append(dictionary[w])
         return result
+
     def printSummary(file1, file2):
         """
         printSummary() prints out the number of bytes in the original file and in
@@ -45,6 +46,7 @@ try:
         f2_bytes = os.path.getsize(file2)
         sys.stderr.write(str(file1) + ': ' + str(f1_bytes) + ' bytes\n')
         sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n') 
+
     def length_OToN(compressedList, OriginalLength, NewLength ):
         i = 0
         strJoin = 0
@@ -64,6 +66,7 @@ try:
                 i += 1
                 x = x - NewLengthç
         return compde
+
     def init():
         start = time.time()
         GPIO.setmode(GPIO.BCM)
@@ -119,6 +122,7 @@ try:
         radio_Rx.printDetails()
         print("*------------------------------------------------------------------------------------------------------------*")
         return (radio_Tx, radio_Rx)      
+
     def dataPackets(toSend):
         for i in range (0, len(toSend), dataSize):
             if((i+dataSize) < len(toSend)):
@@ -126,6 +130,7 @@ try:
             else:
                 packets.append(toSend[i:])
         return packets
+
     def handshakeF(packets, radio_Rx, radio_Tx,time_ack):
         n=1
         while (1):
@@ -147,7 +152,7 @@ try:
                 ###STEP 2
                 print("STEP 2: Sending ACK")
                 #Send ack_Handshake
-                radio_Tx.write(char(254)+str(numberofPackets) + str(listLengh) + "," + str(listMax) + str(slidingWindowsLength))
+                radio_Tx.write(char(254) + "," + str(numberofPackets) + "," + str(listLengh) + "," + str(listMax) + "," + str(slidingWindowsLength))
                 timeout = time.time() + time_ack
                 n=3
             if(n==3):
@@ -170,13 +175,14 @@ try:
                         print("TIMEOUT")
                         n=2
                         break   
+
     def sendingPackets(packets,windowsWindows,timeout,radio_Rx, radio_Tx):
         suma = 0
         messageSended = 0
         pending=list(range(len(packets)))
         numWindows=0
         
-        while messageSended<numberofPackets:            
+        while messageSended < numberofPackets:            
             for x in range(0, min(slidingWindowsLength,len(pending))):                
                 flag = chr(ord(numWindows*slidingWindowsLength) + pending(x))
                 message2Send = list(flag) + list(packets(x))
@@ -208,9 +214,10 @@ try:
                         break    
                 #If an established time passes and we have not received anything we retransmit the data packet
                 if((time.time()) > timeout):
-                    #print("No Data ACK received resending message")
+                    print("No Data ACK received resending message")
                     suma += 1
-                    break     
+                    break  
+
     def main():        
 
         radio_Tx, radio_Rx = init()
@@ -247,7 +254,7 @@ try:
         controlAck_received = 0
 
         #Time variables
-        time_ack = 0.2
+        time_ack = 1
 
         start_c = time.time()
         
