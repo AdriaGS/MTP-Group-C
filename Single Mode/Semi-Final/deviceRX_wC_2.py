@@ -167,6 +167,7 @@ try:
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 				print("Something received")
+				print(handshake_frame)
 
 				for c in range(0, len(handshake_frame)):
 					str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
