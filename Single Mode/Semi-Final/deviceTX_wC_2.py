@@ -314,6 +314,7 @@ try:
 
 		GPIO.output(22,0)
 		GPIO.output(23,0)
+		GPIO.cleanup()
 
 	if __name__ == '__main__':
 		main()

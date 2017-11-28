@@ -84,6 +84,7 @@ try:
 		GPIO.setup(22, GPIO.OUT)
 		GPIO.output(22,1)
 		GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
+		GPIO.output(3, 0)
 
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
@@ -257,6 +258,7 @@ try:
 		GPIO.output(3, 1)
 		GPIO.output(22,0)
 		GPIO.output(23,0)
+		GPIO.cleanup()
 
 	if __name__ == '__main__':
 		main()
