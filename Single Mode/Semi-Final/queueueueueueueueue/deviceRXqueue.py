@@ -5,7 +5,7 @@ try:
     import spidev
     import numpy as np
     from threading import Thread
-    from queuelib import queue
+    from multiprocessing import Queue as queue
 
     myQueue = queue.Queue()
     myQueue2 = queue.Queue()
