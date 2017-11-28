@@ -85,6 +85,7 @@ try:
 		GPIO.output(22,1)
 		GPIO.setup(24, GPIO.OUT)
 		GPIO.output(24,1)
+		GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
 
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
@@ -254,6 +255,8 @@ try:
 		print("Total time: " + str(totalTime))
 
 		print("Number of retransmissions = " + str(suma))
+
+		GPIO.output(3, 1)
 
 	if __name__ == '__main__':
 		main()
