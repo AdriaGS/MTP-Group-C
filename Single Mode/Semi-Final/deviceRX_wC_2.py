@@ -90,8 +90,8 @@ try:
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 		payloadSize = 32
-		channel_RX = 63
-		channel_TX = 83
+		channel_RX = 30
+		channel_TX = 50
 
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
