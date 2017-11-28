@@ -191,7 +191,7 @@ try:
         global myQueue
         global myQueue2
         #Open file
-        outputFile = open("RxFile-MTPGroupC.txt", "wb")
+        outputFile = open("RxFile-MTPGroupC_2.txt", "wb")
         #starting threads
         thread = Thread(target = decodingOnTheGo, args = (listMax))
         thread.start()
@@ -244,14 +244,6 @@ try:
         ###############################################################################################################################
         ###############################################################################################################################
         ###############################################################################################################################
-
-        #Compute Cksum
-        textFile = "RxFile-MTPGroupC.txt"
-        command = "cksum " + textFile + " > checksum.txt"
-        os.system(command)
-        checksumFile = open("checksum.txt", 'rb')
-        checksumRx = checksumFile.read()
-        print(checksumRx)
 
         final = time.time()
         totalTime = final - start
