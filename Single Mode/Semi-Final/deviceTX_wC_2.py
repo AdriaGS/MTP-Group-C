@@ -133,13 +133,6 @@ try:
 		data2Tx = inFile.read()
 		inFile.close()
 
-		#Compute Cksum
-		command = "cksum " + textFile + " > checksum.txt"
-		os.system(command)
-		checksumFile = open("checksum.txt", 'rb')
-		checksum = checksumFile.read()
-		checksum = checksum[0:15]
-
 		#flag variables
 		original_flag = 'A'
 		flag = ""
@@ -218,7 +211,7 @@ try:
 			numberofPackets += 1
 
 		#Start sendind Handshake Packet
-		handshakePacket = checksum + "," + str(numberofPackets) + "," + str(listLengh) + "," + str(listMax)
+		handshakePacket = str(numberofPackets) + "," + str(listLengh) + "," + str(listMax)
 		radio_Tx.write(handshakePacket)
 		timeout = time.time() + time_ack
 		radio_Rx.startListening()

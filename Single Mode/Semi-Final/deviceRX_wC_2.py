@@ -172,10 +172,10 @@ try:
 					str_Handshakeframe = str_Handshakeframe + chr(handshake_frame[c])
 
 				#print("Handshake frame: " + str_Controlframe)
-				if(len(str_Handshakeframe.split(",")) == 4):
+				if(len(str_Handshakeframe.split(",")) == 3):
 					print("Sending ACK")
 					radio_Tx.write(list("ACK"))
-					checksum, numberOfPackets, listLength, listMax = str_Handshakeframe.split(",")
+					numberOfPackets, listLength, listMax = str_Handshakeframe.split(",")
 					listLength = int(listLength)
 					listMax = int(listMax)
 				
@@ -238,18 +238,8 @@ try:
 		###############################################################################################################################
 		###############################################################################################################################
 
-		time.sleep(1)
-
 		thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
 		thread.start()
-
-		#Compute Cksum
-		textFile = "RxFile-MTPGroupC.txt"
-		command = "cksum " + textFile + " > checksum.txt"
-		os.system(command)
-		checksumFile = open("checksum.txt", 'rb')
-		checksumRx = checksumFile.read()
-		print(checksumRx)
 
 		final = time.time()
 		totalTime = final - start
