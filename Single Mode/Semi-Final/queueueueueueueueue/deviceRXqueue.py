@@ -147,17 +147,6 @@ try:
         receivedPacket = 0
         receivedHandshakePacket = 0
 
-        #Queue
-        global myQueue
-        global myQueue2
-        #Open file
-        outputFile = open("RxFile-MTPGroupC.txt", "wb")
-        #starting threads
-        thread = Thread(target = decodingOnTheGo, args = (listMax))
-        thread.start()
-        thread2 = Thread(target = decompresionOnTheGo, args = (listMax, outputFile))
-        thread2.start()
-
         ###############################################################################################################################
         ###############################################################################################################################
         ###############################################################################################################################
@@ -197,6 +186,17 @@ try:
         print("Length of list: " + str(listLength))
         print("maximum value of list: " + str(listMax))
         bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
+
+        #Queue
+        global myQueue
+        global myQueue2
+        #Open file
+        outputFile = open("RxFile-MTPGroupC.txt", "wb")
+        #starting threads
+        thread = Thread(target = decodingOnTheGo, args = (listMax))
+        thread.start()
+        thread2 = Thread(target = decompresionOnTheGo, args = (listMax, outputFile))
+        thread2.start()
 
         ###############################################################################################################################
         ###############################################################################################################################
