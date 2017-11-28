@@ -65,6 +65,7 @@ try:
 	def compressionThread():
 
 		textFile = "MTP_Prev.txt"
+		global data2Tx_compressed
 
 		#Read file to transmit
 		inFile = open(textFile, "rb")
