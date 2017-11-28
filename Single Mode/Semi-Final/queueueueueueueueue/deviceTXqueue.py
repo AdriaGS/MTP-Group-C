@@ -219,7 +219,6 @@ try:
 
             if radio_Rx.available(0):
                 radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
-                radio_Rx.openReadingPipe(0, pipe_Rx)
                 print("Something Received")
 
                 for c in range(0, len(handshake)):
