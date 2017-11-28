@@ -203,7 +203,7 @@ try:
 		########################################################################################################################
 
 		#Now we conform all the data packets in a list
-		for i in xrange (0, len(toSend), dataSize):
+		for i in range (0, len(toSend), dataSize):
 			if((i+dataSize) < len(toSend)):
 				packets.append(toSend[i:i+dataSize])
 			else:
