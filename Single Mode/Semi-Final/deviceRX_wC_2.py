@@ -88,7 +88,7 @@ try:
 
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
-		payloadSize = 32
+		payloadSize = 30
 		channel_RX = 30
 		channel_TX = 50
 
