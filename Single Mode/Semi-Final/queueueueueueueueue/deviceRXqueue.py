@@ -125,10 +125,12 @@ try:
         print("*------------------------------------------------------------------------------------------------------------*")
         radio_Rx.printDetails()
         print("*------------------------------------------------------------------------------------------------------------*")
+
+        return (radio_Tx, radio_Rx)
     
     def main():        
         
-        radio_Tx,radio_Rx = init()
+        radio_Tx, radio_Rx = init()
         
         #Flag variables
         original_flag_data = 'A'
