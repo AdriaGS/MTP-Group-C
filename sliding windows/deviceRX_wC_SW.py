@@ -47,8 +47,8 @@ try:
         global myQueue2
         NewLength = int(np.ceil(np.log(listMax+1)/np.log(2)))
         OriginalLength=8
-        numPacketsOutput= len(compressedList)*OriginalLength/NewLength
-        while i < (numPacketsOutput):
+
+        while (1):
             if x < NewLength:
                 strJoin = (strJoin<<OriginalLength) + ord(myQueue.get())
                 x = x + OriginalLength
@@ -60,7 +60,7 @@ try:
                 x = x - NewLength
             myQueue.task_done()
     
-    def decompresionOnTheGo(listMax,outputFile):    
+    def decompresionOnTheGo    (listMax, outputFile):    
         ##Mirar si hay conflicots con windows o donde sea por no usar binario.
         
         ##############
@@ -177,7 +177,7 @@ try:
                 print("STEP 1: sending SYN")
                 radio_Tx.write(list(chr(255)))
                 timeout = time.time() + time_ack
-                radio_Rx.startListening() #pasa algo?¿
+                radio_Rx.startListening() #pasa algo?
                 str_Handshake = ""
                 n = 2
             if(n==2):
@@ -216,7 +216,7 @@ try:
                 print("HANDSHAKE DONE")
                 return
     
-    def recivingPackets(radio_Tx,radio_Rx,windowWindow,slidingWindowsLength,time_ack):
+    def recivingPackets(radio_Tx,radio_Rx,windowWindow,slidingWindowsLength,time_ack, outputFile):
         listLength, listMax, slidingWindowsLength, numberOfPackets = handshakeF(radio_Tx,radio_Rx,time_ack)
         print("The number of data packets that will be transmitted: " + str(numberOfPackets))
         print("Length of list: " + str(listLength))
@@ -225,7 +225,7 @@ try:
         #Threads
         thread = Thread(target = decodingOnTheGo, args = (listMax))
         thread.start()
-        thread2 = Thread(target = decompresionOnTheGo, args = (listMax))
+        thread2 = Thread(target = decompresionOnTheGo, args = (listMax, outputFile))
         thread2.start()
         
         #Start lisening
@@ -273,7 +273,7 @@ try:
                     ackPacketPrev=ackPacket
                     ackPacket=[]
                     break
-            #Ir añadiendo a la queue
+            #Ir add la queue
             while(1):
                 if (recived.has_key(numInQueue)):
                     myQueue.put(recived[numInQueue])
@@ -314,7 +314,7 @@ try:
         #listLength, listMax, slidingWindowsLength, numberOfPackets = handshakeF(radio_Tx,radio_Rx,time_ack)
         
         #Handshake + recived packets
-        thread, thread2 = recivingPackets(radio_Tx,radio_Rx,windowWindow,slidingWindowsLength)
+        thread, thread2 = recivingPackets(radio_Tx,radio_Rx,windowWindow,slidingWindowsLength, outputFile)
 
         myQueue.join()
         thread.stop()

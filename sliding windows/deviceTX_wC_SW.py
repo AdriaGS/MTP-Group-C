@@ -64,7 +64,7 @@ try:
                 compde.append(strJoin>>(x-NewLength))
                 strJoin = strJoin & (2**(x-NewLength)-1)
                 i += 1
-                x = x - NewLengthç
+                x = x - NewLength
         return compde
 
     def init():
