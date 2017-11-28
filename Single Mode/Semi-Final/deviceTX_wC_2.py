@@ -78,7 +78,7 @@ try:
 		pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 		payloadSize = 32
 		channel_TX = 63
-		channel_RX = 63
+		channel_RX = 73
 
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
