@@ -12,9 +12,6 @@ try:
 	import mat4py as m4p
 	import os
 	import lzw
-	from threading import Thread
-
-	global data2Tx_compressed
 
 	def compress(uncompressed):
 		"""Compress a string to a list of output symbols."""
@@ -62,24 +59,9 @@ try:
 		sys.stderr.write(str(file1) + ': ' + str(f1_bytes) + ' bytes\n')
 		sys.stderr.write(str(file2) + ': ' + str(f2_bytes) + ' bytes\n')
 
-	def compressionThread():
-
-		textFile = "MTP_Prev.txt"
-		global data2Tx_compressed
-
-		#Read file to transmit
-		inFile = open(textFile, "rb")
-		data2Tx = inFile.read()
-		inFile.close()
-
-		data2Tx_compressed = compress(data2Tx)
-
-
 	def main():		
 
 		start = time.time()
-		thread = Thread(target = compressionThread)
-		thread.start()
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(23, GPIO.OUT)
 		GPIO.output(23, 1)
@@ -144,6 +126,13 @@ try:
 
 		#VARIABLES
 
+		textFile = "MTP_Prev.txt"
+
+		#Read file to transmit
+		inFile = open(textFile, "rb")
+		data2Tx = inFile.read()
+		inFile.close()
+
 		#flag variables
 		original_flag = 'A'
 		flag = ""
@@ -183,8 +172,9 @@ try:
 		###############################################################################################################################
 
 		start_c = time.time()
-		thread.join()
 		#Compression of the data to transmit into data2Tx_compressed
+		data2Tx_compressed = compress(data2Tx)
+
 		listLengh = len(data2Tx_compressed)
 		listMax = max(data2Tx_compressed)
 		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
@@ -213,7 +203,7 @@ try:
 		########################################################################################################################
 
 		#Now we conform all the data packets in a list
-		for i in range (0, len(toSend), dataSize):
+		for i in xrange (0, len(toSend), dataSize):
 			if((i+dataSize) < len(toSend)):
 				packets.append(toSend[i:i+dataSize])
 			else:
