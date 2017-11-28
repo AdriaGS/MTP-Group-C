@@ -74,7 +74,7 @@ try:
 		print("Transmitter")
 		pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 		pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
-		payloadSize = 30
+		payloadSize = 32
 		channel_TX = 30
 		channel_RX = 50
 

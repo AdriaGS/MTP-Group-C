@@ -88,7 +88,7 @@ try:
 
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
-		payloadSize = 30
+		payloadSize = 32
 		channel_RX = 30
 		channel_TX = 50
 
@@ -222,7 +222,7 @@ try:
 						radio_Tx.write(list("ACK") + list(flag))
 						receivedPacket = 1
 					else:
-						if ((suma % 10) == 0):
+						if((suma % 10) == 0):
 							print("Number of retransmissions increasing: " + str(suma))
 						suma += 1
 						if flag_n == 0:
