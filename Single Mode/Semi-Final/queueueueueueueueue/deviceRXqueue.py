@@ -34,6 +34,7 @@ try:
                 i += 1
                 x = x - NewLength
             myQueue.task_done()
+
     def decompresionOnTheGo    (listMax,outputFile):    
         ##Mirar si hay conflicots con windows o donde sea por no usar binario.
         
@@ -64,6 +65,7 @@ try:
             dict_size += 1
             w = entry
             myQueue2.task_done()
+
     def init() :
         start = time.time()
         GPIO.setmode(GPIO.BCM)
@@ -101,8 +103,12 @@ try:
         radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
         #Configuration of the power level to be used by the transceiver
-        radio_Tx.setPALevel(NRF24.PA_MAX)
-        radio_Rx.setPALevel(NRF24.PA_MAX)
+        radio_Tx.setPALevel(NRF24.PA_LOW)
+        radio_Rx.setPALevel(NRF24.PA_LOW)
+
+        #CRC Length
+        radio_Tx.setCRCLength(NRF24.CRC_8)
+        radio_Rx.setCRCLength(NRF24.CRC_8)
 
         #We disable the Auto Acknowledgement
         radio_Tx.setAutoAck(False)
@@ -119,6 +125,7 @@ try:
         print("*------------------------------------------------------------------------------------------------------------*")
         radio_Rx.printDetails()
         print("*------------------------------------------------------------------------------------------------------------*")
+    
     def main():        
         
         radio_Tx,radio_Rx = init()
