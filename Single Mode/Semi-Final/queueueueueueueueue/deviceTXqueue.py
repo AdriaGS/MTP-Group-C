@@ -125,13 +125,6 @@ try:
         data2Tx = inFile.read()
         inFile.close()
 
-        #Compute Cksum
-        command = "cksum " + textFile + " > checksum.txt"
-        os.system(command)
-        checksumFile = open("checksum.txt", 'rb')
-        checksum = checksumFile.read()
-        checksum = checksum[0:15]
-
         #flag variables
         original_flag = 'A'
         flag = ""
@@ -140,6 +133,7 @@ try:
 
         #packet realted variables
         overhead = 1
+        payloadSize = 32
         dataSize = payloadSize - overhead
         #Data Packets
         packets = []
