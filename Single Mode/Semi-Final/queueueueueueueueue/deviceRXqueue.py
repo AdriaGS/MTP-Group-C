@@ -5,10 +5,10 @@ try:
 	import spidev
 	import numpy as np
 	from threading import Thread
-	from multiprocessing import Queue
+	import Queue
 
-	myQueue = Queue()
-	myQueue2 = Queue()
+	myQueue = Queue.Queue()
+	myQueue2 = Queue.Queue()
 
 	def decodingOnTheGo(listMax):
 
