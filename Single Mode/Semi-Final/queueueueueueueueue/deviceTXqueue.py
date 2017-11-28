@@ -204,7 +204,7 @@ try:
             numberofPackets += 1
 
         #Start sendind Handshake Packet
-        handshakePacket = checksum + "," + str(numberofPackets) + "," + str(listLengh) + "," + str(listMax)
+        handshakePacket = str(numberofPackets) + "," + str(listLengh) + "," + str(listMax)
         radio_Tx.write(handshakePacket)
         timeout = time.time() + time_ack
         radio_Rx.startListening()
