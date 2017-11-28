@@ -114,7 +114,9 @@ try:
         
         return (radio_Tx, radio_Rx)      
     
-    def main():        
+    def main():  
+
+        start = time.time()       
         radio_Tx, radio_Rx = init()
         #VARIABLES
 
