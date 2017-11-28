@@ -67,8 +67,6 @@ try:
 		GPIO.output(23, 1)
 		GPIO.setup(22, GPIO.OUT)
 		GPIO.output(22, 1)
-		GPIO.setup(24, GPIO.OUT)
-		GPIO.output(24, 1)
 
 		#GPIO.output(23, GPIO.LOW)
 		#GPIO.output(22, GPIO.LOW)
@@ -313,6 +311,9 @@ try:
 		print(totalTime)
 		print(messageSent == toSend)
 		print("Total retransmissions: " + str(suma))
+
+		GPIO.output(22,0)
+		GPIO.output(23,0)
 
 	if __name__ == '__main__':
 		main()
