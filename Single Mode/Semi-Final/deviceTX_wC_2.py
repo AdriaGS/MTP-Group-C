@@ -174,7 +174,9 @@ try:
 		start_c = time.time()
 		#Compression of the data to transmit into data2Tx_compressed
 		data2Tx_compressed = compress(data2Tx)
+		final_c1 = time.time()
 
+		start_c2 = time.time()
 		listLengh = len(data2Tx_compressed)
 		listMax = max(data2Tx_compressed)
 		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
@@ -199,6 +201,8 @@ try:
 
 		final_c = time.time()
 		print("Compression time: " + str(final_c-start_c))
+		print("First part of compression: " + str(final_c1 - start_c))
+		print("Second part of compression: " + str(final_c - start_c2))
 
 		########################################################################################################################
 
