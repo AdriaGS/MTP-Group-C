@@ -12,6 +12,7 @@ try:
 	import mat4py as m4p
 	import os
 	import lzw
+	from threading import Thread
 
 	global data2Tx_compressed
 
