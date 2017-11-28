@@ -62,8 +62,6 @@ try:
         GPIO.output(23,1)
         GPIO.setup(22, GPIO.OUT)
         GPIO.output(22, 1)
-        GPIO.setup(24, GPIO.OUT)
-        GPIO.output(24,1)
 
         print("Transmitter")
         pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
@@ -307,10 +305,15 @@ try:
         print(totalTime)
         print(messageSent == toSend)
         print("Total retransmissions: " + str(suma))
+
+        GPIO.output(22,0)
+        GPIO.output(23,0)
+        GPIO.cleanup()
+
     if __name__ == '__main__':
         main()        
+
 except KeyboardInterrupt:
     GPIO.output(22,0)
     GPIO.output(23,0)
-    GPIO.output(24,0)
     GPIO.cleanup()
