@@ -3,7 +3,7 @@ try:
 	import time
 	from threading import Thread, Event
 
-	def led_blink(gpio_value, stop_event):
+	def led_blink(gpio_value):
 
 		global blink
 		global stop
@@ -38,8 +38,7 @@ try:
 
 		stop = 1
 		#LED Blinking thread
-		led_1 = Event()
-		led_thread = Thread(target = led_blink, args = (2, led_1))
+		led_thread = Thread(target = led_blink, args = (2))
 
 		if(input_onoff == True):
 			time.sleep(1)
