@@ -154,7 +154,7 @@ try:
 		handshakeAck_received = 0
 
 		#Time variables
-		time_ack = 0.05
+		time_ack = 0.1
 
 		#First time error solution
 		firstTime_retransmissions = 0
