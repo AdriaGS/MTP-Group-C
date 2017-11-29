@@ -27,6 +27,7 @@ while True:
 	input_onoff = GPIO.input(14)
 	input_tx_rx = GPIO.input(15)
 	input_nm = GPIO.input(18)
+	suma = 0
 
 	#LED Blinking thread
 	led_1 = Event()
@@ -40,10 +41,13 @@ while True:
 
 		led_thread.start()
 
+		suma += 1
+
+		if(suma == 5):
+			led_1.set()
+
 	else:
 		time.sleep(1)
 		print("Starting Script")
 		print("Tx=1 or Rx=0: " + str(input_tx_rx))
 		print("Network Mode: " + str(input_nm))
-
-		led_1.set()
