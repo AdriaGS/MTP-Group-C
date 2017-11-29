@@ -287,7 +287,6 @@ try:
 
 					#If an established time passes and we have not received anything we retransmit the handshake packet
 					if((time.time()) > timeout):
-						firstTime_retransmissions += 1
 						radio_Tx.write(handshakePacket)
 						timeout = time.time() + time_ack
 
