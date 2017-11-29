@@ -48,7 +48,7 @@ try:
 			print("Network Mode: " + str(input_nm))
 
 			blink = 0
-			led_thread.exit()
+			#led_thread.exit()
 			GPIO.output(3, 1)
 
 
