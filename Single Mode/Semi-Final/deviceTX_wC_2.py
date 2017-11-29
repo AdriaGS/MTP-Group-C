@@ -264,11 +264,12 @@ try:
 			#time.sleep(1)
 
 			timeout = time.time() + time_ack
-			radio_Rx.startListening()
 			str_ack = ""
 
 			#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
 			while not (ack_received):
+
+				radio_Rx.startListening()
 				if radio_Rx.available(0):
 					radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
 					radio_Rx.stopListening()

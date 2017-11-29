@@ -203,9 +203,9 @@ try:
 
 			timeout = time.time() + time_ack
 			flag = chr(ord(original_flag_data) + flag_n)
-			radio_Rx.startListening()
 
 			while not (receivedPacket):
+				radio_Rx.startListening()
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 					radio_Rx.stopListening()
