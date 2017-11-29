@@ -158,12 +158,13 @@ try:
 		###############################################################################################################################
 			
 		#We listen for the control packet
-		radio_Rx.startListening()
 		while not (receivedHandshakePacket):
 			str_Handshakeframe = ""
 
+			radio_Rx.startListening()
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
+				radio_Rx.stopListening()
 				print("Something received")
 
 				for c in range(0, len(handshake_frame)):
@@ -189,26 +190,25 @@ try:
 
 		print("The number of data packets that will be transmitted: " + numberOfPackets)
 		print("Length of list: " + str(listLength))
-		print("maximum value of list: " + str(listMax))
+		print("Maximum value of list: " + str(listMax))
 		bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 
 		###############################################################################################################################
 		###############################################################################################################################
 		###############################################################################################################################
 
-		radio_Rx.startListening()
 		suma = 0
 
 		for i in range(0, int(numberOfPackets)-1):
 
 			timeout = time.time() + time_ack
 			flag = chr(ord(original_flag_data) + flag_n)
+			radio_Rx.startListening()
 
 			while not (receivedPacket):
-
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-					#print(frame)
+					radio_Rx.stopListening()
 
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
