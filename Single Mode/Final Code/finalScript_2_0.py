@@ -476,6 +476,7 @@ try:
 				GPIO.cleanup()
 
 		else:
+			print("Network Mode")
 			#Network Mode Code
 			########################################
 			########################################
