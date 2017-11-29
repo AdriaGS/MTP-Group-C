@@ -302,6 +302,8 @@ try:
 
 		GPIO.output(3, 1)
 		radio_Rx.stopListening()
+		radio_Tx.end()
+		radio_Rx.end()
 
 		time.sleep(5)
 
