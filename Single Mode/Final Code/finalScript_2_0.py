@@ -259,20 +259,25 @@ try:
 						packets.append(toSend[i:])
 					numberofPackets += 1
 
-				#Start sendind
-				radio_Tx.write(str(numberofPackets) + "," + str(listLengh) + "," + str(listMax))
+				#Start sendind Handshake Packet
+				handshakePacket = str(numberofPackets) + "," + str(listLengh) + "," + str(listMax)
+				radio_Tx.write(handshakePacket)
 				timeout = time.time() + time_ack
 				radio_Rx.startListening()
 				str_Handshake = ""
 				blink = 1
 				led_thread.start()
 
-				print("Script has started")
-
+				###############################################################################################################################
+				###############################################################################################################################
+				###############################################################################################################################
+				#While we don't receive the handshake ack we keep trying
 				while not (handshakeAck_received):
 
 					if radio_Rx.available(0):
 						radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
+						radio_Rx.openReadingPipe(0, pipe_Rx)
+						#print("Something Received")
 
 						for c in range(0, len(handshake)):
 							str_Handshake = str_Handshake + chr(handshake[c])
@@ -281,12 +286,16 @@ try:
 						if(list(str_Handshake) != list("ACK")):	
 							radio_Tx.write(handshakePacket)
 							timeout = time.time() + time_ack
+							#print("Handshake Message Lost")
 							str_Handshake = ""
 						else:
+							#print("Handshake done")
 							handshakeAck_received = 1
 
 					#If an established time passes and we have not received anything we retransmit the handshake packet
 					if((time.time()) > timeout):
+						#print("No Handshake ACK received resending message")
+						firstTime_retransmissions += 1
 						radio_Tx.write(handshakePacket)
 						timeout = time.time() + time_ack
 
