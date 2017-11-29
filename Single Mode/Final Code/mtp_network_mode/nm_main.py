@@ -4,10 +4,10 @@ from team import Team
 import time
 
 
-def main():
+def nm_main():
     # Network variables
-    dilationFactor = 5
-    networkSize = 3
+    dilationFactor = 7
+    networkSize = 4
 
     print("Hello from the Network Mode")
     transmission_init = True
@@ -37,7 +37,3 @@ def main():
         print("Timeout!")
     else:
         print("Transmission complete. Time elapsed: {}".format(timePassed))
-
-
-if __name__ == "__main__":
-    main()
