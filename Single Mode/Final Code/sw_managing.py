@@ -43,7 +43,7 @@ while True:
 
 		suma += 1
 
-		if(suma == 5):
+		#if(suma == 5):
 			#led_1.set()
 
 	else:
