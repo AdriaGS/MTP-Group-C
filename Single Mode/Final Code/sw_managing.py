@@ -29,7 +29,6 @@ while True:
 	input_tx_rx = GPIO.input(15)
 	input_nm = GPIO.input(18)
 	global blink
-	blink = 1
 
 	#LED Blinking thread
 	led_1 = Event()
@@ -41,7 +40,7 @@ while True:
 		print("Tx=1 or Rx=0: " + str(input_tx_rx))
 		print("Network Mode: " + str(input_nm))
 
-
+		blink = 1
 		#GPIO.output(2, 0)
 		GPIO.output(3, 0)
 		led_thread.start()
