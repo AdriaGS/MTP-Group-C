@@ -111,16 +111,14 @@ try:
 
 	def main():
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(22, GPIO.OUT)
-		GPIO.setup(23, GPIO.OUT)
+		GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW)
+		GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
 		GPIO.setup(2, GPIO.OUT) #LED 1 TX_RX Running
 		GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
 		GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #ON or OFF
 		GPIO.setup(15, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Transmit or Receive
 		GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Network Mode
 
-		GPIO.output(22, 1)
-		GPIO.output(23, 1)
 		GPIO.output(2, 0)
 		GPIO.output(3, 0)
 
@@ -313,7 +311,6 @@ try:
 					radio_Tx.write(message2Send)
 
 					timeout = time.time() + time_ack
-					radio_Rx.startListening()
 					str_ack = ""
 
 					#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
@@ -331,6 +328,12 @@ try:
 								suma += 1
 								str_ack = ""
 
+								if(suma > 50):
+									time_ack += 0.05
+									suma = 0
+									if(time_ack > 0.2):
+										time_ack = 0.2
+
 							else:
 								ack_received = 1
 
@@ -346,6 +349,9 @@ try:
 				blink = 0
 
 				GPIO.output(3, 1)
+				radio_Rx.stopListening()
+				radio_Tx.end()
+				radio_Rx.end()
 				GPIO.output(22, 0)
 				GPIO.output(23, 0)
 
@@ -419,8 +425,9 @@ try:
 				#LED Blinking thread
 				led_thread = Thread(target = led_blink, args = (2,))
 
-				#We listen for the control packet
 				radio_Rx.startListening()
+
+				#We listen for the control packet
 				while not (receivedHandshakePacket):
 					str_Handshakeframe = ""
 
@@ -449,8 +456,6 @@ try:
 								receivedHandshakePacket = 1
 
 				bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
-
-				radio_Rx.startListening()
 
 				for i in range(0, int(numberOfPackets)-1):
 
@@ -487,6 +492,9 @@ try:
 				blink = 0
 
 				GPIO.output(3, 1)
+				radio_Rx.stopListening()
+				radio_Tx.end()
+				radio_Rx.end()
 				GPIO.output(22, 0)
 				GPIO.output(23, 0)
 
