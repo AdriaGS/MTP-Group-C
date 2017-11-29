@@ -133,7 +133,7 @@ try:
 				time.sleep(1)
 				print("Waiting to start")
 			else:
-				TX_RX = input_txrx
+				TX_RX = input_tx_rx
 				NM = input_nm
 				break
 
