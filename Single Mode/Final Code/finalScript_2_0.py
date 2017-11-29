@@ -129,7 +129,7 @@ try:
 			input_onoff = GPIO.input(14)
 			input_tx_rx = GPIO.input(15)
 			input_nm = GPIO.input(18)
-			if(input_onoff == True):
+			if(input_onoff == False):
 				time.sleep(1)
 				print("Waiting to start")
 			else:
@@ -265,6 +265,8 @@ try:
 				str_Handshake = ""
 				blink = 1
 				led_thread.start()
+
+				print("Script has started")
 
 				while not (handshakeAck_received):
 
