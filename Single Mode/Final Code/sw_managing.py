@@ -64,6 +64,4 @@ try:
 			led_thread.start()
 
 except KeyboardInterrupt:
-	GPIO.output(22,0)
-	GPIO.output(23,0)
 	GPIO.cleanup()
