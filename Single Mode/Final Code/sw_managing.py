@@ -40,10 +40,9 @@ while True:
 		print("Tx=1 or Rx=0: " + str(input_tx_rx))
 		print("Network Mode: " + str(input_nm))
 
-		blink = 1
-		#GPIO.output(2, 0)
-		GPIO.output(3, 0)
-		led_thread.start()
+		blink = 0
+		#led_thread.join()
+		GPIO.output(3, 1)
 
 
 	else:
@@ -52,7 +51,8 @@ while True:
 		print("Tx=1 or Rx=0: " + str(input_tx_rx))
 		print("Network Mode: " + str(input_nm))
 
-		blink = 0
-		#led_thread.join()
-		GPIO.output(3, 1)
+		blink = 1
+		#GPIO.output(2, 0)
+		GPIO.output(3, 0)
+		led_thread.start()
 
