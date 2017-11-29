@@ -46,10 +46,6 @@ while True:
 		GPIO.output(3, 0)
 		led_thread.start()
 
-		suma += 1
-
-		#if(suma == 5):
-			#led_1.set()
 
 	else:
 		time.sleep(1)
