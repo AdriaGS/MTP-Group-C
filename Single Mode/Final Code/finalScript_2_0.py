@@ -104,9 +104,9 @@ try:
 
 		while(blink):
 			GPIO.output(gpio_value, 1)
-			time.sleep(0.5)
+			time.sleep(0.3)
 			GPIO.output(gpio_value, 0)
-			time.sleep(0.5)
+			time.sleep(0.3)
 
 	def main():
 		GPIO.setmode(GPIO.BCM)
@@ -267,6 +267,8 @@ try:
 				str_Handshake = ""
 				blink = 1
 				led_thread.start()
+
+				print("Starting Script")
 
 				###############################################################################################################################
 				###############################################################################################################################
