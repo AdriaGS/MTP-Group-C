@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+from threading import Thread, Event
 
 def led_blink(gpio_value, stop_event):
 
