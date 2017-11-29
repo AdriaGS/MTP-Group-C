@@ -435,7 +435,6 @@ try:
 				bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 
 				radio_Rx.startListening()
-				suma = 0
 
 				for i in range(0, int(numberOfPackets)-1):
 
@@ -457,8 +456,6 @@ try:
 								radio_Tx.write(list("ACK") + list(flag))
 								receivedPacket = 1
 							else:
-								if ((suma % 10) == 0):
-								suma += 1
 								if flag_n == 0:
 									radio_Tx.write(list("ACK") + list('J'))
 								else:
