@@ -16,7 +16,7 @@ try:
 
     radio = NRF24(GPIO, spidev.SpiDev())
     radio.begin(1, 22)
-    radio.setPayloadSize(32)
+    radio.setPayloadSize(10)
     radio.setChannel(0x64)
 
     radio.setDataRate(NRF24.BR_250KBPS)#2MBPS)
@@ -35,7 +35,7 @@ try:
 
     while True:
         #print("Transmitting Ping")
-        message = "PINGDEPROBAMTPGROUPC " + str(i)
+        message = 0xFFFFFFFFFF
         radio.write(list(message))
         #time.sleep(1)
         i += 1

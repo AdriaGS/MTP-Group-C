@@ -97,9 +97,11 @@ try:
 		outputFile.close()
 
 
-	def led_blink(gpio_value, stop_event):
+	def led_blink(gpio_value):
 
-		while(not stop_event.is_set()):
+		global blink
+
+		while(blink):
 			GPIO.output(gpio_value, 1)
 			time.sleep(0.5)
 			GPIO.output(gpio_value, 0)
@@ -121,6 +123,7 @@ try:
 		GPIO.output(3, 0)
 
 		TX0_RX1 = True
+		global blink
 
 		while True:
 			input_onoff = GPIO.input(14)
@@ -217,8 +220,7 @@ try:
 				time_ack = 0.1
 
 				#LED Blinking thread
-				led_1 = Event()
-				led_thread = Thread(target = led_blink, args = (2, led_1))
+				led_thread = Thread(target = led_blink, args = (2))
 
 				#Compression of the data to transmit into data2Tx_compressed
 				data2Tx_compressed = compress(data2Tx)
@@ -261,6 +263,7 @@ try:
 				timeout = time.time() + time_ack
 				radio_Rx.startListening()
 				str_Handshake = ""
+				blink = 1
 				led_thread.start()
 
 				while not (handshakeAck_received):
@@ -326,11 +329,12 @@ try:
 					ack_received = 0
 					flag_n = (flag_n + 1) % 10
 
-				led_1.set()
+				blink = 0
 
 				GPIO.output(3, 1)
 				GPIO.output(22, 0)
 				GPIO.output(23, 0)
+				GPIO.cleanup()
 
 			else:
 				print("Receiver")
@@ -395,8 +399,7 @@ try:
 				receivedHandshakePacket = 0
 
 				#LED Blinking thread
-				led_1 = Event()
-				led_thread = Thread(target = led_blink, args = (2, led_1))
+				led_thread = Thread(target = led_blink, args = (2))
 
 				#We listen for the control packet
 				radio_Rx.startListening()
@@ -420,6 +423,8 @@ try:
 							if(chr(handshake_frame[0]) == original_flag_data):
 								handshake_frame = handshake_frame[1:len(handshake_frame)]
 								compressed.extend(handshake_frame)
+								blink = 1
+								led_thread.start()
 
 								radio_Tx.write(list("ACK") + list(original_flag_data))
 								flag_n = (flag_n + 1) % 10
@@ -464,11 +469,12 @@ try:
 				thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
 				thread.start()
 
-				led_1.set()
+				blink = 0
 
 				GPIO.output(3, 1)
 				GPIO.output(22, 0)
 				GPIO.output(23, 0)
+				GPIO.cleanup()
 
 		else:
 			#Network Mode Code

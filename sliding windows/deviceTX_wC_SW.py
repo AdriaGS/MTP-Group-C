@@ -81,8 +81,8 @@ try:
         pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
         pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
         payloadSize = 32
-        channel_TX = 90
-        channel_RX = 100
+        channel_TX = 40
+        channel_RX = 50
 
         #Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
         radio_Tx = NRF24(GPIO, spidev.SpiDev())
@@ -99,8 +99,8 @@ try:
         radio_Rx.setChannel(channel_RX)
 
         #We set the Transmission Rate
-        radio_Tx.setDataRate(NRF24.BR_250KBPS)
-        radio_Rx.setDataRate(NRF24.BR_250KBPS)
+        radio_Tx.setDataRate(NRF24.BR_2MBPS)
+        radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
         #Configuration of the power level to be used by the transceiver
         radio_Tx.setPALevel(NRF24.PA_LOW)
