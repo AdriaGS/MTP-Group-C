@@ -8,7 +8,7 @@ try:
 	import sys
 	import os.path
 	from threading import Thread, Event
-	import mtp_network_mode.nm_main as NM
+	import mtp_network_mode.nm_main as NetMode
 
 	def compress(uncompressed):
 		"""Compress a string to a list of output symbols."""
@@ -496,7 +496,7 @@ try:
 			########################################
 			########################################
 			########################################
-			NM.main_nm()
+			NetMode.main_nm()
 
 	if __name__ == '__main__':
 		main()
