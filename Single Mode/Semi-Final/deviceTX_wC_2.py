@@ -211,6 +211,7 @@ try:
 		#Start sendind Handshake Packet
 		handshakePacket = str(numberofPackets) + "," + str(listLengh) + "," + str(listMax)
 		radio_Tx.write(handshakePacket)
+		radio_Rx.startListening()
 		timeout = time.time() + time_ack
 		str_Handshake = ""
 		print("Waiting ACK")
@@ -221,10 +222,8 @@ try:
 		#While we don't receive the handshake ack we keep trying
 		while not (handshakeAck_received):
 
-			radio_Rx.startListening()
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
-				radio_Rx.stopListening()
 				print("Something Received")
 
 				for c in range(0, len(handshake)):
@@ -261,18 +260,15 @@ try:
 			flag = chr(ord(original_flag) + flag_n)
 			message2Send = list(flag) + list(message)
 			radio_Tx.write(message2Send)
-			#time.sleep(1)
-
 			timeout = time.time() + time_ack
 			str_ack = ""
 
 			#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
 			while not (ack_received):
 
-				radio_Rx.startListening()
+				
 				if radio_Rx.available(0):
 					radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
-					radio_Rx.stopListening()
 
 					for c in range(0, len(ack)):
 						str_ack = str_ack + chr(ack[c])
@@ -305,6 +301,7 @@ try:
 		print("Total retransmissions: " + str(suma))
 
 		GPIO.output(3, 1)
+		radio_Rx.stopListening()
 
 		time.sleep(5)
 

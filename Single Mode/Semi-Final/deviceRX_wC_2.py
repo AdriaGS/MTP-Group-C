@@ -153,6 +153,8 @@ try:
 		receivedPacket = 0
 		receivedHandshakePacket = 0
 
+		radio_Rx.startListening()
+
 		###############################################################################################################################
 		###############################################################################################################################
 		###############################################################################################################################
@@ -161,10 +163,8 @@ try:
 		while not (receivedHandshakePacket):
 			str_Handshakeframe = ""
 
-			radio_Rx.startListening()
 			if radio_Rx.available(0):
 				radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
-				radio_Rx.stopListening()
 				print("Something received")
 
 				for c in range(0, len(handshake_frame)):
@@ -205,10 +205,8 @@ try:
 			flag = chr(ord(original_flag_data) + flag_n)
 
 			while not (receivedPacket):
-				radio_Rx.startListening()
 				if radio_Rx.available(0):
 					radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
-					radio_Rx.stopListening()
 
 					if(chr(frame[0]) == flag):
 						compressed.extend(frame[1:len(frame)])
@@ -246,6 +244,7 @@ try:
 		print("Number of retransmissions = " + str(suma))
 
 		GPIO.output(3, 1)
+		radio_Rx.stopListening()
 
 		time.sleep(5)
 		GPIO.output(22,0)
