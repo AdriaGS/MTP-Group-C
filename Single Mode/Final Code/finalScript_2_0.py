@@ -221,7 +221,7 @@ try:
 				time_ack = 0.02
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (2))
+				led_thread = Thread(target = led_blink, args = (2,))
 
 				#Compression of the data to transmit into data2Tx_compressed
 				data2Tx_compressed = compress(data2Tx)
@@ -409,7 +409,7 @@ try:
 				receivedHandshakePacket = 0
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (2))
+				led_thread = Thread(target = led_blink, args = (2,))
 
 				#We listen for the control packet
 				radio_Rx.startListening()
