@@ -1,3 +1,6 @@
+import RPi.GPIO as GPIO
+import time
+
 def led_blink(gpio_value, stop_event):
 
 	while(not stop_event.is_set()):
