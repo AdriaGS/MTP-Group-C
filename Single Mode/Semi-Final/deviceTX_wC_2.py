@@ -7,11 +7,7 @@ try:
 	import sys
 	import os.path
 	import numpy as np
-	import pickle
-	import sqlite3
-	import mat4py as m4p
 	import os
-	import lzw
 
 	def compress(uncompressed):
 		"""Compress a string to a list of output symbols."""
