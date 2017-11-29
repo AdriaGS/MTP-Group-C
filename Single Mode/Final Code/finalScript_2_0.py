@@ -2,6 +2,7 @@ try:
 	import RPi.GPIO as GPIO
 	from lib_nrf24 import NRF24
 	from math import *
+	import numpy as np
 	import time
 	import spidev
 	import sys
