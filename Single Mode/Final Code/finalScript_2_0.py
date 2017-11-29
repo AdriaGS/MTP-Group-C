@@ -217,7 +217,7 @@ try:
 				handshakeAck_received = 0
 
 				#Time variables
-				time_ack = 0.1
+				time_ack = 0.02
 
 				#LED Blinking thread
 				led_thread = Thread(target = led_blink, args = (2))
@@ -396,7 +396,7 @@ try:
 				str_compressed = ""
 
 				#ACK related variables
-				time_ack = 0.1
+				time_ack = 0.02
 				receivedPacket = 0
 				receivedHandshakePacket = 0
 
@@ -482,7 +482,7 @@ try:
 			########################################
 
 	if __name__ == '__main__':
-	main()
+		main()
 
 except KeyboardInterrupt:
 	GPIO.output(22,0)
