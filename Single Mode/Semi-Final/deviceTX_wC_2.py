@@ -63,9 +63,11 @@ try:
 		GPIO.output(23, 1)
 		GPIO.setup(22, GPIO.OUT)
 		GPIO.output(22, 1)
+		GPIO.setup(2, GPIO.OUT) #LED 1 TX_RX Running
+		GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
 
-		#GPIO.output(23, GPIO.LOW)
-		#GPIO.output(22, GPIO.LOW)
+		GPIO.output(2, 0)
+		GPIO.output(3, 0)
 
 		print("Transmitter")
 		pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
@@ -299,6 +301,10 @@ try:
 		print(totalTime)
 		print(messageSent == toSend)
 		print("Total retransmissions: " + str(suma))
+
+		GPIO.output(3, 1)
+
+		time.sleep(5)
 
 		GPIO.output(22,0)
 		GPIO.output(23,0)

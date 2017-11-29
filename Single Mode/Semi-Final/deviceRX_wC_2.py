@@ -246,6 +246,8 @@ try:
 		print("Number of retransmissions = " + str(suma))
 
 		GPIO.output(3, 1)
+
+		time.sleep(5)
 		GPIO.output(22,0)
 		GPIO.output(23,0)
 		GPIO.cleanup()
