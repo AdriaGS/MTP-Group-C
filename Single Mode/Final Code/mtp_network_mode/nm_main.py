@@ -4,7 +4,7 @@ from team import Team
 import time
 
 
-def nm_main():
+def main_nm():
     # Network variables
     dilationFactor = 7
     networkSize = 4
