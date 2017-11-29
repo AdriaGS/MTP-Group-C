@@ -102,7 +102,7 @@ try:
 	def led_blink(gpio_value):
 
 		global blink
-
+		GPIO.setmode(GPIO.BCM)
 		while(blink):
 			GPIO.output(gpio_value, 1)
 			time.sleep(0.3)
@@ -281,7 +281,6 @@ try:
 
 					if radio_Rx.available(0):
 						radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
-						radio_Rx.openReadingPipe(0, pipe_Rx)
 						#print("Something Received")
 
 						for c in range(0, len(handshake)):
@@ -349,6 +348,8 @@ try:
 				GPIO.output(3, 1)
 				GPIO.output(22, 0)
 				GPIO.output(23, 0)
+
+				time.sleep(2)	#Check is alive
 				GPIO.cleanup()
 
 			else:
@@ -488,6 +489,8 @@ try:
 				GPIO.output(3, 1)
 				GPIO.output(22, 0)
 				GPIO.output(23, 0)
+
+				time.sleep(2)	#Check is alive
 				GPIO.cleanup()
 
 		else:
