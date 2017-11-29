@@ -317,6 +317,4 @@ try:
 except KeyboardInterrupt:
 	GPIO.output(22,0)
 	GPIO.output(23,0)
-	radio_Tx.end()
-	radio_Rx.end()
 	GPIO.cleanup()
