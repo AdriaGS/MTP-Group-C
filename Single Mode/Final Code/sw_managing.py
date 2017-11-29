@@ -39,6 +39,9 @@ while True:
 		print("Tx=1 or Rx=0: " + str(input_tx_rx))
 		print("Network Mode: " + str(input_nm))
 
+
+		GPIO.output(2, 0)
+		GPIO.output(3, 0)
 		#led_thread.start()
 
 		suma += 1
