@@ -59,10 +59,8 @@ try:
 
 		start = time.time()
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(23, GPIO.OUT)
-		GPIO.output(23, 1)
-		GPIO.setup(22, GPIO.OUT)
-		GPIO.output(22, 1)
+		GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW)
+		GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
 		GPIO.setup(2, GPIO.OUT) #LED 1 TX_RX Running
 		GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
 
