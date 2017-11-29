@@ -4,7 +4,8 @@ from threading import Thread, Event
 
 def led_blink(gpio_value, stop_event):
 
-	while(not stop_event.is_set()):
+	global blink
+	while(blink):
 		GPIO.output(gpio_value, 1)
 		time.sleep(0.5)
 		GPIO.output(gpio_value, 0)
@@ -27,7 +28,8 @@ while True:
 	input_onoff = GPIO.input(14)
 	input_tx_rx = GPIO.input(15)
 	input_nm = GPIO.input(18)
-	suma = 0
+	global blink
+	blink = 1
 
 	#LED Blinking thread
 	led_1 = Event()
@@ -55,6 +57,7 @@ while True:
 		print("Tx=1 or Rx=0: " + str(input_tx_rx))
 		print("Network Mode: " + str(input_nm))
 
-		led_1.set()
+		blink = 0
+		led_thread.join()
 		GPIO.output(3, 1)
 
