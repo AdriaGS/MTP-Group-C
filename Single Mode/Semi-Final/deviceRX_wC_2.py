@@ -217,7 +217,7 @@ try:
 						receivedPacket = 1
 
 					else:
-						if((suma % 10) == 0):
+						#if((suma % 10) == 0):
 							#print("Number of retransmissions increasing: " + str(suma))
 						suma += 1
 						if flag_n == 0:
