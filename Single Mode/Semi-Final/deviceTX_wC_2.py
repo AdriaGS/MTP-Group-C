@@ -279,6 +279,12 @@ try:
 						suma += 1
 						str_ack = ""
 
+						if(suma > 50):
+							time_ack += 0.05
+							suma = 0
+							if(time_ack > 0.2):
+								time_ack = 0.2
+
 					else:
 						ack_received = 1
 
