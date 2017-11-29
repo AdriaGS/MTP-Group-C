@@ -54,6 +54,6 @@ while True:
 		print("Network Mode: " + str(input_nm))
 
 		blink = 0
-		led_thread.join()
+		#led_thread.join()
 		GPIO.output(3, 1)
 
