@@ -245,9 +245,6 @@ try:
 				radio_Tx.write(handshakePacket)
 				timeout = time.time() + time_ack
 
-			if(firstTime_retransmissions > 200 and time.time() < (final_c + 5)):
-				os.execv(sys.executable, ['python'] + sys.argv)
-
 		messageSent = ""
 
 		###############################################################################################################################
