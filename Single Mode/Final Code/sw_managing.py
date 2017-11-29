@@ -50,4 +50,7 @@ while True:
 		time.sleep(1)
 		print("Starting Script")
 		print("Tx=1 or Rx=0: " + str(input_tx_rx))
-		print("Network Mode: " + str(input_nm))
+		print("Network Mode: " + str(input_nm
+
+		GPIO.output(2, 1)
+		GPIO.output(3, 1)
