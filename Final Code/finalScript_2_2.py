@@ -172,8 +172,8 @@ try:
 				radio_Rx.setChannel(channel_RX)
 
 				#We set the Transmission Rate
-				radio_Tx.setDataRate(NRF24.BR_250KBPS)
-				radio_Rx.setDataRate(NRF24.BR_250KBPS)
+				radio_Tx.setDataRate(NRF24.BR_2MBPS)
+				radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
 				#Configuration of the power level to be used by the transceiver
 				radio_Tx.setPALevel(NRF24.PA_HIGH)
@@ -391,8 +391,8 @@ try:
 				radio_Rx.setChannel(channel_RX)
 
 				#We set the Transmission Rate
-				radio_Tx.setDataRate(NRF24.BR_250KBPS)
-				radio_Rx.setDataRate(NRF24.BR_250KBPS)
+				radio_Tx.setDataRate(NRF24.BR_2MBPS)
+				radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
 				#Configuration of the power level to be used by the transceiver
 				radio_Tx.setPALevel(NRF24.PA_HIGH)
