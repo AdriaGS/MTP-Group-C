@@ -360,6 +360,7 @@ try:
 
 				GPIO.output(3, 1)
 				radio_Rx.stopListening()
+				radio_Rx.closeReadingPipe(0, pipes[0])
 				radio_Tx.end()
 				radio_Rx.end()
 				GPIO.output(22, 0)
@@ -503,6 +504,7 @@ try:
 
 				GPIO.output(3, 1)
 				radio_Rx.stopListening()
+				radio_Rx.closeReadingPipe(0, pipes[0])
 				radio_Tx.end()
 				radio_Rx.end()
 				GPIO.output(22, 0)
