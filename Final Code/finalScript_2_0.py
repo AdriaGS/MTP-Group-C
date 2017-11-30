@@ -125,10 +125,11 @@ try:
 		TX0_RX1 = True
 		global blink
 
+		led_thread2 = Thread(target = led_blink, args = (0.7, ))
+
 		while True:
 			input_onoff = GPIO.input(14)
 			blink = 1
-			led_thread2 = Thread(target = led_blink, args = (0.7, ))
 
 			if(input_onoff == False):
 				time.sleep(1)
