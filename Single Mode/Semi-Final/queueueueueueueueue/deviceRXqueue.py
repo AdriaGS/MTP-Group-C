@@ -35,7 +35,7 @@ try:
 				x = x - NewLength
 			myQueue.task_done()
 
-	def decompresionOnTheGo    (listMax,outputFile):    
+	def decompresionOnTheGo(listMax,outputFile):    
 		##Mirar si hay conflicots con windows o donde sea por no usar binario.
 		
 		##############
@@ -69,10 +69,8 @@ try:
 	def init() :
 		start = time.time()
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(23, GPIO.OUT)
-		GPIO.output(23,1)
-		GPIO.setup(22, GPIO.OUT)
-		GPIO.output(22,1)
+		GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW)
+		GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
 
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
@@ -192,7 +190,7 @@ try:
 		#Open file
 		outputFile = open("RxFile-MTPGroupC_2.txt", "wb")
 		#starting threads
-		thread = Thread(target = decodingOnTheGo, args = (listMax))
+		thread = Thread(target = decodingOnTheGo, args = (listMax, ))
 		thread.start()
 		thread2 = Thread(target = decompresionOnTheGo, args = (listMax, outputFile))
 		thread2.start()
