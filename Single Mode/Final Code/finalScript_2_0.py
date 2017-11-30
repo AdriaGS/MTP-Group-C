@@ -109,6 +109,7 @@ try:
 			GPIO.output(gpio_value, 0)
 			time.sleep(0.3)
 
+
 	def main():
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW)

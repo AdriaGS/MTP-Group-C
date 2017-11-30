@@ -6,15 +6,12 @@ try:
 	def led_blink(gpio_value):
 
 		global blink
-		global stop
+		GPIO.setmode(GPIO.BCM)
 		while(blink):
 			GPIO.output(gpio_value, 1)
 			time.sleep(0.5)
 			GPIO.output(gpio_value, 0)
 			time.sleep(0.5)
-
-		if(stop == 0):
-			return
 
 
 	GPIO.setmode(GPIO.BCM)
