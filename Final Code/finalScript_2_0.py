@@ -223,7 +223,7 @@ try:
 				handshakeAck_received = 0
 
 				#Time variables
-				time_ack = 0.02
+				time_ack = 0.08
 
 				#LED Blinking thread
 				led_thread = Thread(target = led_blink, args = (0.3, ))
@@ -422,7 +422,7 @@ try:
 				str_compressed = ""
 
 				#ACK related variables
-				time_ack = 0.02
+				time_ack = 0.08
 				receivedPacket = 0
 				receivedHandshakePacket = 0
 
