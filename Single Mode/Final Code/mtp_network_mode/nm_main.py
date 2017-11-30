@@ -11,7 +11,7 @@ def main_nm():
 
     print("Hello from the Network Mode")
     transmission_init = True
-    teamNumber = int(raw_input("What team are you?"))
+    teamNumber = 2
     team = Team(teamNumber, UDP=False, dilationFactor=dilationFactor, networkSize=networkSize)
     timeout = random.uniform(5, 10)
     startTime = time.time()

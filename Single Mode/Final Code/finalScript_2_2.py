@@ -99,20 +99,17 @@ try:
 		outputFile.close()
 
 
-	def led_blink(gpio_value, time_onoff):
+	def led_blink(gpio_value):
 
 		global blink
 		GPIO.setmode(GPIO.BCM)
 		while(blink):
 			GPIO.output(gpio_value, 1)
-			time.sleep(time_onoff)
+			time.sleep(0.3)
 			GPIO.output(gpio_value, 0)
-<<<<<<< HEAD
-			time.sleep(time_onoff)
-=======
 			time.sleep(0.3)
 		return
->>>>>>> 42bcb812af2a04742daf72e55ed6b86d957713ee
+
 
 	def main():
 		GPIO.setmode(GPIO.BCM)
@@ -120,8 +117,8 @@ try:
 		GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
 		GPIO.setup(2, GPIO.OUT) #LED 1 TX_RX Running
 		GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
-		GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #ON or OFF
-		GPIO.setup(15, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Transmit or Receive
+		GPIO.setup(15, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #ON or OFF
+		GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Transmit or Receive
 		GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Network Mode
 
 		GPIO.output(2, 0)
@@ -131,28 +128,14 @@ try:
 		global blink
 
 		while True:
-			input_onoff = GPIO.input(14)
-<<<<<<< HEAD
-			input_tx_rx = GPIO.input(15)
-			input_nm = GPIO.input(18)
-			blink = 1
-			led_thread2 = Thread(target = led_blink, args = (2, 1, ))
-=======
->>>>>>> 42bcb812af2a04742daf72e55ed6b86d957713ee
+			input_onoff = GPIO.input(15)
 			if(input_onoff == False):
 				time.sleep(1)
 				print("Waiting to start")
-				led_thread2.start()
 			else:
-<<<<<<< HEAD
-				TX_RX = input_tx_rx
-				NM = input_nm
-				blink = 0
-=======
->>>>>>> 42bcb812af2a04742daf72e55ed6b86d957713ee
 				break
 		
-		TX_RX = GPIO.input(15)
+		TX_RX = GPIO.input(14)
 		NM = GPIO.input(18)
 
 		if(not NM):
@@ -240,7 +223,7 @@ try:
 				time_ack = 0.02
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (2, 0.3, ))
+				led_thread = Thread(target = led_blink, args = (2,))
 
 				#Compression of the data to transmit into data2Tx_compressed
 				data2Tx_compressed = compress(data2Tx)
@@ -441,7 +424,7 @@ try:
 				receivedHandshakePacket = 0
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (2, 0.3, ))
+				led_thread = Thread(target = led_blink, args = (2,))
 
 				radio_Rx.startListening()
 

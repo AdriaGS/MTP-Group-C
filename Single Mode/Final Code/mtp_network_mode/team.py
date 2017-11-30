@@ -31,10 +31,10 @@ class Team(object):
         self.pipeRX = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
         self.pipeTX = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 
-        pinTX = int(raw_input("In which GPIO port did you connect the CE TX?"))
-        pinValTx = int(raw_input("Value to set CS TX?"))
-        pinRX = int(raw_input("In which GPIO port did you connect the CE RX?"))
-        pinValRx = int(raw_input("Value to set CS RX?"))
+        pinTX = 22
+        pinValTx = 0
+        pinRX = 23
+        pinValRx = 1
 
         # pinTX = 27
         # pinRX = 17
@@ -85,7 +85,7 @@ class Team(object):
         self.nextPlayer = False
         startTime = time.time()
         if self.waitACKs(self.tACK, sentPacket) == 1:
-            print("Received ack, sending data")
+            #print("Received ack, sending data")
             self.sendData()
         while time.time() - startTime < self.tData:
             pass

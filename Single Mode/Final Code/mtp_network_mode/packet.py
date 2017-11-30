@@ -68,7 +68,7 @@ def isControl(buf, teamID, networkSize):
             acks[i] = int(header[count])
             count += 1
     ack = acks[teamID]
-    print("ACKS: {}".format(acks))
+    # print("ACKS: {}".format(acks))
     return packet_type, sender, ack, next_sender
 
 
@@ -79,7 +79,7 @@ def isData(buf, teamID):
     header = '{:08b}'.format(header)
     packet_type = int(header[0])
     receiver = binaryStrToInt(header[1:3])
-    # print("The receiver is {} and I am {}".format(receiver, teamID))
+    print("The receiver is {} and I am {}".format(receiver, teamID))
     if packet_type != 1 or receiver != teamID:
         return None, None
     packet_counter = binaryStrToInt(header[3:8])
