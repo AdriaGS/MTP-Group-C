@@ -206,7 +206,7 @@ try:
 				###############################################################################################################################
 
 				#Read file to transmit
-				inFile = open("MTP_Prev.txt", "rb")
+				inFile = open("~/home/pi/Documents/MTP-Group-C/Final_Code/MTP_Prev.txt", "rb")
 				data2Tx = inFile.read()
 				inFile.close()
 
