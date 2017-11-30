@@ -18,7 +18,7 @@ try:
     radio.setChannel(30)
 
     radio.setDataRate(NRF24.BR_2MBPS)
-    radio.setPALevel(NRF24.PA_MAX)
+    radio.setPALevel(NRF24.PA_HIGH)
     radio.setAutoAck(False)
     radio.enableDynamicPayloads()
 
