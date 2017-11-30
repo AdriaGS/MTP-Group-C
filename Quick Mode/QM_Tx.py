@@ -17,7 +17,7 @@ try:
     radio = NRF24(GPIO, spidev.SpiDev())
     radio.begin(0, 22)
     radio.setPayloadSize(1)
-    radio.setChannel(63)
+    radio.setChannel(30)
 
     radio.setDataRate(NRF24.BR_250KBPS)
     radio.setPALevel(NRF24.PA_MAX)
