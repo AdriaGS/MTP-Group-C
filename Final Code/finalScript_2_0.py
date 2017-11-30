@@ -107,7 +107,7 @@ try:
 	def led_blink(time_onoff, end):
 
 		global blink
-		for i in range(0, end)
+		for i in range(0, end):
 			GPIO.output(2, 0)
 			time.sleep(time_onoff)
 			GPIO.output(2, 1)
