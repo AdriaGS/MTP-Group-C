@@ -108,6 +108,7 @@ try:
 			time.sleep(time_onoff)
 			GPIO.output(gpio_value, 0)
 			time.sleep(time_onoff)
+		return
 
 	def main():
 		GPIO.setmode(GPIO.BCM)
