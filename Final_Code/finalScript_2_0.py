@@ -311,7 +311,7 @@ try:
 
 					#If an established time passes and we have not received anything we retransmit the handshake packet
 					if((time.time()) > timeout):
-						print("No Handshake ACK received resending message")
+						#print("No Handshake ACK received resending message")
 						radio_Tx.write(handshakePacket)
 						timeout = time.time() + time_ack
 
