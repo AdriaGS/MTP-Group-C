@@ -56,7 +56,7 @@ class Radio(object):
             # else:
             #     self.radio.openWritingPipe(self.pipes)
 
-            # self.radio.printDetails()
+            self.radio.printDetails()
             # print ("----------------------------------------")
 
             
@@ -91,12 +91,12 @@ class Radio(object):
             if not self.radio.isPVariant():
                 # If self.radio configures correctly, we confirmed a "plus" (ie "variant") nrf24l01+
                 # Else print diagnostic stuff & exit.
-                self.radio.printDetails()
+                # self.radio.printDetails()
                 # (or we could always just print details anyway, even on good setup, for debugging)
                 print ("NRF24L01+ not found.")
                 return
 
-            self.radio.printDetails()
+            # self.radio.printDetails()
 
             timeout = time.time() + 0.1
 
@@ -108,12 +108,12 @@ class Radio(object):
             rx_socket.bind((self.UDP_IP, self.rx_UPD_port))
             rx_socket.setblocking(0)
 
-            # print("Reading from socket...")
+            print("Reading from socket...")
             ready = select.select([rx_socket], [], [], timeOut)
             if len(ready[0]) > 0:
                 data, _ = rx_socket.recvfrom(1024)
                 data = [ord(byte) for byte in data]
-                # print("Received packet of len {} with header {:08b}".format(len(data), data[0]))
+                print("Received packet of len {} with header {:08b}".format(len(data), data[0]))
                 rx_socket.close()
 
                 # Emulate error probability
