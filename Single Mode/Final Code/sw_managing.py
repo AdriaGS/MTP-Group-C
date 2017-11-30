@@ -20,8 +20,8 @@ try:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(2, GPIO.OUT) #LED 1 TX_RX Running
     GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
-    GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #ON or OFF
-    GPIO.setup(15, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Transmit or Receive
+    GPIO.setup(15, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #ON or OFF
+    GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Transmit or Receive
     GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Network Mode
 
     GPIO.output(2, 0)
