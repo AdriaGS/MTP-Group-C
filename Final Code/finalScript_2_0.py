@@ -174,8 +174,8 @@ try:
 				radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
 				#Configuration of the power level to be used by the transceiver
-				radio_Tx.setPALevel(NRF24.PA_HIGH)
-				radio_Rx.setPALevel(NRF24.PA_HIGH)
+				radio_Tx.setPALevel(NRF24.PA_MAX)
+				radio_Rx.setPALevel(NRF24.PA_MAX)
 
 				#CRC Length
 				radio_Tx.setCRCLength(NRF24.CRC_8)
@@ -395,8 +395,8 @@ try:
 				radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
 				#Configuration of the power level to be used by the transceiver
-				radio_Tx.setPALevel(NRF24.PA_HIGH)
-				radio_Rx.setPALevel(NRF24.PA_HIGH)
+				radio_Tx.setPALevel(NRF24.PA_MAX)
+				radio_Rx.setPALevel(NRF24.PA_MAX)
 
 				#CRC Length
 				radio_Tx.setCRCLength(NRF24.CRC_8)
@@ -459,12 +459,13 @@ try:
 							if(chr(handshake_frame[0]) == original_flag_data):
 								handshake_frame = handshake_frame[1:len(handshake_frame)]
 								compressed.extend(handshake_frame)
-								blink = 1
-								led_thread.start()
 
 								radio_Tx.write(list("ACK") + list(original_flag_data))
 								flag_n = (flag_n + 1) % 10
 								receivedHandshakePacket = 1
+
+				blink = 1
+				led_thread.start()
 
 				bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 				suma = 0
