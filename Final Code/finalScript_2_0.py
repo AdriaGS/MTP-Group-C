@@ -307,6 +307,7 @@ try:
 				messageSent = ""
 				#We iterate over every packet to be sent
 				suma = 0
+				retrans = 0
 				for message in packets:
 
 					messageSent += message
@@ -338,6 +339,8 @@ try:
 									if(time_ack > 0.2):
 										time_ack = 0.2
 
+								retrans += 1
+
 							else:
 								ack_received = 1
 
@@ -351,6 +354,8 @@ try:
 					flag_n = (flag_n + 1) % 10
 
 				blink = 0
+
+				print("Number of retransmissions = " + str(retrans))
 
 				GPIO.output(3, 1)
 				radio_Rx.stopListening()
@@ -460,6 +465,7 @@ try:
 								receivedHandshakePacket = 1
 
 				bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
+				suma = 0
 
 				for i in range(0, int(numberOfPackets)-1):
 
@@ -481,6 +487,9 @@ try:
 								radio_Tx.write(list("ACK") + list(flag))
 								receivedPacket = 1
 
+							else:
+								suma += 1
+
 					flag_n = (flag_n + 1) % 10
 					receivedPacket = 0
 
@@ -488,6 +497,8 @@ try:
 				thread.start()
 
 				blink = 0
+
+				print("Number of retransmissions = " + str(suma))
 
 				GPIO.output(3, 1)
 				radio_Rx.stopListening()
