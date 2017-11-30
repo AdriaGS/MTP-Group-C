@@ -130,7 +130,7 @@ try:
 		while True:
 			input_onoff = GPIO.input(15)
 			blink = 1
-			led_thread2 = Thread(target = led_blink, args = (2, 1, ))
+			led_thread2 = Thread(target = led_blink, args = (2, 1))
 			
 			if(input_onoff == False):
 				time.sleep(1)
