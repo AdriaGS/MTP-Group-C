@@ -132,7 +132,7 @@ try:
 		led_thread2.start()
 
 		while True:
-			input_onoff = GPIO.input(14)
+			input_onoff = GPIO.input(15)
 			blink = 1
 			if(input_onoff == False):
 				time.sleep(1)
