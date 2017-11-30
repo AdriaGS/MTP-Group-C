@@ -124,17 +124,17 @@ try:
 
 		TX0_RX1 = True
 		global blink
+		blink = 0
 
 		led_thread2 = Thread(target = led_blink, args = (0.7, ))
+		led_thread2.start()
 
 		while True:
 			input_onoff = GPIO.input(14)
 			blink = 1
-
 			if(input_onoff == False):
 				time.sleep(1)
 				print("Waiting to start")
-				led_thread2.start()
 			else:
 				blink = 0
 				break
