@@ -33,35 +33,11 @@ class Radio(object):
             PWR_LVL = NRF24.PA_MIN  # Transceiver output (HIGH = -6 dBm + 20 dB)
             BRATE = NRF24.BR_250KBPS  # 250 kbps bit rate
             PLOAD_SIZE = 32
-            # self.radio = NRF24()
 
             self.pipes = pipes
 
-            # if rx:
-            #     self.radio.begin(0, 1, 24, 18)
-            # else:
-            #     self.radio.begin(0, 0, 25, 18)
-
-            # self.radio.setPayloadSize(PLOAD_SIZE)
-            # self.radio.setChannel(RF_CH[0])
-            # self.radio.setDataRate(NRF24.BR_250KBPS)
-            # self.radio.setPALevel(NRF24.PA_MIN)
-            # self.radio.setAutoAck(False)
-            # self.radio.enableDynamicPayloads()
-            # self.radio.setCRCLength(NRF24.CRC_8)
-
-            # # Open the writing and reading pipe
-            # if rx:
-            #     self.radio.openReadingPipe(1, self.pipes)
-            # else:
-            #     self.radio.openWritingPipe(self.pipes)
-
-            self.radio.printDetails()
-            # print ("----------------------------------------")
-
             
             self.radio = NRF24(GPIO, spidev.SpiDev())
-            # self.radio.begin(1, 27)
 
 
             GPIO.setup(pins[1], GPIO.OUT, initial=GPIO.LOW)
@@ -96,7 +72,7 @@ class Radio(object):
                 print ("NRF24L01+ not found.")
                 return
 
-            # self.radio.printDetails()
+            self.radio.printDetails()
 
             timeout = time.time() + 0.1
 
