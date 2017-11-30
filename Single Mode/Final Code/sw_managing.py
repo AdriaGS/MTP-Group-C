@@ -15,6 +15,7 @@ try:
             time.sleep(0.5)
             GPIO.output(gpio_value, 0)
             time.sleep(0.5)
+        return
 
 
     GPIO.setmode(GPIO.BCM)
@@ -30,8 +31,8 @@ try:
     TX0_RX1 = True
     
     while True:
-        input_onoff = GPIO.input(14)
-        input_tx_rx = GPIO.input(15)
+        input_onoff = GPIO.input(15)
+        input_tx_rx = GPIO.input(14)
         input_nm = GPIO.input(18)
 
         stop = 1
