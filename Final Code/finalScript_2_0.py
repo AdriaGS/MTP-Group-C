@@ -169,8 +169,8 @@ try:
 				radio_Rx.setChannel(channel_RX)
 
 				#We set the Transmission Rate
-				radio_Tx.setDataRate(NRF24.BR_250KBPS)
-				radio_Rx.setDataRate(NRF24.BR_250KBPS)
+				radio_Tx.setDataRate(NRF24.BR_2MBPS)
+				radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
 				#Configuration of the power level to be used by the transceiver
 				radio_Tx.setPALevel(NRF24.PA_HIGH)
@@ -300,7 +300,7 @@ try:
 
 					#If an established time passes and we have not received anything we retransmit the handshake packet
 					if((time.time()) > timeout):
-						#print("No Handshake ACK received resending message")
+						print("No Handshake ACK received resending message")
 						radio_Tx.write(handshakePacket)
 						timeout = time.time() + time_ack
 
