@@ -129,15 +129,14 @@ try:
 
 		while True:
 			input_onoff = GPIO.input(15)
-			input_tx_rx = GPIO.input(14)
-			input_nm = GPIO.input(18)
 			if(input_onoff == False):
 				time.sleep(1)
 				print("Waiting to start")
 			else:
-				TX_RX = input_tx_rx
-				NM = input_nm
 				break
+		
+		TX_RX = GPIO.input(14)
+		NM = GPIO.input(18)
 
 		if(not NM):
 			#Single Mode Code
