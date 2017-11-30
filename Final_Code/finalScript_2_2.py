@@ -158,7 +158,7 @@ try:
 		radio_Tx.enableDynamicPayloads()
 		radio_Rx.enableDynamicPayloads()
 
-		logfile = open("LogFile.txt", 'wb')
+		logfile = open("logFile.txt", 'wb')
 
 		TX0_RX1 = True
 
