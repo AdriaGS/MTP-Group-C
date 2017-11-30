@@ -14,6 +14,7 @@ try:
 	BitRate = NRF24.BR_2MBPS
 	Power = NRF24.PA_MAX
 	CRC = NRF24.CRC_8
+	payloadSize = 32
 
 	def compress(uncompressed):
 		"""Compress a string to a list of output symbols."""
@@ -189,7 +190,6 @@ try:
 				print("Transmitter")
 				pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 				pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
-				payloadSize = 32
 				channel_TX = Channels[0]
 				channel_RX = Channels[1]
 
@@ -383,7 +383,6 @@ try:
 			else:
 				print("Receiver")
 				pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
-				payloadSize = 32
 				channel_RX = Channels[0]
 				channel_TX = Channels[1]
 
