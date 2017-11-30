@@ -107,12 +107,7 @@ try:
 			GPIO.output(gpio_value, 1)
 			time.sleep(time_onoff)
 			GPIO.output(gpio_value, 0)
-<<<<<<< HEAD
 			time.sleep(time_onoff)
-=======
-			time.sleep(0.3)
-		return
->>>>>>> 42bcb812af2a04742daf72e55ed6b86d957713ee
 
 	def main():
 		GPIO.setmode(GPIO.BCM)
@@ -132,24 +127,19 @@ try:
 
 		while True:
 			input_onoff = GPIO.input(14)
-<<<<<<< HEAD
 			input_tx_rx = GPIO.input(15)
 			input_nm = GPIO.input(18)
 			blink = 1
 			led_thread2 = Thread(target = led_blink, args = (2, 1, ))
-=======
->>>>>>> 42bcb812af2a04742daf72e55ed6b86d957713ee
+
 			if(input_onoff == False):
 				time.sleep(1)
 				print("Waiting to start")
 				led_thread2.start()
 			else:
-<<<<<<< HEAD
 				TX_RX = input_tx_rx
 				NM = input_nm
 				blink = 0
-=======
->>>>>>> 42bcb812af2a04742daf72e55ed6b86d957713ee
 				break
 		
 		TX_RX = GPIO.input(15)
