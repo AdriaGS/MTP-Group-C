@@ -379,6 +379,7 @@ try:
 
 				time.sleep(2)
 				GPIO.cleanup()
+				logfile.close()
 
 			else:
 				print("Receiver")
@@ -498,6 +499,7 @@ try:
 
 				time.sleep(2)
 				GPIO.cleanup()
+				logfile.close()
 
 		else:
 			print("Network Mode")

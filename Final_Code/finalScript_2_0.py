@@ -158,7 +158,7 @@ try:
 		radio_Tx.enableDynamicPayloads()
 		radio_Rx.enableDynamicPayloads()
 
-		logfile = open("LogFile.txt", 'wb')
+		logfile = open("logFile.txt", 'wb')
 
 		TX0_RX1 = True
 
@@ -379,6 +379,7 @@ try:
 
 				time.sleep(2)
 				GPIO.cleanup()
+				logfile.close()
 
 			else:
 				print("Receiver")
@@ -498,6 +499,7 @@ try:
 
 				time.sleep(2)
 				GPIO.cleanup()
+				logfile.close()
 
 		else:
 			print("Network Mode")
