@@ -61,12 +61,8 @@ try:
 	def main():		
 
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(22, GPIO.OUT)
-		GPIO.output(22,1)
-		GPIO.setup(23, GPIO.OUT)
-		GPIO.output(23,1)
-		GPIO.setup(24, GPIO.OUT)
-		GPIO.output(24,1)
+		GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW)
+		GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
 
 		print("Transmitter")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
