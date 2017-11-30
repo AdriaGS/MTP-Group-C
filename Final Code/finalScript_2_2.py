@@ -361,7 +361,7 @@ try:
 
 				GPIO.output(3, 1)
 				radio_Rx.stopListening()
-				radio_Rx.closeReadingPipe(0, pipes[0])
+				radio_Rx.closeReadingPipe(0, pipe_Rx)
 				radio_Tx.end()
 				radio_Rx.end()
 				GPIO.output(22, 0)
