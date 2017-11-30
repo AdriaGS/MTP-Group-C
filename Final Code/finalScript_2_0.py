@@ -10,6 +10,11 @@ try:
 	from threading import Thread, Event
 	import nm_main as NetMode
 
+	Channels = [30, 50]
+	BitRate = NRF24.BR_2MBPS
+	Power = NRF24.PA_MAX
+	CRC = NRF24.CRC_8
+
 	def compress(uncompressed):
 		"""Compress a string to a list of output symbols."""
 	 
@@ -99,14 +104,16 @@ try:
 		outputFile.close()
 
 
-	def led_blink(time_onoff):
+	def led_blink(time_onoff, end):
 
 		global blink
-		while(blink):
-			GPIO.output(2, 1)
-			time.sleep(time_onoff)
+		for i in range(0, end)
 			GPIO.output(2, 0)
 			time.sleep(time_onoff)
+			GPIO.output(2, 1)
+			time.sleep(time_onoff)
+			if blink == 0:
+				break
 		return
 
 	def main():
@@ -119,19 +126,49 @@ try:
 		GPIO.setup(15, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Transmit or Receive
 		GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #Network Mode
 
-		GPIO.output(2, 0)
+		GPIO.output(2, 1)
 		GPIO.output(3, 0)
 
-		TX0_RX1 = True
-		global blink
-		blink = 0
+		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
+		radio_Tx = NRF24(GPIO, spidev.SpiDev())
+		radio_Rx = NRF24(GPIO, spidev.SpiDev())
+		radio_Tx.begin(0, 22)
+		radio_Rx.begin(1, 23)
 
-		led_thread2 = Thread(target = led_blink, args = (0.7, ))
+		#We set the Payload Size to the limit which is 32 bytes
+		radio_Tx.setPayloadSize(payloadSize)
+		radio_Rx.setPayloadSize(payloadSize)
+
+		#We set the Transmission Rate
+		radio_Tx.setDataRate(BitRate)
+		radio_Rx.setDataRate(BitRate)
+
+		#Configuration of the power level to be used by the transceiver
+		radio_Tx.setPALevel(Power)
+		radio_Rx.setPALevel(Power)
+
+		#CRC Length
+		radio_Tx.setCRCLength(CRC)
+		radio_Rx.setCRCLength(CRC)
+
+		#We disable the Auto Acknowledgement
+		radio_Tx.setAutoAck(False)
+		radio_Rx.setAutoAck(False)
+		radio_Tx.enableDynamicPayloads()
+		radio_Rx.enableDynamicPayloads()
+
+		logfile = open("LogFile.txt", 'wb')
+
+		TX0_RX1 = True
+
+		global blink
+		blink = 1
+
+		led_thread2 = Thread(target = led_blink, args = (0.7, 1000))
 		led_thread2.start()
 
 		while True:
 			input_onoff = GPIO.input(14)
-			blink = 1
 			if(input_onoff == False):
 				time.sleep(1)
 				print("Waiting to start")
@@ -141,6 +178,7 @@ try:
 		
 		TX_RX = GPIO.input(15)
 		NM = GPIO.input(18)
+		GPIO.output(2, 0)
 
 		if(not NM):
 			#Single Mode Code
@@ -152,40 +190,12 @@ try:
 				pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 				pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 				payloadSize = 32
-				channel_TX = 30
-				channel_RX = 50
-
-				#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
-				radio_Tx = NRF24(GPIO, spidev.SpiDev())
-				radio_Rx = NRF24(GPIO, spidev.SpiDev())
-				radio_Tx.begin(0, 22)
-				radio_Rx.begin(1, 23)
-
-				#We set the Payload Size to the limit which is 32 bytes
-				radio_Tx.setPayloadSize(payloadSize)
-				radio_Rx.setPayloadSize(payloadSize)
+				channel_TX = Channels[0]
+				channel_RX = Channels[1]
 
 				#We choose the channels to be used for one and the other transceiver
 				radio_Tx.setChannel(channel_TX)
 				radio_Rx.setChannel(channel_RX)
-
-				#We set the Transmission Rate
-				radio_Tx.setDataRate(NRF24.BR_2MBPS)
-				radio_Rx.setDataRate(NRF24.BR_2MBPS)
-
-				#Configuration of the power level to be used by the transceiver
-				radio_Tx.setPALevel(NRF24.PA_MAX)
-				radio_Rx.setPALevel(NRF24.PA_MAX)
-
-				#CRC Length
-				radio_Tx.setCRCLength(NRF24.CRC_8)
-				radio_Rx.setCRCLength(NRF24.CRC_8)
-
-				#We disable the Auto Acknowledgement
-				radio_Tx.setAutoAck(False)
-				radio_Rx.setAutoAck(False)
-				radio_Tx.enableDynamicPayloads()
-				radio_Rx.enableDynamicPayloads()
 
 				#Open the writing and reading pipe
 				radio_Tx.openWritingPipe(pipe_Tx)
@@ -227,7 +237,7 @@ try:
 				time_ack = 0.08
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (0.3, ))
+				led_thread = Thread(target = led_blink, args = (0.3, 1000))
 
 				#Compression of the data to transmit into data2Tx_compressed
 				data2Tx_compressed = compress(data2Tx)
@@ -271,7 +281,6 @@ try:
 				timeout = time.time() + time_ack
 				radio_Rx.startListening()
 				str_Handshake = ""
-				blink = 1
 				led_thread.start()
 
 				print("Starting Script")
@@ -283,6 +292,7 @@ try:
 				while not (handshakeAck_received):
 
 					if radio_Rx.available(0):
+						handshake = []
 						radio_Rx.read(handshake, radio_Rx.getDynamicPayloadSize())
 						#print("Something Received")
 
@@ -322,6 +332,7 @@ try:
 					#While we don't receive a correct ack for the transmitted packet we keep trying for the same packet
 					while not (ack_received):
 						if radio_Rx.available(0):
+							ack = []
 							radio_Rx.read(ack, radio_Rx.getDynamicPayloadSize())
 
 							for c in range(0, len(ack)):
@@ -341,12 +352,14 @@ try:
 										time_ack = 0.2
 
 								retrans += 1
+								logfile.write("Wrong ACK received")
 
 							else:
 								ack_received = 1
 
 						#If an established time passes and we have not received anything we retransmit the data packet
 						if((time.time()) > timeout):
+							logfile.write("NO ACK received")
 							suma += 1
 							radio_Tx.write(message2Send)
 							timeout = time.time() + time_ack
@@ -363,8 +376,6 @@ try:
 				radio_Rx.closeReadingPipe(0)
 				radio_Tx.end()
 				radio_Rx.end()
-				GPIO.output(22, 0)
-				GPIO.output(23, 0)
 
 				time.sleep(2)
 				GPIO.cleanup()
@@ -373,40 +384,12 @@ try:
 				print("Receiver")
 				pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 				payloadSize = 32
-				channel_RX = 30
-				channel_TX = 50
-
-				#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
-				radio_Tx = NRF24(GPIO, spidev.SpiDev())
-				radio_Rx = NRF24(GPIO, spidev.SpiDev())
-				radio_Tx.begin(0, 22)
-				radio_Rx.begin(1, 23)
-
-				#We set the Payload Size to the limit which is 32 bytes
-				radio_Tx.setPayloadSize(payloadSize)
-				radio_Rx.setPayloadSize(payloadSize)
+				channel_RX = Channels[0]
+				channel_TX = Channels[1]
 
 				#We choose the channels to be used for one and the other transceiver
 				radio_Tx.setChannel(channel_TX)
 				radio_Rx.setChannel(channel_RX)
-
-				#We set the Transmission Rate
-				radio_Tx.setDataRate(NRF24.BR_2MBPS)
-				radio_Rx.setDataRate(NRF24.BR_2MBPS)
-
-				#Configuration of the power level to be used by the transceiver
-				radio_Tx.setPALevel(NRF24.PA_MAX)
-				radio_Rx.setPALevel(NRF24.PA_MAX)
-
-				#CRC Length
-				radio_Tx.setCRCLength(NRF24.CRC_8)
-				radio_Rx.setCRCLength(NRF24.CRC_8)
-
-				#We disable the Auto Acknowledgement
-				radio_Tx.setAutoAck(False)
-				radio_Rx.setAutoAck(False)
-				radio_Tx.enableDynamicPayloads()
-				radio_Rx.enableDynamicPayloads()
 
 				#Open the writing and reading pipe
 				radio_Tx.openWritingPipe(pipes[1])
@@ -434,7 +417,7 @@ try:
 				receivedHandshakePacket = 0
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (0.3, ))
+				led_thread = Thread(target = led_blink, args = (0.3, 5))
 
 				radio_Rx.startListening()
 
@@ -442,7 +425,8 @@ try:
 				while not (receivedHandshakePacket):
 					str_Handshakeframe = ""
 
-					if radio_Rx.available(0):
+					if radio_Rx.available([0]):
+						handshake_frame = []
 						radio_Rx.read(handshake_frame, radio_Rx.getDynamicPayloadSize())
 
 						for c in range(0, len(handshake_frame)):
@@ -464,11 +448,9 @@ try:
 								flag_n = (flag_n + 1) % 10
 								receivedHandshakePacket = 1
 
-				blink = 1
-				led_thread.start()
-
 				bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
 				suma = 0
+				GPIO.output(2, 1)
 
 				for i in range(0, int(numberOfPackets)-1):
 
@@ -477,7 +459,8 @@ try:
 
 					while not (receivedPacket):
 
-						if radio_Rx.available(0):
+						if radio_Rx.available([0]):
+							frame = []
 							radio_Rx.read(frame, radio_Rx.getDynamicPayloadSize())
 							#print(frame)
 
@@ -487,11 +470,13 @@ try:
 								if (((len(compressed)*8) % (bitsMax*300)) == 0):
 									thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
 									thread.start()
+									led_thread.start()
 								radio_Tx.write(list("ACK") + list(flag))
 								receivedPacket = 1
 
 							else:
 								suma += 1
+								logfile.write("Wrong Packet received")
 
 					flag_n = (flag_n + 1) % 10
 					receivedPacket = 0
@@ -500,16 +485,16 @@ try:
 				thread.start()
 
 				blink = 0
+				GPIO.output(2, 0)
 
 				print("Number of retransmissions = " + str(suma))
+				logfile.write("Number of retransmissions = " + str(suma))
 
 				GPIO.output(3, 1)
 				radio_Rx.stopListening()
 				radio_Rx.closeReadingPipe(0)
 				radio_Tx.end()
 				radio_Rx.end()
-				GPIO.output(22, 0)
-				GPIO.output(23, 0)
 
 				time.sleep(2)
 				GPIO.cleanup()
@@ -522,6 +507,4 @@ try:
 		main()
 
 except KeyboardInterrupt:
-	GPIO.output(22,0)
-	GPIO.output(23,0)
 	GPIO.cleanup()
