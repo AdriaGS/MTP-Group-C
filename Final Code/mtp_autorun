@@ -1,0 +1,52 @@
+#! /bin/sh
+# /etc/init.d/mtp_autorun
+
+### BEGIN INIT INFO
+# Provides:          mtp_final_script
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Simple script to start a program at boot
+# Description:       A simple script from www.stuffaboutcode.com which will start / stop a program a boot / shutdown.
+### END INIT INFO
+
+# If you want a command to always run, put it here
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    echo "Starting mtp_autorun"
+    # run application you want to start
+    # /path/to/file.py = /home/pi/Documents/MTP\ -\ Group\ C/Final\ Code/finalScript_2_{0,2}.py
+    python /path/to/file.py
+    ;;
+  stop)
+    echo "Stopping mtp_autorun"
+    # kill application you want to stop
+    killall python /path/to/file.py
+    ;;
+  *)
+    echo "Usage: /etc/init.d/mtp_autorun {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
+#################################
+######### INSTRUCTIONS ##########
+# 1) Copy this file with "sudo" permissions in /etc/init.d/
+#
+# 2) Make script executable with: sudo chmod 755 /etc/init.d/mtp_autorun
+#
+# 3.a) Test running program: sudo /etc/init.d/mtp_autorun start
+#
+# 3.b) Test stopping program: sudo /etc/init.d/mtp_autorun stop
+#
+# 4) Script running at start-up: sudo update-rc.d mtp_autorun defaults
+#
+# Extra) To ever remove the script from start-up: sudo update-rc.d -f mtp_autorun remove
+#
+#################################
+#################################
