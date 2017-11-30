@@ -99,14 +99,14 @@ try:
 		outputFile.close()
 
 
-	def led_blink(gpio_value, time_onoff):
+	def led_blink(time_onoff):
 
 		global blink
 		GPIO.setmode(GPIO.BCM)
 		while(blink):
-			GPIO.output(gpio_value, 1)
+			GPIO.output(2, 1)
 			time.sleep(time_onoff)
-			GPIO.output(gpio_value, 0)
+			GPIO.output(2, 0)
 			time.sleep(time_onoff)
 		return
 
@@ -130,7 +130,7 @@ try:
 		while True:
 			input_onoff = GPIO.input(15)
 			blink = 1
-			led_thread2 = Thread(target = led_blink, args = (2, 1))
+			led_thread2 = Thread(target = led_blink, args = (0.7, ))
 			
 			if(input_onoff == False):
 				time.sleep(1)
@@ -228,7 +228,7 @@ try:
 				time_ack = 0.02
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (2, 0.3))
+				led_thread = Thread(target = led_blink, args = (0.3, ))
 
 				#Compression of the data to transmit into data2Tx_compressed
 				data2Tx_compressed = compress(data2Tx)
@@ -429,7 +429,7 @@ try:
 				receivedHandshakePacket = 0
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (2, 0.3))
+				led_thread = Thread(target = led_blink, args = (0.3, ))
 
 				radio_Rx.startListening()
 
