@@ -38,7 +38,7 @@ try:
         stop = 1
         #LED Blinking thread
 
-        if(input_onoff == True):
+        if(not input_onoff):
             time.sleep(1)
             print("Waiting to start")
             print("Tx=1 or Rx=0: " + str(input_tx_rx))
