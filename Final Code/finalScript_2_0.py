@@ -173,8 +173,8 @@ try:
 				radio_Rx.setDataRate(NRF24.BR_2MBPS)
 
 				#Configuration of the power level to be used by the transceiver
-				radio_Tx.setPALevel(NRF24.PA_HIGH)
-				radio_Rx.setPALevel(NRF24.PA_HIGH)
+				radio_Tx.setPALevel(NRF24.PA_MAX)
+				radio_Rx.setPALevel(NRF24.PA_MAX)
 
 				#CRC Length
 				radio_Tx.setCRCLength(NRF24.CRC_8)
