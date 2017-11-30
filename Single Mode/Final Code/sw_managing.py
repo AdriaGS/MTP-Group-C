@@ -29,8 +29,6 @@ try:
 
     TX0_RX1 = True
     
-    led_thread = Thread(target = led_blink, args = (2))
-    led_thread.start()
     while True:
         input_onoff = GPIO.input(14)
         input_tx_rx = GPIO.input(15)
@@ -57,6 +55,8 @@ try:
             print("Network Mode: " + str(input_nm))
 
             blink = 1
+            led_thread = Thread(target = led_blink, args = (2,))
+            led_thread.start()
             #GPIO.output(2, 0)
             GPIO.output(3, 0)
             
