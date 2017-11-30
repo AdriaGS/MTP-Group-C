@@ -150,8 +150,8 @@ try:
 			########################################
 			if(TX_RX):
 				print("Transmitter")
-				pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
-				pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
+				pipe_Tx = [0xa7, 0xa7, 0xa7, 0xa7, 0xa7]
+				pipe_Rx = [0xd2, 0xd2, 0xd2, 0xd2, 0xd2]
 				payloadSize = 32
 				channel_TX = 30
 				channel_RX = 50
@@ -366,7 +366,7 @@ try:
 
 			else:
 				print("Receiver")
-				pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+				pipes = [[0xa7, 0xa7, 0xa7, 0xa7, 0xa7], [0xd2, 0xd2, 0xd2, 0xd2, 0xd2]]
 				payloadSize = 32
 				channel_RX = 30
 				channel_TX = 50
@@ -482,12 +482,6 @@ try:
 									thread.start()
 								radio_Tx.write(list("ACK") + list(flag))
 								receivedPacket = 1
-							else:
-								if flag_n == 0:
-									radio_Tx.write(list("ACK") + list('J'))
-								else:
-									radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
-								timeout = time.time() + time_ack
 
 					flag_n = (flag_n + 1) % 10
 					receivedPacket = 0
