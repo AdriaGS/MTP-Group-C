@@ -416,7 +416,7 @@ try:
 				receivedHandshakePacket = 0
 
 				#LED Blinking thread
-				led_thread = Thread(target = led_blink, args = (0.3, 5))
+				#led_thread = Thread(target = led_blink, args = (0.3, 5))
 
 				radio_Rx.startListening()
 
@@ -469,6 +469,7 @@ try:
 								if (((len(compressed)*8) % (bitsMax*300)) == 0):
 									thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
 									thread.start()
+									led_thread = Thread(target = led_blink, args = (0.3, 5))
 									led_thread.start()
 								radio_Tx.write(list("ACK") + list(flag))
 								receivedPacket = 1
