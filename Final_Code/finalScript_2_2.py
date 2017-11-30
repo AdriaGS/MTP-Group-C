@@ -187,7 +187,8 @@ try:
 			########################################
 			########################################
 			if(TX_RX):
-				print("Transmitter")
+				#print("Transmitter")
+				logfile.write("Transmitter")
 				pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 				pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 				channel_TX = Channels[0]
@@ -283,7 +284,9 @@ try:
 				str_Handshake = ""
 				led_thread.start()
 
-				print("Starting Script")
+				logfile.write("Started up and compression done")
+
+				#print("Starting Script")
 
 				###############################################################################################################################
 				###############################################################################################################################
@@ -369,9 +372,12 @@ try:
 
 				blink = 0
 
-				print("Number of retransmissions = " + str(retrans))
+				#print("Number of retransmissions = " + str(retrans))
+				logfile.write("Number of retransmissions = " + str(suma))
 
 				GPIO.output(3, 1)
+				GPIO.output(2, 0)
+
 				radio_Rx.stopListening()
 				radio_Rx.closeReadingPipe(0)
 				radio_Tx.end()
@@ -382,7 +388,8 @@ try:
 				logfile.close()
 
 			else:
-				print("Receiver")
+				#print("Receiver")
+				logfile.write("Receiver")
 				pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 				channel_RX = Channels[0]
 				channel_TX = Channels[1]
@@ -488,7 +495,7 @@ try:
 				blink = 0
 				GPIO.output(2, 0)
 
-				print("Number of retransmissions = " + str(suma))
+				#print("Number of retransmissions = " + str(suma))
 				logfile.write("Number of retransmissions = " + str(suma))
 
 				GPIO.output(3, 1)
@@ -502,7 +509,8 @@ try:
 				logfile.close()
 
 		else:
-			print("Network Mode")
+			#print("Network Mode")
+			logfile.write("Network Mode")
 			NetMode.main_nm()
 
 	if __name__ == '__main__':
