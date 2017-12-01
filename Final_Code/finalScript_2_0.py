@@ -516,11 +516,18 @@ try:
 				radio_Rx.end()
 
 				time.sleep(5)
-				GPIO.cleanup()
 				logfile.close()
 
 				a  = os.popen('diff RxFileMTP-GroupC-SR.txt MTP_Prev.txt').readlines()
 				print(a)
+
+				if(a == []):
+					GPIO.output(3, 0)
+					time.sleep(1)
+					GPIO.output(3, 1)
+					time.slee(1)
+
+				GPIO.cleanup()
 
 		else:
 			#print("Network Mode")
