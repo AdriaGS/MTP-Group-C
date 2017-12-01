@@ -535,6 +535,12 @@ try:
 			logfile.close()
 			NetMode.main_nm()
 
+			for i in range(0,20):
+				GPIO.output(3, 1)
+				time.sleep(1)
+				GPIO.output(3, 0)
+				time.sleep(1)
+
 	if __name__ == '__main__':
 		main()
 
