@@ -9,6 +9,10 @@ def main_nm():
     dilationFactor = 7
     networkSize = 4
 
+    logfile = open("/home/pi/Documents/MTP-Group-C/Final_Code/logFile_NM.txt", "wb")
+    logfile.write("Hello from the Network Mode")
+    logfile.close()
+
     print("Hello from the Network Mode")
     transmission_init = True
     teamNumber = 2

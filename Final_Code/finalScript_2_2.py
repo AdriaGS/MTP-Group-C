@@ -100,7 +100,7 @@ try:
 		str_decompressed = decompress(compde)
 
 		#Open file to save the transmitted data
-		outputFile = open("RxFileMTP-GroupC-SR.txt", "wb")
+		outputFile = open("/home/pi/Documents/MTP-Group-C/Final_Code/RxFileMTP-GroupC-SR.txt", "wb")
 		outputFile.write(str_decompressed)
 		outputFile.close()
 
@@ -532,6 +532,7 @@ try:
 		else:
 			#print("Network Mode")
 			logfile.write("Network Mode")
+			logfile.close()
 			NetMode.main_nm()
 
 	if __name__ == '__main__':
