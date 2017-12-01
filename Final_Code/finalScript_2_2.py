@@ -133,8 +133,8 @@ try:
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
 		radio_Rx = NRF24(GPIO, spidev.SpiDev())
-		radio_Tx.begin(0, 22)
-		radio_Rx.begin(1, 23)
+		radio_Tx.begin(0, 23)
+		radio_Rx.begin(1, 22)
 
 		#We set the Payload Size to the limit which is 32 bytes
 		radio_Tx.setPayloadSize(payloadSize)
