@@ -133,8 +133,8 @@ try:
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
 		radio_Rx = NRF24(GPIO, spidev.SpiDev())
-		radio_Tx.begin(0, 23)
-		radio_Rx.begin(1, 22)
+		radio_Tx.begin(0, 22)
+		radio_Rx.begin(1, 23)
 
 		#We set the Payload Size to the limit which is 32 bytes
 		radio_Tx.setPayloadSize(payloadSize)
@@ -319,6 +319,9 @@ try:
 						#print("No Handshake ACK received resending message")
 						radio_Tx.write(handshakePacket)
 						timeout = time.time() + time_ack
+
+				led_thread = Thread(target = led_blink, args = (0.3, 5))
+				led_thread.start()
 
 				messageSent = ""
 				#We iterate over every packet to be sent

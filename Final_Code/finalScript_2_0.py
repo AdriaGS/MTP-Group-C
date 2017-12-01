@@ -320,6 +320,9 @@ try:
 						radio_Tx.write(handshakePacket)
 						timeout = time.time() + time_ack
 
+				led_thread = Thread(target = led_blink, args = (0.3, 5))
+				led_thread.start()
+
 				messageSent = ""
 				#We iterate over every packet to be sent
 				suma = 0
