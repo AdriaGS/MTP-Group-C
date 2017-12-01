@@ -24,7 +24,7 @@ class Team(object):
             if i != self.teamID:
                 savingFilePath = os.path.join("/home/pi/Documents/MTP-Group-C/Final_Code/savingFiles" + str(self.teamID), "team" + str(i), "received_file.txt")
                 self.savingFiles[i] = FileClass(reader=False, path=savingFilePath)
-                senderFolder = os.path.join("/home/pi/Documents/MTP-Group-C/Final_Code/sendFiles" + str(self.teamID), "team" + str(i))
+                senderFolder = os.path.join("/home/pi/Documents/MTP-Group-C/Final_Code/sendFiles2" + str(self.teamID), "team" + str(i))
                 senderFilePath = os.path.join(senderFolder, os.listdir(senderFolder)[0])
                 self.senderFiles[i] = FileClass(reader=True, path=senderFilePath)
 
