@@ -130,35 +130,6 @@ try:
 		GPIO.output(2, 1)
 		GPIO.output(3, 0)
 
-		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
-		radio_Tx = NRF24(GPIO, spidev.SpiDev())
-		radio_Rx = NRF24(GPIO, spidev.SpiDev())
-		radio_Tx.begin(0, 22)
-		radio_Rx.begin(1, 23)
-
-		#We set the Payload Size to the limit which is 32 bytes
-		radio_Tx.setPayloadSize(payloadSize)
-		radio_Rx.setPayloadSize(payloadSize)
-
-		#We set the Transmission Rate
-		radio_Tx.setDataRate(BitRate)
-		radio_Rx.setDataRate(BitRate)
-
-		#Configuration of the power level to be used by the transceiver
-		radio_Tx.setPALevel(Power)
-		radio_Rx.setPALevel(Power)
-
-		#CRC Length
-		radio_Tx.setCRCLength(CRC)
-		radio_Rx.setCRCLength(CRC)
-
-		#We disable the Auto Acknowledgement
-		radio_Tx.setAutoAck(False)
-		radio_Rx.setAutoAck(False)
-		radio_Tx.enableDynamicPayloads()
-		radio_Rx.enableDynamicPayloads()
-
-
 		logfile = open("/home/pi/Documents/MTP-Group-C/Final_Code/logFile.txt", 'wb')
 
 		TX0_RX1 = True
@@ -188,6 +159,34 @@ try:
 			########################################
 			########################################
 			########################################
+			#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
+			radio_Tx = NRF24(GPIO, spidev.SpiDev())
+			radio_Rx = NRF24(GPIO, spidev.SpiDev())
+			radio_Tx.begin(0, 22)
+			radio_Rx.begin(1, 23)
+
+			#We set the Payload Size to the limit which is 32 bytes
+			radio_Tx.setPayloadSize(payloadSize)
+			radio_Rx.setPayloadSize(payloadSize)
+
+			#We set the Transmission Rate
+			radio_Tx.setDataRate(BitRate)
+			radio_Rx.setDataRate(BitRate)
+
+			#Configuration of the power level to be used by the transceiver
+			radio_Tx.setPALevel(Power)
+			radio_Rx.setPALevel(Power)
+
+			#CRC Length
+			radio_Tx.setCRCLength(CRC)
+			radio_Rx.setCRCLength(CRC)
+
+			#We disable the Auto Acknowledgement
+			radio_Tx.setAutoAck(False)
+			radio_Rx.setAutoAck(False)
+			radio_Tx.enableDynamicPayloads()
+			radio_Rx.enableDynamicPayloads()
+
 			if(TX_RX):
 				#print("Transmitter")
 				logfile.write("Transmitter\n")
