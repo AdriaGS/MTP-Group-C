@@ -525,7 +525,7 @@ try:
 					GPIO.output(3, 0)
 					time.sleep(1)
 					GPIO.output(3, 1)
-					time.slee(1)
+					time.sleep(1)
 
 				GPIO.cleanup()
 
