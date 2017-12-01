@@ -159,7 +159,7 @@ try:
 		radio_Rx.enableDynamicPayloads()
 
 
-		logfile = open("logFile.txt", 'wb')
+		logfile = open("/home/pi/Documents/MTP-Group-C/Final_Code/logFile.txt", 'wb')
 
 		TX0_RX1 = True
 
@@ -190,7 +190,7 @@ try:
 			########################################
 			if(TX_RX):
 				#print("Transmitter")
-				logfile.write("Transmitter")
+				logfile.write("Transmitter\n")
 				pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 				pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 				channel_TX = Channels[0]
@@ -286,7 +286,7 @@ try:
 				str_Handshake = ""
 				led_thread.start()
 
-				logfile.write("Started up and compression done")
+				logfile.write("Started up and compression done\n")
 
 				#print("Starting Script")
 
@@ -357,14 +357,14 @@ try:
 										time_ack = 0.2
 
 								retrans += 1
-								logfile.write("Wrong ACK received")
+								logfile.write("Wrong ACK received\n")
 
 							else:
 								ack_received = 1
 
 						#If an established time passes and we have not received anything we retransmit the data packet
 						if((time.time()) > timeout):
-							logfile.write("NO ACK received")
+							logfile.write("NO ACK received\n")
 							suma += 1
 							radio_Tx.write(message2Send)
 							timeout = time.time() + time_ack
@@ -391,7 +391,7 @@ try:
 
 			else:
 				#print("Receiver")
-				logfile.write("Receiver")
+				logfile.write("Receiver\n")
 				pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 				channel_RX = Channels[0]
 				channel_TX = Channels[1]
@@ -486,7 +486,7 @@ try:
 
 							else:
 								suma += 1
-								logfile.write("Wrong Packet received")
+								logfile.write("Wrong Packet received\n")
 
 					flag_n = (flag_n + 1) % 10
 					receivedPacket = 0
