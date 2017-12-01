@@ -515,7 +515,7 @@ try:
 				radio_Tx.end()
 				radio_Rx.end()
 
-				time.sleep(2)
+				time.sleep(5)
 				GPIO.cleanup()
 				logfile.close()
 
