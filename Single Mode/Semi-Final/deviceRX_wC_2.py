@@ -77,8 +77,6 @@ try:
 
 		start = time.time()
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
 		GPIO.setup(3, GPIO.OUT) #LED 2 End-of-File
 		GPIO.output(3, 0)
 
@@ -248,14 +246,10 @@ try:
 		radio_Rx.end()
 
 		time.sleep(5)
-		GPIO.output(22,0)
-		GPIO.output(23,0)
 		GPIO.cleanup()
 
 	if __name__ == '__main__':
 		main()
 
 except KeyboardInterrupt:
-	GPIO.output(22,0)
-	GPIO.output(23,0)
 	GPIO.cleanup()
