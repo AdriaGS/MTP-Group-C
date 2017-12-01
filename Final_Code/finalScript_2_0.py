@@ -208,7 +208,7 @@ try:
 				###############################################################################################################################
 
 				#Read file to transmit
-				inFile = open("/home/pi/Documents/MTP-Group-C/Final_Code/TXFILE-C-SRI-1.txt", "rb")
+				inFile = open("/home/pi/Documents/MTP-Group-C/Final_Code/TXFILE-C-MRM-3.txt", "rb")
 				data2Tx = inFile.read()
 				inFile.close()
 
