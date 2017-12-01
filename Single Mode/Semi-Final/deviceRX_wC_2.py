@@ -83,8 +83,8 @@ try:
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 		payloadSize = 32
-		channel_RX = 30
-		channel_TX = 50
+		channel_RX = 35
+		channel_TX = 40
 
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
 		radio_Tx = NRF24(GPIO, spidev.SpiDev())
@@ -213,16 +213,6 @@ try:
 							thread.start()
 						radio_Tx.write(list("ACK") + list(flag))
 						receivedPacket = 1
-
-					else:
-						#if((suma % 10) == 0):
-							#print("Number of retransmissions increasing: " + str(suma))
-						suma += 1
-						if flag_n == 0:
-							radio_Tx.write(list("ACK") + list('J'))
-						else:
-							radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
-						timeout = time.time() + time_ack
 
 			flag_n = (flag_n + 1) % 10
 			receivedPacket = 0
