@@ -83,7 +83,7 @@ try:
 		print("Receiver")
 		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 		payloadSize = 32
-		channel_RX = 10
+		channel_RX = 50
 		channel_TX = 30
 
 		#Initializa the radio transceivers with the CE ping connected to the GPIO22 and GPIO24
