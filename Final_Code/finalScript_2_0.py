@@ -159,14 +159,14 @@ try:
 		radio_Rx.enableDynamicPayloads()
 
 
-		#logfile = open("logFile.txt", 'wb')
+		logfile = open("logFile.txt", 'wb')
 
 		TX0_RX1 = True
 
 		global blink
 		blink = 1
 
-		led_thread2 = Thread(target = led_blink, args = (0.7, 1000))
+		led_thread2 = Thread(target = led_blink, args = (0.1, 1000))
 		led_thread2.start()
 
 		while True:
@@ -176,6 +176,7 @@ try:
 				print("Waiting to start")
 			else:
 				blink = 0
+				time.sleep(0.3)
 				break
 		
 		TX_RX = GPIO.input(15)
@@ -189,7 +190,7 @@ try:
 			########################################
 			if(TX_RX):
 				#print("Transmitter")
-				#logfile.write("Transmitter")
+				logfile.write("Transmitter")
 				pipe_Tx = [0xe7, 0xe7, 0xe7, 0xe7, 0xe7]
 				pipe_Rx = [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]
 				channel_TX = Channels[0]
@@ -285,7 +286,7 @@ try:
 				str_Handshake = ""
 				led_thread.start()
 
-				#logfile.write("Started up and compression done")
+				logfile.write("Started up and compression done")
 
 				#print("Starting Script")
 
@@ -356,14 +357,14 @@ try:
 										time_ack = 0.2
 
 								retrans += 1
-								#logfile.write("Wrong ACK received")
+								logfile.write("Wrong ACK received")
 
 							else:
 								ack_received = 1
 
 						#If an established time passes and we have not received anything we retransmit the data packet
 						if((time.time()) > timeout):
-							#logfile.write("NO ACK received")
+							logfile.write("NO ACK received")
 							suma += 1
 							radio_Tx.write(message2Send)
 							timeout = time.time() + time_ack
@@ -374,7 +375,7 @@ try:
 				blink = 0
 
 				#print("Number of retransmissions = " + str(retrans))
-				#logfile.write("Number of retransmissions = " + str(suma))
+				logfile.write("Number of retransmissions = " + str(suma))
 
 				GPIO.output(3, 1)
 				GPIO.output(2, 0)
@@ -386,11 +387,11 @@ try:
 
 				time.sleep(2)
 				GPIO.cleanup()
-				#logfile.close()
+				logfile.close()
 
 			else:
 				#print("Receiver")
-				#logfile.write("Receiver")
+				logfile.write("Receiver")
 				pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 				channel_RX = Channels[0]
 				channel_TX = Channels[1]
@@ -485,7 +486,7 @@ try:
 
 							else:
 								suma += 1
-								#logfile.write("Wrong Packet received")
+								logfile.write("Wrong Packet received")
 
 					flag_n = (flag_n + 1) % 10
 					receivedPacket = 0
@@ -497,7 +498,7 @@ try:
 				GPIO.output(2, 0)
 
 				#print("Number of retransmissions = " + str(suma))
-				#logfile.write("Number of retransmissions = " + str(suma))
+				logfile.write("Number of retransmissions = " + str(suma))
 
 				GPIO.output(3, 1)
 				radio_Rx.stopListening()
@@ -507,11 +508,11 @@ try:
 
 				time.sleep(2)
 				GPIO.cleanup()
-				#logfile.close()
+				logfile.close()
 
 		else:
 			#print("Network Mode")
-			#logfile.write("Network Mode")
+			logfile.write("Network Mode")
 			NetMode.main_nm()
 
 	if __name__ == '__main__':
