@@ -373,7 +373,7 @@ try:
 							timeout = time.time() + time_ack
 							
 					ack_received = 0
-					flag_n = (flag_n + 1) % 10
+					flag_n = (flag_n + 1) % 20
 
 				blink = 0
 
@@ -457,7 +457,7 @@ try:
 								compressed.extend(handshake_frame)
 
 								radio_Tx.write(list("ACK") + list(original_flag_data))
-								flag_n = (flag_n + 1) % 10
+								flag_n = (flag_n + 1) % 20
 								receivedHandshakePacket = 1
 
 				bitsMax = int(np.ceil(np.log(listMax+1)/np.log(2)))
@@ -490,8 +490,14 @@ try:
 							else:
 								suma += 1
 								logfile.write("Wrong Packet received\n")
+								if flag_n == 0:
+									radio_Tx.write(list("ACK") + list('T'))
+								else:
+									radio_Tx.write(list("ACK") + list(chr(ord(original_flag_data) + flag_n-1)))
+								timeout = time.time() + time_ack
 
-					flag_n = (flag_n + 1) % 10
+
+					flag_n = (flag_n + 1) % 20
 					receivedPacket = 0
 
 				thread = Thread(target = decompressionOnTheGo, args = (compressed, listMax))
@@ -512,6 +518,9 @@ try:
 				time.sleep(2)
 				GPIO.cleanup()
 				logfile.close()
+
+				a  = os.popen('diff RxFileMTP-GroupC-SR.txt MTP_Prev.txt').readlines()
+				print(a)
 
 		else:
 			#print("Network Mode")
